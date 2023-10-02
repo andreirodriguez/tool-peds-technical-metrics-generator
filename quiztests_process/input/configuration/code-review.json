@@ -1,0 +1,32 @@
+{
+    "especialidad": "GENERAL",
+    "archivo":"code-review.xlsx",
+    "segmentos" : [
+        {
+            "segmento": "estandar_commit",
+            "respuestas": ["C","A","B","A","B","B","C"]
+        },
+
+        {
+            "segmento": "commit_atomico",
+            "respuestas": ["C","A","A"]
+        },
+        {
+            "segmento": "solicitud_pull_request",
+            "respuestas": ["A","D","B", "C"]
+        },
+
+        {
+            "segmento": "declinar_pull_request",
+            "respuestas": ["B","A"]
+        },
+        {
+            "segmento": "observacion_pull_request",
+            "respuestas": ["D","D","C","B","A","D","C"]
+        },
+        {
+            "segmento": "aprobar_pull_request",
+            "respuestas": ["B","B","B","D","C"]
+        }
+    ]
+}

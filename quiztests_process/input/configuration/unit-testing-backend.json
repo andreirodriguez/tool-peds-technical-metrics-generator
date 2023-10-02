@@ -1,0 +1,40 @@
+{
+    "especialidad": "BACKEND JAVA",
+    "archivo":"unit-testing-backend.xlsx",
+    "segmentos" : [
+        {
+            "segmento": "patrones",
+            "respuestas": ["B","D"]
+        },
+        {
+            "segmento": "principios",
+            "respuestas": ["A","B"]
+        },
+
+        {
+            "segmento": "asserts",
+            "respuestas": ["A","D","A","B","D","C"]
+        },
+        {
+            "segmento": "restricciones_unit_test",
+            "respuestas": ["D","C"]
+        },
+        {
+            "segmento": "mocks",
+            "respuestas": ["B","C","B"]
+        },
+
+        {
+            "segmento": "stubs",
+            "respuestas": ["C"]
+        },
+        {
+            "segmento": "naming_convention",
+            "respuestas": ["D","D","B"]
+        },
+        {
+            "segmento": "coverage_no_anemico",
+            "respuestas": ["A"]
+        }
+    ]
+}

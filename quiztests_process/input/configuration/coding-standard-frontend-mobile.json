@@ -1,0 +1,14 @@
+{
+    "especialidad": "GENERAL",
+    "archivo":"coding-standard-frontend-mobile.xlsx",
+    "segmentos" : [
+        {
+            "segmento": "estandares_lineamientos",
+            "respuestas": ["A","B","D","C","B","D","B","A"]
+        },
+        {
+            "segmento": "patrones_principios",
+            "respuestas": ["D","A","B","C","B","D","A","D","C"]
+        }
+    ]
+}

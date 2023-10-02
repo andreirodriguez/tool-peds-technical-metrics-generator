@@ -1,0 +1,39 @@
+{
+    "especialidad": "FRONTEND IOS",
+    "archivo":"unit-testing-frontend-ios.xlsx",
+    "segmentos" : [
+        {
+            "segmento": "patrones",
+            "respuestas": ["D","C","C"]
+        },
+        {
+            "segmento": "principios",
+            "respuestas": ["D","B","B","B","C"]
+        },
+        {
+            "segmento": "asserts",
+            "respuestas": ["C","B"]
+        },
+        {
+            "segmento": "restricciones_unit_test",
+            "respuestas": ["Si"]
+        },
+        {
+            "segmento": "mocks",
+            "respuestas": ["B","A"]
+        },
+        {
+            "segmento": "stubs",
+            "respuestas": ["C","B"]
+        },
+        {
+            "segmento": "naming_convention",
+            "respuestas": ["C","B"]
+        },
+        {
+            "segmento": "coverage_no_anemico",
+            "respuestas": ["No","Si","C","C","C"]
+        }
+
+    ]
+}

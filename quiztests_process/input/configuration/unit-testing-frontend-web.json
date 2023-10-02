@@ -1,0 +1,40 @@
+{
+  "especialidad": "FRONTEND WEB",
+  "archivo": "unit-testing-frontend-web.xlsx",
+  "segmentos": [
+    {
+      "segmento": "patrones",
+      "respuestas": ["B", "B", "D"]
+    },
+
+    {
+      "segmento": "principios",
+      "respuestas": ["B", "A", "B", "A"]
+    },
+    {
+      "segmento": "asserts",
+      "respuestas": ["C","A","A"]
+    },
+
+    {
+      "segmento": "restricciones_unit_test",
+      "respuestas": ["B","A","A"]
+    },
+    {
+      "segmento": "mocks",
+      "respuestas": ["B","C","D","A","A"]
+    },
+    {
+      "segmento": "stubs",
+      "respuestas": ["C","C","A","C"]
+    },
+    {
+      "segmento": "naming_convention",
+      "respuestas": ["A","A","A"]
+    },
+    {
+      "segmento": "coverage_no_anemico",
+      "respuestas": ["A","A"]
+    }
+  ]
+}

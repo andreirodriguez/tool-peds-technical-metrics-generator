@@ -1,0 +1,14 @@
+{
+    "especialidad": "BACKEND JAVA",
+    "archivo":"coding-standard-backend.xlsx",
+    "segmentos" : [
+		{
+            "segmento": "estandares_lineamientos",
+            "respuestas": ["A","B","B","A","B","A","B","B","B","A","A","B","B","A","B","A","B","A","B","B","A","A","B"]
+        },
+		{
+            "segmento": "patrones_principios",
+            "respuestas": ["A","A","B","B","B","A"]
+        }
+    ]
+}

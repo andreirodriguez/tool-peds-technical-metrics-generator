@@ -1,0 +1,14 @@
+{
+  "especialidad": "FRONTEND WEB",
+  "archivo": "coding-standard-frontend-web.xlsx",
+  "segmentos": [
+    {
+      "segmento": "estandares_lineamientos",
+      "respuestas": ["B", "D", "C", "B", "A", "C","B", "C", "B", "C", "A", "B", "B","D", "B", "B", "C", "D","D", "B", "B", "B", "B", "C", "C", "C"]
+    },
+    {
+      "segmento": "patrones_principios",
+      "respuestas": ["A", "A", "C", "C"]
+    }
+  ]
+}
