@@ -3,7 +3,7 @@
         "services":[
             {
                 "service":"azureSql",
-                "codeSmells":["CloudPEDS_Yaml:PoolMaximunSize","CloudPEDS_Yaml:PoolMinimunIdle","CloudPEDS_Yaml:PoolConnectionTimeOut"],
+                "codeSmells":["CloudPEDS_Yaml:PoolMaximunSize","CloudPEDS_Yaml:PoolMinimunIdle","CloudPEDS_Yaml:PoolConnectionTimeOut"]
             },
             {
                 "service":"cosmosRedis",
