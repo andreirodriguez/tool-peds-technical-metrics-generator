@@ -158,3 +158,23 @@ assets/base_activos/input/data_process_project/*
 
 assets/base_activos/output/*
 !assets/base_activos/output/.gitkeep
+
+# Cloud Development
+
+cloud_development/resources/log/*
+!cloud_development/resources/log/.gitkeep
+
+cloud_development/resources/output/*
+!cloud_development/resources/output/.gitkeep
+
+cloud_development/resources/input/base_activos/*
+!cloud_development/resources/input/base_activos/.gitkeep
+
+cloud_development/resources/input/assesments/azure_sql/*
+!cloud_development/resources/input/assesments/azure_sql/.gitkeep
+
+cloud_development/resources/input/assesments/cache_redis/*
+!cloud_development/resources/input/assesments/cache_redis/.gitkeep
+
+cloud_development/resources/input/assesments/cosmos_db/*
+!cloud_development/resources/input/assesments/cosmos_db/.gitkeep
