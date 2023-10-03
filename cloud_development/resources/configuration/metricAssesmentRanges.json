@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "minimum": 0,
+        "maximum": 20,
+        "points": 1.00
+    },
+    {
+        "id": 2,
+        "minimum": 20,
+        "maximum": 50,
+        "points": 2.00
+    },    
+    {
+        "id": 3,
+        "minimum": 50,
+        "maximum": 65,
+        "points": 3.00
+    },    
+    {
+        "id": 4,
+        "minimum": 65,
+        "maximum": 80,
+        "points": 4.00
+    },
+    {
+        "id": 5,
+        "minimum": 80,
+        "maximum": 100,
+        "points": 5.00
+    }            
+]

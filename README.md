@@ -5,7 +5,7 @@
 ### Create a virtual environment
 
 ```shell
-python -m venv ven
+python -m venv venv
 ```
 
 ### Activate venv
