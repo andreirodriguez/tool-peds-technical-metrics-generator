@@ -79,7 +79,13 @@ class Utils:
         date = datetime.datetime.strptime(dateUtc,'%Y-%m-%dT%H:%M:%SZ')
 
         return date
-    
+
+    @staticmethod
+    def convertStringToDatetime(date:str,format:str)->datetime.datetime:
+        date = datetime.datetime.strptime(date,format)
+
+        return date    
+
     @staticmethod
     def convertXmlUtcToDatetime(dateUtc:str):
         date = datetime.datetime.strptime(dateUtc,'%Y-%m-%dT%H:%M:%S')

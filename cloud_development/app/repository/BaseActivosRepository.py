@@ -7,7 +7,7 @@ import cloud_development.app.common.Constants as Constants
 class BaseActivosRepository():
 
     def getBaseByPeriod(self,period:str)->pd.DataFrame:
-        file:str = Utils.getPathDirectory(Constants.PATH_OUTPUT_BASE_ACTIVOS.format(period=period))
+        file:str = Utils.getPathDirectory(Constants.PATH_INPUT_BASE_ACTIVOS.format(period=period))
 
         usecols:list[str]=["matricula","nombre","apellido_paterno","apellido_materno","correo",
                              "tribu_code","tribu","squad_code","squad","cod_app","especialidad","flag_activo"]

@@ -1,0 +1,14 @@
+{
+    "connectionPool": {
+        "services":[
+            {
+                "service":"azureSql",
+                "codeSmells":["CloudPEDS_Yaml:PoolMaximunSize","CloudPEDS_Yaml:PoolMinimunIdle","CloudPEDS_Yaml:PoolConnectionTimeOut"],
+            },
+            {
+                "service":"cosmosRedis",
+                "codeSmells":["CloudPEDS_Yaml:RedisPoolConnectionTimeOut","CloudPEDS_Yaml:RedisPoolMinimunIdle","CloudPEDS_Yaml:RedisPoolMaximunSize"]
+            }
+        ]
+    }
+}
