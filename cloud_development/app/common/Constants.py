@@ -16,3 +16,9 @@ FORMAT_DATETIME_SONAR:str = "%Y-%m-%dT%H:%M:%S-%f"
 
 
 URL_BASE_BITBUCKET_REPO:str = "https://bitbucket.lima.bcp.com.pe/scm/"
+
+SERVICE_CLOUD_AZURE_SQL:str = "azureSql"
+SERVICE_CLOUD_CACHE_REDIS:str = "cacheRedis"
+SERVICE_CLOUD_COSMOS_DB:str = "cosmosDb"
+
+METRIC_SONAR_CONNECTION_POOL:str = "connectionPool"

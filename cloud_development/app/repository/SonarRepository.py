@@ -10,7 +10,7 @@ class SonarRepository():
         file:str = Utils.getPathDirectory(path)
 
         usecols:list[int]=[0,1,2,3,4,5,6]
-        namescols:list[str]=["appCode","project","urlRepository","rule","component","creationDate","updateDate"]
+        namescols:list[str]=["app","project","urlRepository","codeSmell","component","creationDate","updateDate"]
 
         data:pd.DataFrame = pd.read_excel(file,usecols=usecols,names=namescols)
         data = data.astype(object).where(pd.notnull(data),None)
@@ -31,6 +31,8 @@ class SonarRepository():
             if (not file.endswith(".xlsx")): continue
 
             data = pd.concat([data, self.__getFileSonar(path + file)], ignore_index=True)        
+
+        data = data.sort_values(["app","repository"], ascending = [True, True])
 
         return data
 

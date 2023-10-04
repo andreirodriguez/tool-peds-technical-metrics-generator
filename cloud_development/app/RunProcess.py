@@ -26,7 +26,9 @@ class RunProcess():
         metricAssesmentRanges:any = Utils.getConfigurationFileJson("metricAssesmentRanges")
         self.__assesmentService = AssesmentService(metricAssesmentRanges)
 
-        self.__sonarService = SonarService()
+
+        metricSonarCodeSmells:any = Utils.getConfigurationFileJson("metricSonarCodeSmells")
+        self.__sonarService = SonarService(metricSonarCodeSmells)
 
     def run(self):
         #baseActivos:pd.DataFrame = self.__baseActivosService.listBaseByPeriod(self.__period)
@@ -37,8 +39,12 @@ class RunProcess():
 
         #assesmentCosmosDb:pd.DataFrame = self.__assesmentService.listAssesmentByServiceCloud(Constants.PATH_INPUT_ASSESMENT_COSMOS_DB,Constants.ASSESMENT_METRICS_COSMOS_DB,baseActivos)
 
-        metricsSonar:pd.DataFrame = self.__sonarService.listSonarCodeSmells()
+        metricsSonar:pd.DataFrame = self.__sonarService.listMetricsSonar()
 
-        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\data.xlsx",metricsSonar)
+        metricsSonarAzureSql:pd.DataFrame = self.__sonarService.listMetricsSonarByServiceCloud(Constants.SERVICE_CLOUD_AZURE_SQL,metricsSonar)
+
+        metricsSonarCacheRedis:pd.DataFrame = self.__sonarService.listMetricsSonarByServiceCloud(Constants.SERVICE_CLOUD_CACHE_REDIS,metricsSonar)
+
+        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\data.xlsx",metricsSonarCacheRedis)
 
         Utils.logInfo(f"FINALIZA la ejecución del proceso modelo de métrica cloud development con el periodo {self.__period}")
