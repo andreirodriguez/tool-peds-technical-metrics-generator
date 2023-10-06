@@ -30,3 +30,15 @@ class AzureSqlRepository():
         dataBases:list[AzureSql] = [AzureSql(**record) for record in data.to_dict(orient='records')]
 
         return dataBases
+    
+    def getColumnsTableByDatabase(self,tenantId:str,database:AzureSql)->list[AzureSql]:
+        file:str = Constants.PATH_INPUT_METRIC_AZURE_SQL_TABLE_COLUMNS.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,sqlServer=database.sqlServer,sqlDatabase=database.name)
+        file = Utils.getPathDirectory(file)
+
+        usecols:list[str]=["id","subscriptionId","resourceGroup","sqlServer","sqlDatabase",
+                           "table","name","type"]
+
+        data:pd.DataFrame = pd.read_csv(file,usecols=usecols,encoding="utf-8")
+        data = data.astype(object).where(pd.notnull(data),None)
+
+        return data 

@@ -6,6 +6,15 @@ PATH_INPUT_ASSESMENT_AZURE_SQL:str = "cloud_development\\resources\\input\\asses
 PATH_INPUT_ASSESMENT_CACHE_REDIS:str = "cloud_development\\resources\\input\\assesments\\cache_redis\\"
 PATH_INPUT_ASSESMENT_COSMOS_DB:str = "cloud_development\\resources\\input\\assesments\\cosmos_db\\"
 
+PATH_INPUT_METRIC_AZURE_SQL_TABLE_COLUMNS:str = "cloud_development\\resources\\input\\azure_monitor\\{tenantId}\\{subscriptionId}\\{resourceGroup}\\azure-sql\\{sqlServer}({sqlDatabase})\\table-columns-azure-sql.csv"
+PATH_INPUT_METRIC_AZURE_SQL_ADVISOR_RECOMMENDEDS:str = "cloud_development\\resources\\input\\azure_monitor\\{tenantId}\\{subscriptionId}\\{resourceGroup}\\azure-sql\\{sqlServer}({sqlDatabase})\\advisor-recommendeds-azure-sql.csv"
+PATH_INPUT_METRIC_AZURE_SQL_TOP_QUERIES:str = "cloud_development\\resources\\input\\azure_monitor\\{tenantId}\\{subscriptionId}\\{resourceGroup}\\azure-sql\\{sqlServer}({sqlDatabase})\\top-queries-azure-sql.csv"
+PATH_INPUT_METRIC_AZURE_SQL_MONITOR_METRICS:str = "cloud_development\\resources\\input\\azure_monitor\\{tenantId}\\{subscriptionId}\\{resourceGroup}\\azure-sql\\{sqlServer}({sqlDatabase})\\monitor-metrics-azure-sql.csv"
+
+PATH_INPUT_METRIC_REDIS_CACHE_MONITOR_METRICS:str = "cloud_development\\resources\\input\\azure_monitor\\{tenantId}\\{subscriptionId}\\{resourceGroup}\\redis-cache\\{redisCache}\\monitor-metrics-redis-cache.csv"
+
+PATH_INPUT_METRIC_COSMOS_DB_MONITOR_METRICS:str = "cloud_development\\resources\\input\\azure_monitor\\{tenantId}\\{subscriptionId}\\{resourceGroup}\\cosmos-db\\{cosmosDb}\\monitor-metrics-cosmos-db.csv"
+
 AZURE_MONITOR_FILE_AZURE_SQL:str = "sql-databases.csv"
 AZURE_MONITOR_FILE_REDIS_CACHE:str = "redis-caches.csv"
 AZURE_MONITOR_FILE_COSMOS_DB:str = "cosmos-dbs.csv"

@@ -113,8 +113,12 @@ class SonarService():
         return maxValue
     
     def __getPointsCodeSmellConnectionPool(self,value:int,rangesMetric:any)->Decimal:
+        length:int = len(rangesMetric)
+
         for range in rangesMetric:
-            if(range["minimum"] <= value < range["maximum"]):
+            if(value <= range["maximum"]):
                 return range["points"]
+
+
 
 

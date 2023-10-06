@@ -6,6 +6,7 @@ import datetime
 import logging as log
 import traceback
 import os
+from decimal import Decimal
 
 from cloud_development.app.common.Log import getLog,getLogDateFormat,getLogFormat
 from os import listdir,getcwd,mkdir
@@ -177,3 +178,39 @@ class Utils:
                     paths.append(os.path.join(path, name))   
 
         return paths
+    
+
+    @staticmethod
+    def getAppCodeByResourceGroupName(resourceGroupName:str) -> str:
+        lenght:int = len(resourceGroupName) - 1
+        character:str = resourceGroupName[lenght]
+
+        if(not character.isnumeric()): return None
+
+        while lenght >= 0:
+            character = resourceGroupName[lenght]
+
+            if(character.isnumeric()): 
+                lenght-=1
+            else:
+                return resourceGroupName[(lenght-4):lenght].upper()    
+            
+        return None
+    
+    @staticmethod
+    def getMetricPointsAzureMonitor(value:Decimal,ranges:any) -> Decimal:
+        length:int = len(ranges)
+
+        for range in ranges:
+            if(range["id"]==1):
+                if(range["maximum"] <= value):
+                    return range["points"]   
+            elif(range["id"]==length):
+                if(value < range["minimum"]):
+                    return range["points"]                                 
+            else:
+                if(range["maximum"] <= value < range["minimum"]):
+                    return round(
+                            range["points"] + 
+                                ((((range["maximum"] - value) * 100) / (range["minimum"] - range["maximum"])) / 100)
+                            ,2)

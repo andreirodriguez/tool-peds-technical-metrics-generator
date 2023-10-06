@@ -9,8 +9,8 @@ class SonarRepository():
     def __getFileSonar(self,path:str)->pd.DataFrame:
         file:str = Utils.getPathDirectory(path)
 
-        usecols:list[int]=[0,1,2,3,4,5,6]
-        namescols:list[str]=["app","project","urlRepository","codeSmell","component","creationDate","updateDate"]
+        usecols:list[int]=[0,1,2,3,4,5]
+        namescols:list[str]=["app","project","codeSmell","component","creationDate","updateDate"]
 
         data:pd.DataFrame = pd.read_excel(file,usecols=usecols,names=namescols)
         data = data.astype(object).where(pd.notnull(data),None)
@@ -18,7 +18,7 @@ class SonarRepository():
         data['creationDate'] = data['creationDate'].apply(lambda value: pd.to_datetime(value,format=Constants.FORMAT_DATETIME_SONAR).to_datetime64())
         data['updateDate'] = data['updateDate'].apply(lambda value: pd.to_datetime(value,format=Constants.FORMAT_DATETIME_SONAR).to_datetime64())
 
-        data['repository'] = data['urlRepository'].apply(lambda value: self.__getRepository(value))
+        data['repository'] = data['project'].apply(lambda value: value)
 
         return data
     

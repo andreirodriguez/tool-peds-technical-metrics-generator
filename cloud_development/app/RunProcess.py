@@ -9,9 +9,11 @@ import cloud_development.app.common.Constants as Constants
 from cloud_development.app.service.BaseActivosService import BaseActivosService
 from cloud_development.app.service.AssesmentService import AssesmentService
 from cloud_development.app.service.SonarService import SonarService
+
 from cloud_development.app.service.AzureSqlService import AzureSqlService
 from cloud_development.app.service.RedisCacheService import RedisCacheService
 from cloud_development.app.service.CosmosDbService import CosmosDbService
+
 
 class RunProcess():
     __period:str
@@ -36,7 +38,8 @@ class RunProcess():
         metricSonarCodeSmells:any = Utils.getConfigurationFileJson("metricSonarCodeSmells")
         self.__sonarService = SonarService(metricSonarCodeSmells)
 
-        self.__azureSqlService = AzureSqlService()
+        metricAzureMonitorSql:any = Utils.getConfigurationFileJson("metricAzureMonitorSql")
+        self.__azureSqlService = AzureSqlService(metricAzureMonitorSql)
         self.__redisCacheService = RedisCacheService()
         self.__cosmosDbService = CosmosDbService()
 
@@ -60,8 +63,10 @@ class RunProcess():
 
         sqlDatabases = self.__azureSqlService.listAllSqlDatabases()
 
-        redisDatabases = self.__redisCacheService.listAllRedisDatabases()
+        self.__azureSqlService.calculateMetrics(sqlDatabases[0])
 
-        cosmosDatabases = self.__cosmosDbService.listAllCosmosDatabases()
+        #redisDatabases = self.__redisCacheService.listAllRedisDatabases()
+
+        #cosmosDatabases = self.__cosmosDbService.listAllCosmosDatabases()
 
         Utils.logInfo(f"FINALIZA la ejecución del proceso modelo de métrica cloud development con el periodo {self.__period}")
