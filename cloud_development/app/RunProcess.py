@@ -9,12 +9,18 @@ import cloud_development.app.common.Constants as Constants
 from cloud_development.app.service.BaseActivosService import BaseActivosService
 from cloud_development.app.service.AssesmentService import AssesmentService
 from cloud_development.app.service.SonarService import SonarService
+from cloud_development.app.service.AzureSqlService import AzureSqlService
+from cloud_development.app.service.RedisCacheService import RedisCacheService
+from cloud_development.app.service.CosmosDbService import CosmosDbService
 
 class RunProcess():
     __period:str
     __baseActivosService:BaseActivosService
     __assesmentService:AssesmentService
     __sonarService:SonarService
+    __azureSqlService:AzureSqlService
+    __redisCacheService:RedisCacheService
+    __cosmosDbService:CosmosDbService
 
     def __init__(self,period:str):
         self.__period = period
@@ -30,7 +36,12 @@ class RunProcess():
         metricSonarCodeSmells:any = Utils.getConfigurationFileJson("metricSonarCodeSmells")
         self.__sonarService = SonarService(metricSonarCodeSmells)
 
+        self.__azureSqlService = AzureSqlService()
+        self.__redisCacheService = RedisCacheService()
+        self.__cosmosDbService = CosmosDbService()
+
     def run(self):
+        
         #baseActivos:pd.DataFrame = self.__baseActivosService.listBaseByPeriod(self.__period)
 
         #assesmentAzureSql:pd.DataFrame = self.__assesmentService.listAssesmentByServiceCloud(Constants.PATH_INPUT_ASSESMENT_AZURE_SQL,Constants.ASSESMENT_METRICS_AZURE_SQL,baseActivos)
@@ -39,12 +50,18 @@ class RunProcess():
 
         #assesmentCosmosDb:pd.DataFrame = self.__assesmentService.listAssesmentByServiceCloud(Constants.PATH_INPUT_ASSESMENT_COSMOS_DB,Constants.ASSESMENT_METRICS_COSMOS_DB,baseActivos)
 
-        metricsSonar:pd.DataFrame = self.__sonarService.listMetricsSonar()
+        #metricsSonar:pd.DataFrame = self.__sonarService.listMetricsSonar()
 
-        metricsSonarAzureSql:pd.DataFrame = self.__sonarService.listMetricsSonarByServiceCloud(Constants.SERVICE_CLOUD_AZURE_SQL,metricsSonar)
+        #metricsSonarAzureSql:pd.DataFrame = self.__sonarService.listMetricsSonarByServiceCloud(Constants.SERVICE_CLOUD_AZURE_SQL,metricsSonar)
 
-        metricsSonarCacheRedis:pd.DataFrame = self.__sonarService.listMetricsSonarByServiceCloud(Constants.SERVICE_CLOUD_CACHE_REDIS,metricsSonar)
+        #metricsSonarCacheRedis:pd.DataFrame = self.__sonarService.listMetricsSonarByServiceCloud(Constants.SERVICE_CLOUD_CACHE_REDIS,metricsSonar)
 
-        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\data.xlsx",metricsSonarCacheRedis)
+        #Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\metricsSonarCacheRedis.xlsx",metricsSonarCacheRedis)
+
+        sqlDatabases = self.__azureSqlService.listAllSqlDatabases()
+
+        redisDatabases = self.__redisCacheService.listAllRedisDatabases()
+
+        cosmosDatabases = self.__cosmosDbService.listAllCosmosDatabases()
 
         Utils.logInfo(f"FINALIZA la ejecución del proceso modelo de métrica cloud development con el periodo {self.__period}")

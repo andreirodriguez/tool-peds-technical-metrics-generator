@@ -173,6 +173,9 @@ cloud_development/resources/input/base_activos/*
 cloud_development/resources/input/sonar/*
 !cloud_development/resources/input/sonar/.gitkeep
 
+cloud_development/resources/input/azure_monitor/*
+!cloud_development/resources/input/azure_monitor/.gitkeep
+
 cloud_development/resources/input/assesments/azure_sql/*
 !cloud_development/resources/input/assesments/azure_sql/.gitkeep
 

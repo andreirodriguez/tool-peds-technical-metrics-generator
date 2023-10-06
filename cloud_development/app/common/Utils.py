@@ -5,9 +5,10 @@ import json
 import datetime
 import logging as log
 import traceback
+import os
 
 from cloud_development.app.common.Log import getLog,getLogDateFormat,getLogFormat
-from os import listdir,path,getcwd,mkdir
+from os import listdir,getcwd,mkdir
 
 log.basicConfig(filename=getLog(), 
                 level=log.INFO,
@@ -31,7 +32,7 @@ class Utils:
 
     @staticmethod
     def setCreateDirectory(directory:str):
-        if(path.exists(directory)): return
+        if(os.path.exists(directory)): return
 
         mkdir(directory)
 
@@ -43,7 +44,7 @@ class Utils:
 
         directory = directory.replace(fileName,"")
 
-        if(path.exists(directory)): return
+        if(os.path.exists(directory)): return
 
         mkdir(directory)
 
@@ -165,3 +166,14 @@ class Utils:
         files = [x for x in listdir(Utils.getPathDirectory(directory))]
 
         return files          
+    
+    @staticmethod
+    def getAllFilesSubDirectory(directory:str,pattern:str) -> list[str]:
+        paths:list[str] = []
+
+        for path, subdirs, files in os.walk(directory):
+            for name in files:
+                if name==pattern:
+                    paths.append(os.path.join(path, name))   
+
+        return paths
