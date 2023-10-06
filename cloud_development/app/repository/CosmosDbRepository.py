@@ -30,3 +30,15 @@ class CosmosDbRepository():
         dataBases:list[CosmosDb] = [CosmosDb(**record) for record in data.to_dict(orient='records')]
 
         return dataBases
+    
+    def getAzureMonitor(self,tenantId:str,database:CosmosDb)->list[CosmosDb]:
+        file:str = Constants.PATH_INPUT_METRIC_COSMOS_DB_MONITOR_METRICS.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,cosmosDb=database.name)
+        file = Utils.getPathDirectory(file)
+
+        usecols:list[str]=["metric","subscriptionId","resourceGroup","resourceName",
+                           "aggregation","interval","unit","intervalTimeStamp","value"]
+
+        data:pd.DataFrame = pd.read_csv(file,usecols=usecols,encoding="utf-8")
+        data = data.astype(object).where(pd.notnull(data),None)
+
+        return data        

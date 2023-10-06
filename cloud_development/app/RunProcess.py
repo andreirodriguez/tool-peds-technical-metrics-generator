@@ -40,8 +40,11 @@ class RunProcess():
 
         metricAzureMonitorSql:any = Utils.getConfigurationFileJson("metricAzureMonitorSql")
         self.__azureSqlService = AzureSqlService(metricAzureMonitorSql)
+
         self.__redisCacheService = RedisCacheService()
-        self.__cosmosDbService = CosmosDbService()
+
+        metricAzureMonitorCosmos:any = Utils.getConfigurationFileJson("metricAzureMonitorCosmos")
+        self.__cosmosDbService = CosmosDbService(metricAzureMonitorCosmos)
 
     def run(self):
         
@@ -67,6 +70,8 @@ class RunProcess():
 
         #redisDatabases = self.__redisCacheService.listAllRedisDatabases()
 
-        #cosmosDatabases = self.__cosmosDbService.listAllCosmosDatabases()
+        cosmosDatabases = self.__cosmosDbService.listAllCosmosDatabases()
+
+        self.__cosmosDbService.calculateMetrics(cosmosDatabases[0])
 
         Utils.logInfo(f"FINALIZA la ejecución del proceso modelo de métrica cloud development con el periodo {self.__period}")

@@ -24,6 +24,8 @@ AZURE_MONITOR_AZURE_SQL_METRIC_DEADLOCK:str = "deadlock"
 AZURE_MONITOR_AZURE_SQL_METRIC_CONNECTION_SUCCESSFUL:str = "connection_successful"
 AZURE_MONITOR_AZURE_SQL_METRIC_CONNECTION_FAILED:str = "connection_failed"
 
+AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION:str = "NormalizedRUConsumption"
+
 BASE_ACTIVOS_FLAGS_ACTIVE_COE:list[str] = ["ACTIVO COE"]
 
 ASSESMENT_METRICS_AZURE_SQL:list[str] = ["normalizacion","performance","querys","transactional","poolConexion","estandarConexion"]
