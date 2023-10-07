@@ -41,7 +41,8 @@ class RunProcess():
         metricAzureMonitorSql:any = Utils.getConfigurationFileJson("metricAzureMonitorSql")
         self.__azureSqlService = AzureSqlService(metricAzureMonitorSql)
 
-        self.__redisCacheService = RedisCacheService()
+        metricAzureMonitorRedis:any = Utils.getConfigurationFileJson("metricAzureMonitorRedis")
+        self.__redisCacheService = RedisCacheService(metricAzureMonitorRedis)
 
         metricAzureMonitorCosmos:any = Utils.getConfigurationFileJson("metricAzureMonitorCosmos")
         self.__cosmosDbService = CosmosDbService(metricAzureMonitorCosmos)
@@ -68,7 +69,9 @@ class RunProcess():
 
         self.__azureSqlService.calculateMetrics(sqlDatabases[0])
 
-        #redisDatabases = self.__redisCacheService.listAllRedisDatabases()
+        redisDatabases = self.__redisCacheService.listAllRedisDatabases()
+
+        self.__redisCacheService.calculateMetrics(redisDatabases[0])
 
         cosmosDatabases = self.__cosmosDbService.listAllCosmosDatabases()
 

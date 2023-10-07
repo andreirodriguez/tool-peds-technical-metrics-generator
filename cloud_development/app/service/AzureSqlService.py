@@ -106,7 +106,7 @@ class AzureSqlService():
 
         value = (failed * 100) / successful
 
-        return value            
+        return round(value,2)
 
 
 

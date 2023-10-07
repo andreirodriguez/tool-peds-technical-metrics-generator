@@ -31,7 +31,7 @@ class AzureSqlRepository():
 
         return dataBases
     
-    def getColumnsTableByDatabase(self,tenantId:str,database:AzureSql)->list[AzureSql]:
+    def getColumnsTableByDatabase(self,tenantId:str,database:AzureSql)->pd.DataFrame:
         file:str = Constants.PATH_INPUT_METRIC_AZURE_SQL_TABLE_COLUMNS.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,sqlServer=database.sqlServer,sqlDatabase=database.name)
         file = Utils.getPathDirectory(file)
 
@@ -43,7 +43,7 @@ class AzureSqlRepository():
 
         return data 
     
-    def getTopQuerysByDatabase(self,tenantId:str,database:AzureSql)->list[AzureSql]:
+    def getTopQuerysByDatabase(self,tenantId:str,database:AzureSql)->pd.DataFrame:
         file:str = Constants.PATH_INPUT_METRIC_AZURE_SQL_TOP_QUERIES.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,sqlServer=database.sqlServer,sqlDatabase=database.name)
         file = Utils.getPathDirectory(file)
 
@@ -56,7 +56,7 @@ class AzureSqlRepository():
 
         return data     
     
-    def getAdvisorsRecommended(self,tenantId:str,database:AzureSql)->list[AzureSql]:
+    def getAdvisorsRecommended(self,tenantId:str,database:AzureSql)->pd.DataFrame:
         file:str = Constants.PATH_INPUT_METRIC_AZURE_SQL_ADVISOR_RECOMMENDEDS.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,sqlServer=database.sqlServer,sqlDatabase=database.name)
         file = Utils.getPathDirectory(file)
 
@@ -69,7 +69,7 @@ class AzureSqlRepository():
 
         return data
     
-    def getAzureMonitor(self,tenantId:str,database:AzureSql)->list[AzureSql]:
+    def getAzureMonitor(self,tenantId:str,database:AzureSql)->pd.DataFrame:
         file:str = Constants.PATH_INPUT_METRIC_AZURE_SQL_MONITOR_METRICS.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,sqlServer=database.sqlServer,sqlDatabase=database.name)
         file = Utils.getPathDirectory(file)
 

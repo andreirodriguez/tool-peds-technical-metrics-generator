@@ -31,7 +31,7 @@ class CosmosDbRepository():
 
         return dataBases
     
-    def getAzureMonitor(self,tenantId:str,database:CosmosDb)->list[CosmosDb]:
+    def getAzureMonitor(self,tenantId:str,database:CosmosDb)->pd.DataFrame:
         file:str = Constants.PATH_INPUT_METRIC_COSMOS_DB_MONITOR_METRICS.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,cosmosDb=database.name)
         file = Utils.getPathDirectory(file)
 
