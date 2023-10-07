@@ -19,31 +19,31 @@ class AzureSqlService():
         self.__azureSqlRepository = AzureSqlRepository()
 
     def __getMetric(self,nameMetric:str)->pd.DataFrame:
-        metricAzure = [metric for metric in self.__metricsAzureMonitor["metrics"] if metric["metric"]==nameMetric][0]
+        metricAzure = [metric for metric in self.__metricsAzureMonitor if metric["metric"]==nameMetric][0]
 
         return metricAzure
 
     def listAllSqlDatabases(self)->pd.DataFrame:
         return self.__azureSqlRepository.getAllSqlDatabases()
     
-    def calculateMetrics(self,database:AzureSql)->AzureSqlMetric:
+    def calculateMetrics(self,tenantId:str,database:AzureSql)->AzureSqlMetric:
         metric:AzureSqlMetric = AzureSqlMetric(database)
 
         metricAzureMonitor:any
 
         metricAzureMonitor = self.__getMetric("tablesDenormalized")
-        metric.tablesDenormalized = self.__getTablesDenormalized(database,metricAzureMonitor["limitValue"])
+        metric.tablesDenormalized = self.__getTablesDenormalized(tenantId,database,metricAzureMonitor["limitValue"])
         metric.tablesDenormalizedPoints = Utils.getMetricPointsAzureMonitor(metric.tablesDenormalized,metricAzureMonitor["ranges"]) 
         
         metricAzureMonitor = self.__getMetric("topConsumptionQueries")
-        metric.topConsumptionQueries = self.__getTopConsumptionQueries(database,metricAzureMonitor["limitValue"])
+        metric.topConsumptionQueries = self.__getTopConsumptionQueries(tenantId,database,metricAzureMonitor["limitValue"])
         metric.topConsumptionQueriesPoints = Utils.getMetricPointsAzureMonitor(metric.topConsumptionQueries,metricAzureMonitor["ranges"]) 
 
         metricAzureMonitor = self.__getMetric("advisorsRecommended")
-        metric.advisorsRecommended = self.__getAdvisorsRecommended(database)
+        metric.advisorsRecommended = self.__getAdvisorsRecommended(tenantId,database)
         metric.advisorsRecommendedPoints = Utils.getMetricPointsAzureMonitor(metric.advisorsRecommended,metricAzureMonitor["ranges"]) 
 
-        azureMonitor:pd.DataFrame = self.__azureSqlRepository.getAzureMonitor(self.__metricsAzureMonitor["tenantId"],database)
+        azureMonitor:pd.DataFrame = self.__azureSqlRepository.getAzureMonitor(tenantId,database)
 
         metricAzureMonitor = self.__getMetric("deadlock")
         metric.deadlock = self.__getDeadlocks(azureMonitor)
@@ -55,8 +55,8 @@ class AzureSqlService():
 
         return metric
     
-    def __getTablesDenormalized(self,database:AzureSql,limitColumns:int)->Decimal:
-        columns:pd.DataFrame = self.__azureSqlRepository.getColumnsTableByDatabase(self.__metricsAzureMonitor["tenantId"],database)
+    def __getTablesDenormalized(self,tenantId:str,database:AzureSql,limitColumns:int)->Decimal:
+        columns:pd.DataFrame = self.__azureSqlRepository.getColumnsTableByDatabase(tenantId,database)
 
         tables = columns.groupby(['table']).size().reset_index(name='count')
 
@@ -66,8 +66,8 @@ class AzureSqlService():
 
         return value
     
-    def __getTopConsumptionQueries(self,database:AzureSql,maxCpuPercentage:Decimal)->Decimal:
-        topQueries:pd.DataFrame = self.__azureSqlRepository.getTopQuerysByDatabase(self.__metricsAzureMonitor["tenantId"],database)
+    def __getTopConsumptionQueries(self,tenantId:str,database:AzureSql,maxCpuPercentage:Decimal)->Decimal:
+        topQueries:pd.DataFrame = self.__azureSqlRepository.getTopQuerysByDatabase(tenantId,database)
 
         topQueries = topQueries[(topQueries['valueCpu'] > maxCpuPercentage)]
 
@@ -75,8 +75,8 @@ class AzureSqlService():
 
         return value    
     
-    def __getAdvisorsRecommended(self,database:AzureSql)->Decimal:
-        advisors:pd.DataFrame = self.__azureSqlRepository.getAdvisorsRecommended(self.__metricsAzureMonitor["tenantId"],database)
+    def __getAdvisorsRecommended(self,tenantId:str,database:AzureSql)->Decimal:
+        advisors:pd.DataFrame = self.__azureSqlRepository.getAdvisorsRecommended(tenantId,database)
 
         advisors = advisors[(advisors['state'].isin(Constants.AZURE_MONITOR_AZURE_SQL_ADVISORS_RECOMMENDED_STATES))]
 

@@ -21,19 +21,19 @@ class RedisCacheService():
         self.__redisCacheRepository = RedisCacheRepository()
 
     def __getMetric(self,nameMetric:str)->pd.DataFrame:
-        metricAzure = [metric for metric in self.__metricsAzureMonitor["metrics"] if metric["metric"]==nameMetric][0]
+        metricAzure = [metric for metric in self.__metricsAzureMonitor if metric["metric"]==nameMetric][0]
 
         return metricAzure
 
     def listAllRedisDatabases(self)->pd.DataFrame:
         return self.__redisCacheRepository.getAllRedisDatabases()
     
-    def calculateMetrics(self,database:RedisCache)->RedisCacheMetric:
+    def calculateMetrics(self,tenantId:str,database:RedisCache)->RedisCacheMetric:
         metric:RedisCacheMetric = RedisCacheMetric(database)
 
         metricAzureMonitor:any
 
-        azureMonitor:pd.DataFrame = self.__redisCacheRepository.getAzureMonitor(self.__metricsAzureMonitor["tenantId"],database)
+        azureMonitor:pd.DataFrame = self.__redisCacheRepository.getAzureMonitor(tenantId,database)
 
         metricAzureMonitor = self.__getMetric("cachemissrate")
         metric.cacheMissRate = self.__getCacheMissRate(azureMonitor)

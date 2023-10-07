@@ -1,114 +1,110 @@
-{
-    "tenantId": "58e05788-d61c-458a-85ea-13d7ca3cd598",
-    "metrics":[
-        {
-            "metric":"percentProcessorTime",
-            "limitValue":3.0,
-            "ranges":[
-                {
-                    "id": 1,
-                    "minimum": 100,
-                    "maximum": 40,
-                    "points": 1.00
-                },           
-                {
-                    "id": 2,
-                    "minimum": 40,
-                    "maximum": 20,
-                    "points": 2.00
-                },             
-                {
-                    "id": 3,
-                    "minimum": 20,
-                    "maximum": 10,
-                    "points": 3.00
-                },             
-                {
-                    "id": 4,
-                    "minimum": 10,
-                    "maximum": 5,
-                    "points": 4.00
-                },
-                {
-                    "id": 5,
-                    "minimum": 5,
-                    "maximum": 0,
-                    "points": 5.00
-                }                                                                                                 
-            ]              
-        },
-        {
-            "metric":"usedmemorypercentage",
-            "limitValue":10.0,
-            "ranges":[
-                {
-                    "id": 1,
-                    "minimum": 100,
-                    "maximum": 40,
-                    "points": 1.00
-                },           
-                {
-                    "id": 2,
-                    "minimum": 40,
-                    "maximum": 20,
-                    "points": 2.00
-                },             
-                {
-                    "id": 3,
-                    "minimum": 20,
-                    "maximum": 10,
-                    "points": 3.00
-                },             
-                {
-                    "id": 4,
-                    "minimum": 10,
-                    "maximum": 5,
-                    "points": 4.00
-                },
-                {
-                    "id": 5,
-                    "minimum": 5,
-                    "maximum": 0,
-                    "points": 5.00
-                }                                                                                                 
-            ]              
-        },        
-        {
-            "metric":"cachemissrate",
-            "limitValue":0.0,
-            "ranges":[
-                {
-                    "id": 1,
-                    "minimum": 100,
-                    "maximum": 10,
-                    "points": 1.00
-                },           
-                {
-                    "id": 2,
-                    "minimum": 10,
-                    "maximum": 8,
-                    "points": 2.00
-                },             
-                {
-                    "id": 3,
-                    "minimum": 8,
-                    "maximum": 5,
-                    "points": 3.00
-                },             
-                {
-                    "id": 4,
-                    "minimum": 5,
-                    "maximum": 3,
-                    "points": 4.00
-                },
-                {
-                    "id": 5,
-                    "minimum": 3,
-                    "maximum": 0,
-                    "points": 5.00
-                }                                                                                                 
-            ]              
-        }               
-    ]
-}
-
+[
+    {
+        "metric":"percentProcessorTime",
+        "limitValue":3.0,
+        "ranges":[
+            {
+                "id": 1,
+                "minimum": 100,
+                "maximum": 40,
+                "points": 1.00
+            },           
+            {
+                "id": 2,
+                "minimum": 40,
+                "maximum": 20,
+                "points": 2.00
+            },             
+            {
+                "id": 3,
+                "minimum": 20,
+                "maximum": 10,
+                "points": 3.00
+            },             
+            {
+                "id": 4,
+                "minimum": 10,
+                "maximum": 5,
+                "points": 4.00
+            },
+            {
+                "id": 5,
+                "minimum": 5,
+                "maximum": 0,
+                "points": 5.00
+            }                                                                                                 
+        ]              
+    },
+    {
+        "metric":"usedmemorypercentage",
+        "limitValue":10.0,
+        "ranges":[
+            {
+                "id": 1,
+                "minimum": 100,
+                "maximum": 40,
+                "points": 1.00
+            },           
+            {
+                "id": 2,
+                "minimum": 40,
+                "maximum": 20,
+                "points": 2.00
+            },             
+            {
+                "id": 3,
+                "minimum": 20,
+                "maximum": 10,
+                "points": 3.00
+            },             
+            {
+                "id": 4,
+                "minimum": 10,
+                "maximum": 5,
+                "points": 4.00
+            },
+            {
+                "id": 5,
+                "minimum": 5,
+                "maximum": 0,
+                "points": 5.00
+            }                                                                                                 
+        ]              
+    },        
+    {
+        "metric":"cachemissrate",
+        "limitValue":0.0,
+        "ranges":[
+            {
+                "id": 1,
+                "minimum": 100,
+                "maximum": 10,
+                "points": 1.00
+            },           
+            {
+                "id": 2,
+                "minimum": 10,
+                "maximum": 8,
+                "points": 2.00
+            },             
+            {
+                "id": 3,
+                "minimum": 8,
+                "maximum": 5,
+                "points": 3.00
+            },             
+            {
+                "id": 4,
+                "minimum": 5,
+                "maximum": 3,
+                "points": 4.00
+            },
+            {
+                "id": 5,
+                "minimum": 3,
+                "maximum": 0,
+                "points": 5.00
+            }                                                                                                 
+        ]              
+    }               
+]

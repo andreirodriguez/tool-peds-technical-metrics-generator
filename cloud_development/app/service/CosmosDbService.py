@@ -20,19 +20,19 @@ class CosmosDbService():
         self.__cosmosDbRepository = CosmosDbRepository()
 
     def __getMetric(self,nameMetric:str)->pd.DataFrame:
-        metricAzure = [metric for metric in self.__metricsAzureMonitor["metrics"] if metric["metric"]==nameMetric][0]
+        metricAzure = [metric for metric in self.__metricsAzureMonitor if metric["metric"]==nameMetric][0]
 
         return metricAzure
 
     def listAllCosmosDatabases(self)->pd.DataFrame:
         return self.__cosmosDbRepository.getAllCosmosDatabases()
     
-    def calculateMetrics(self,database:CosmosDb)->CosmosDbMetric:
+    def calculateMetrics(self,tenantId:str,database:CosmosDb)->CosmosDbMetric:
         metric:CosmosDbMetric = CosmosDbMetric(database)
 
         metricAzureMonitor:any
 
-        azureMonitor:pd.DataFrame = self.__cosmosDbRepository.getAzureMonitor(self.__metricsAzureMonitor["tenantId"],database)
+        azureMonitor:pd.DataFrame = self.__cosmosDbRepository.getAzureMonitor(tenantId,database)
 
         metricAzureMonitor = self.__getMetric("NormalizedRUConsumption")
         metric.maximumRusConsumption = self.__getTopConsumptionQueries(azureMonitor,metricAzureMonitor["limitValue"])

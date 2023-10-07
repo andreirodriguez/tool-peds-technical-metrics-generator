@@ -1,0 +1,8 @@
+{
+    "tenantId": "58e05788-d61c-458a-85ea-13d7ca3cd598",
+    "threads" : {
+        "azureSql" : 10,
+        "cacheRedis": 10,
+        "cosmosDb": 10
+    }
+}
