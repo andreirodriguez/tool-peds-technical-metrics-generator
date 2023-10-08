@@ -19,17 +19,20 @@ AZURE_MONITOR_FILE_AZURE_SQL:str = "sql-databases.csv"
 AZURE_MONITOR_FILE_REDIS_CACHE:str = "redis-caches.csv"
 AZURE_MONITOR_FILE_COSMOS_DB:str = "cosmos-dbs.csv"
 
+AZURE_MONITOR_AZURE_SQL_METRICS:list[str] = ["tablesDenormalized","topConsumptionQueries","advisorsRecommended","deadlock","connectionFailed"]
 AZURE_MONITOR_AZURE_SQL_ADVISORS_RECOMMENDED_STATES:list[str] = ["Active","Pending"]
 AZURE_MONITOR_AZURE_SQL_METRIC_DEADLOCK:str = "deadlock"
 AZURE_MONITOR_AZURE_SQL_METRIC_CONNECTION_SUCCESSFUL:str = "connection_successful"
 AZURE_MONITOR_AZURE_SQL_METRIC_CONNECTION_FAILED:str = "connection_failed"
 
+AZURE_MONITOR_AZURE_REDIS_METRICS:list[str] = ["cacheMissRate","maximumProcessorConsumption","maximumMemoryConsumption"]
 AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_MISS_RATE:str = "cachemissrate"
 AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_HITS:str = "cachehits"
 AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_MISSES:str = "cachemisses"
 AZURE_MONITOR_AZURE_REDIS_METRIC_PERCENT_PROCESSOR:str = "percentProcessorTime"
 AZURE_MONITOR_AZURE_REDIS_METRIC_MEMORY_PERCENTAGE:str = "usedmemorypercentage"
 
+AZURE_MONITOR_AZURE_COSMOS_METRICS:list[str] = ["maximumRusConsumption"]
 AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION:str = "NormalizedRUConsumption"
 
 BASE_ACTIVOS_FLAGS_ACTIVE_COE:list[str] = ["ACTIVO COE"]
@@ -47,3 +50,5 @@ SERVICE_CLOUD_CACHE_REDIS:str = "cacheRedis"
 SERVICE_CLOUD_COSMOS_DB:str = "cosmosDb"
 
 METRIC_SONAR_CONNECTION_POOL:str = "connectionPool"
+
+METRIC_SONAR_POINTS_MAXIMUM:float = 5.00

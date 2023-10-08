@@ -14,6 +14,9 @@ from cloud_development.app.service.AzureSqlService import AzureSqlService
 from cloud_development.app.service.RedisCacheService import RedisCacheService
 from cloud_development.app.service.CosmosDbService import CosmosDbService
 
+from cloud_development.app.service.MetricModelAppService import MetricModelAppService
+
+
 from cloud_development.app.domain.AzureSql import AzureSql
 from cloud_development.app.domain.AzureSqlMetric import AzureSqlMetric
 
@@ -33,6 +36,7 @@ class RunProcess():
     __azureSqlService:AzureSqlService
     __redisCacheService:RedisCacheService
     __cosmosDbService:CosmosDbService
+    __metricModelAppService:MetricModelAppService
 
     def __init__(self,period:str):
         self.__period = period
@@ -56,6 +60,8 @@ class RunProcess():
 
         metricAzureMonitorCosmos:any = Utils.getConfigurationFileJson("metricAzureMonitorCosmos")
         self.__cosmosDbService = CosmosDbService(metricAzureMonitorCosmos)
+
+        self.__metricModelAppService = MetricModelAppService()
 
     def run(self):
         Utils.logInfo(f"Leo la base de datos de activos con el periodo {self.__period}")
@@ -84,15 +90,25 @@ class RunProcess():
 
         sqlDatabases = self.__azureSqlService.listAllSqlDatabases()
 
-        metricsSql = self.__extractMetricsAzureSql(sqlDatabases)
+        metricsAzureSql = self.__extractMetricsAzureSql(sqlDatabases)
 
         redisDatabases = self.__redisCacheService.listAllRedisDatabases()
 
-        metricsRedis = self.__extractMetricsRedisCache(redisDatabases)
+        metricsAzureRedis = self.__extractMetricsRedisCache(redisDatabases)
 
         cosmosDatabases = self.__cosmosDbService.listAllCosmosDatabases()
 
-        metricsCosmos = self.__extractMetricsCosmosDb(cosmosDatabases)
+        metricsAzureCosmos = self.__extractMetricsCosmosDb(cosmosDatabases)
+
+        Utils.logInfo(f"Cálculo el modelo de la métricas por aplicación del periodo {self.__period}")
+
+        metricsAppSql = self.__metricModelAppService.calculateMetricAzureSqlByApp(metricsAzureSql,metricsSonarAzureSql)
+
+        metricsAppRedis = self.__metricModelAppService.calculateMetricAzureRedisByApp(metricsAzureRedis,metricsSonarCacheRedis)
+
+        metricsAppCosmos = self.__metricModelAppService.calculateMetricAzureCosmosByApp(metricsAzureCosmos)
+
+        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\data.xlsx",metricsAppCosmos)
 
         Utils.logInfo(f"FINALIZA la ejecución del proceso modelo de métrica cloud development con el periodo {self.__period}")
 
