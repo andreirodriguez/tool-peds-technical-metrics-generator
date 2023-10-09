@@ -25,13 +25,35 @@ class MetricModelSquadService():
     def calculateMetricAzureSqlBySquad(self,metricsApp:pd.DataFrame,metricsAssesment:pd.DataFrame,baseActivos:pd.DataFrame)->pd.DataFrame:
         squads:pd.DataFrame = self.__squadPrioritizedRepository.getSquadsByServiceCloud(Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_SQL)
 
-        self.__getPointsMetricBySquad(squads,baseActivos,
+        squads = self.__getPointsMetricBySquad(squads,baseActivos,
                                       Constants.AZURE_MONITOR_AZURE_SQL_METRICS,metricsApp,
                                       [Constants.METRIC_SONAR_CONNECTION_POOL],metricsApp,
                                       Constants.ASSESMENT_METRICS_AZURE_SQL,metricsAssesment
                                       )
 
         return squads
+    
+    def calculateMetricCacheRedisBySquad(self,metricsApp:pd.DataFrame,metricsAssesment:pd.DataFrame,baseActivos:pd.DataFrame)->pd.DataFrame:
+        squads:pd.DataFrame = self.__squadPrioritizedRepository.getSquadsByServiceCloud(Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_REDIS)
+
+        squads = self.__getPointsMetricBySquad(squads,baseActivos,
+                                      Constants.AZURE_MONITOR_AZURE_REDIS_METRICS,metricsApp,
+                                      [Constants.METRIC_SONAR_CONNECTION_POOL],metricsApp,
+                                      Constants.ASSESMENT_METRICS_CACHE_REDIS,metricsAssesment
+                                      )
+
+        return squads    
+    
+    def calculateMetricCosmosDbBySquad(self,metricsApp:pd.DataFrame,metricsAssesment:pd.DataFrame,baseActivos:pd.DataFrame)->pd.DataFrame:
+        squads:pd.DataFrame = self.__squadPrioritizedRepository.getSquadsByServiceCloud(Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_COSMOS)
+
+        squads = self.__getPointsMetricBySquad(squads,baseActivos,
+                                      Constants.AZURE_MONITOR_AZURE_COSMOS_METRICS,metricsApp,
+                                      [],metricsApp,
+                                      Constants.ASSESMENT_METRICS_COSMOS_DB,metricsAssesment
+                                      )
+
+        return squads        
     
     def __getPointsMetricBySquad(self,squads:pd.DataFrame,baseActivos:pd.DataFrame,
                                  metricsListAzure:list[str],metricsDataAzure:pd.DataFrame,

@@ -116,7 +116,11 @@ class RunProcess():
 
         metricsSquadSql = self.__metricModelSquadService.calculateMetricAzureSqlBySquad(metricsAppSql,assesmentAzureSql,baseActivos)
 
-        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\modelMetric.xlsx",metricsSquadSql)
+        metricsSquadRedis = self.__metricModelSquadService.calculateMetricCacheRedisBySquad(metricsAppRedis,assesmentCacheRedis,baseActivos)
+
+        metricsSquadCosmos = self.__metricModelSquadService.calculateMetricCosmosDbBySquad(metricsAppCosmos,assesmentCosmosDb,baseActivos)
+
+        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\modelMetric.xlsx",metricsSquadCosmos)
 
         Utils.logInfo(f"FINALIZA la ejecución del proceso modelo de métrica cloud development con el periodo {self.__period}")
 
