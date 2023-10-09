@@ -25,7 +25,7 @@ class BaseActivosRepository():
             "tribu":"tribe",
             "squad_code":"squadCode",
             "squad":"squad",
-            "cod_app":"appCode",
+            "cod_app":"app",
             "especialidad":"specialty",
             "flag_activo":"flagActive"
         })

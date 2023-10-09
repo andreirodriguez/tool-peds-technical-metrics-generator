@@ -170,6 +170,9 @@ cloud_development/resources/output/*
 cloud_development/resources/input/base_activos/*
 !cloud_development/resources/input/base_activos/.gitkeep
 
+cloud_development/resources/input/squads_priorizados/*
+!cloud_development/resources/input/squads_priorizados/.gitkeep
+
 cloud_development/resources/input/sonar/*
 !cloud_development/resources/input/sonar/.gitkeep
 

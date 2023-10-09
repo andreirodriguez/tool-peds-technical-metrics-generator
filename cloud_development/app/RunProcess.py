@@ -15,7 +15,7 @@ from cloud_development.app.service.RedisCacheService import RedisCacheService
 from cloud_development.app.service.CosmosDbService import CosmosDbService
 
 from cloud_development.app.service.MetricModelAppService import MetricModelAppService
-
+from cloud_development.app.service.MetricModelSquadService import MetricModelSquadService
 
 from cloud_development.app.domain.AzureSql import AzureSql
 from cloud_development.app.domain.AzureSqlMetric import AzureSqlMetric
@@ -37,6 +37,7 @@ class RunProcess():
     __redisCacheService:RedisCacheService
     __cosmosDbService:CosmosDbService
     __metricModelAppService:MetricModelAppService
+    __metricModelSquadService:MetricModelSquadService
 
     def __init__(self,period:str):
         self.__period = period
@@ -62,6 +63,7 @@ class RunProcess():
         self.__cosmosDbService = CosmosDbService(metricAzureMonitorCosmos)
 
         self.__metricModelAppService = MetricModelAppService()
+        self.__metricModelSquadService = MetricModelSquadService(None)
 
     def run(self):
         Utils.logInfo(f"Leo la base de datos de activos con el periodo {self.__period}")
@@ -108,7 +110,13 @@ class RunProcess():
 
         metricsAppCosmos = self.__metricModelAppService.calculateMetricAzureCosmosByApp(metricsAzureCosmos)
 
-        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\data.xlsx",metricsAppCosmos)
+        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\metricApp.xlsx",metricsAppSql)
+
+        Utils.logInfo(f"Cálculo el modelo de la métricas por squad del periodo {self.__period}")
+
+        metricsSquadSql = self.__metricModelSquadService.calculateMetricAzureSqlBySquad(metricsAppSql,assesmentAzureSql,baseActivos)
+
+        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\modelMetric.xlsx",metricsSquadSql)
 
         Utils.logInfo(f"FINALIZA la ejecución del proceso modelo de métrica cloud development con el periodo {self.__period}")
 

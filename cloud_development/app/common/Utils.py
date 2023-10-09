@@ -210,7 +210,37 @@ class Utils:
                     return range["points"]                                 
             else:
                 if(range["maximum"] <= value < range["minimum"]):
-                    return round(
-                            range["points"] + 
-                                ((((range["maximum"] - value) * 100) / (range["minimum"] - range["maximum"])) / 100)
-                            ,2)
+                    points:Decimal = (range["minimum"] - range["maximum"])
+                    points = ((range["maximum"] - value) * 100) / points
+                    points = points / 100
+                    points += range["points"]
+                    points = round(points,2)
+
+                    return points
+                
+    @staticmethod
+    def getCodeSquadTribe(squadTribe:str)->str:
+        if(Utils.isNullOrEmpty(squadTribe)): return None
+
+        arrSquad=squadTribe.split("[")   
+
+        if(len(arrSquad)<2): 
+            arrSquad=squadTribe.split("(")   
+
+            if(len(arrSquad)<2): return None
+
+        if ")" in str(arrSquad[1]): 
+            squadCode=arrSquad[1].split(")")[0].strip()
+        else:
+            squadCode=arrSquad[1].split("]")[0].strip()    
+
+        return squadCode
+
+
+    @staticmethod
+    def isNullOrEmpty(value)->bool:
+        if(value==None): return True
+
+        if(len(str(value).strip())==0): return True
+
+        return False            

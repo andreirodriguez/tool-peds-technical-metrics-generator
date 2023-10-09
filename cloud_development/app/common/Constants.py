@@ -15,6 +15,11 @@ PATH_INPUT_METRIC_REDIS_CACHE_MONITOR_METRICS:str = "cloud_development\\resource
 
 PATH_INPUT_METRIC_COSMOS_DB_MONITOR_METRICS:str = "cloud_development\\resources\\input\\azure_monitor\\{tenantId}\\{subscriptionId}\\{resourceGroup}\\cosmos-db\\{cosmosDb}\\monitor-metrics-cosmos-db.csv"
 
+PATH_INPUT_SQUADS_PRIORIZADOS:str = "cloud_development\\resources\\input\\squads_priorizados\\squads_priorizados.xlsx"
+PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_SQL:str = "CLOUD SQL"
+PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_REDIS:str = "CLOUD REDIS"
+PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_COSMOS:str = "CLOUD COSMOS"
+
 AZURE_MONITOR_FILE_AZURE_SQL:str = "sql-databases.csv"
 AZURE_MONITOR_FILE_REDIS_CACHE:str = "redis-caches.csv"
 AZURE_MONITOR_FILE_COSMOS_DB:str = "cosmos-dbs.csv"
