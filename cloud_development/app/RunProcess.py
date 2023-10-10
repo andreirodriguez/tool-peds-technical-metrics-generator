@@ -116,9 +116,7 @@ class RunProcess():
 
         metricsAppCosmos = self.__metricModelAppService.calculateMetricAzureCosmosByApp(metricsAzureCosmos)
 
-        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\metricApp.xlsx",metricsAppSql)
-
-        Utils.logInfo(f"Cálculo el modelo de la métricas por squad del periodo {self.__period}")
+        Utils.logInfo(f"Cálculo el modelo de la métricas por squad y servicio cloud del periodo {self.__period}")
 
         metricsSquadSql = self.__metricModelSquadService.calculateMetricAzureSqlBySquad(metricsAppSql,assesmentAzureSql,baseActivos)
 
@@ -126,7 +124,17 @@ class RunProcess():
 
         metricsSquadCosmos = self.__metricModelSquadService.calculateMetricCosmosDbBySquad(metricsAppCosmos,assesmentCosmosDb,baseActivos)
 
-        Utils.exportDataFrameToXlsx("cloud_development\\resources\\output\\modelMetric.xlsx",metricsSquadCosmos)
+        Utils.logInfo(f"Cálculo el nivel de los squads priorizados del periodo {self.__period}")
+
+        squads = self.__metricModelSquadService.calculateMaturityLevel(metricsSquadSql,metricsSquadRedis,metricsSquadCosmos)
+
+        self.__maturityLevelService.exportExcelSummary(self.__period,baseActivos,
+                                                       squads,metricsSquadSql,metricsSquadRedis,metricsSquadCosmos,
+                                                       metricsAppSql,metricsAppRedis,metricsAppCosmos,
+                                                       Utils.getDataFrameToDictionaryList(metricsAzureSql),Utils.getDataFrameToDictionaryList(metricsAzureRedis),Utils.getDataFrameToDictionaryList(metricsAzureCosmos),
+                                                       metricsSonarAzureSql,metricsSonarCacheRedis,
+                                                       assesmentAzureSql,assesmentCacheRedis,assesmentCosmosDb
+                                                       )
 
         Utils.logInfo(f"FINALIZA la ejecución del proceso modelo de métrica cloud development con el periodo {self.__period}")
 

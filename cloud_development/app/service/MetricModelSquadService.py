@@ -61,7 +61,14 @@ class MetricModelSquadService():
 
         self.__maturityLevelService.calculateMaturityLevelBySquad(Constants.SERVICE_CLOUD_COSMOS_DB,squads)
 
-        return squads        
+        return squads     
+
+    def calculateMaturityLevel(self,squadsAzureSql:pd.DataFrame,squadsCacheRedis:pd.DataFrame,squadsCosmosDb:pd.DataFrame)->pd.DataFrame:
+        squads:pd.DataFrame = self.__squadPrioritizedRepository.getSquadsByServiceCloud(Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_GENERAL)
+
+        squads = self.__maturityLevelService.calculateMaturityLevel(squads,squadsAzureSql,squadsCacheRedis,squadsCosmosDb)
+
+        return squads            
     
     def __getPointsMetricBySquad(self,squads:pd.DataFrame,baseActivos:pd.DataFrame,
                                  metricsListAzure:list[str],metricsDataAzure:pd.DataFrame,

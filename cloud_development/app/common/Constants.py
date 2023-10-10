@@ -19,10 +19,13 @@ PATH_INPUT_SQUADS_PRIORIZADOS:str = "cloud_development\\resources\\input\\squads
 PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_SQL:str = "CLOUD SQL"
 PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_REDIS:str = "CLOUD REDIS"
 PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_COSMOS:str = "CLOUD COSMOS"
+PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_GENERAL:str = "GENERAL"
 
 AZURE_MONITOR_FILE_AZURE_SQL:str = "sql-databases.csv"
 AZURE_MONITOR_FILE_REDIS_CACHE:str = "redis-caches.csv"
 AZURE_MONITOR_FILE_COSMOS_DB:str = "cosmos-dbs.csv"
+
+PATH_OUTPUT_FILE_SUMMARY:str = "cloud_development\\resources\\output\\{period}-cloud-development-maturity-level-by-squad-summary.xlsx"
 
 AZURE_MONITOR_AZURE_SQL_METRICS:list[str] = ["tablesDenormalized","topConsumptionQueries","advisorsRecommended","deadlock","connectionFailed"]
 AZURE_MONITOR_AZURE_SQL_ADVISORS_RECOMMENDED_STATES:list[str] = ["Active","Pending"]
@@ -42,9 +45,9 @@ AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION:str = "NormalizedRUConsumption"
 
 BASE_ACTIVOS_FLAGS_ACTIVE_COE:list[str] = ["ACTIVO COE"]
 
-ASSESMENT_METRICS_AZURE_SQL:list[str] = ["normalizacion","performance","querys","transactional","poolConexion","estandarConexion"]
-ASSESMENT_METRICS_CACHE_REDIS:list[str] = ["estructura","performance","casosUso","reactividad","estandarConexion","poolConexion"]
-ASSESMENT_METRICS_COSMOS_DB:list[str] = ["desnormalizacion","performance","querys","insertions","estandarConexion"]
+ASSESMENT_METRICS_AZURE_SQL:list[str] = ["normalizedAssesment","performanceAssesment","querysAssesment","transactionalAssesment","connectionPoolAssesment","standardConnectionAssesment"]
+ASSESMENT_METRICS_CACHE_REDIS:list[str] = ["structureAssesment","performanceAssesment","useCaseAssesment","reactivityAssesment","standardConnectionAssesment","connectionPoolAssesment"]
+ASSESMENT_METRICS_COSMOS_DB:list[str] = ["denormalizationAssesment","performanceAssesment","querysAssesment","insertionsAssesment","standardConnectionAssesment"]
 
 FORMAT_DATETIME_SONAR:str = "%Y-%m-%dT%H:%M:%S-%f"
 
