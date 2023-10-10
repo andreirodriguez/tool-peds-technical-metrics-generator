@@ -15,7 +15,9 @@ from cloud_development.app.service.RedisCacheService import RedisCacheService
 from cloud_development.app.service.CosmosDbService import CosmosDbService
 
 from cloud_development.app.service.MetricModelAppService import MetricModelAppService
+from cloud_development.app.service.MaturityLevelService import MaturityLevelService
 from cloud_development.app.service.MetricModelSquadService import MetricModelSquadService
+
 
 from cloud_development.app.domain.AzureSql import AzureSql
 from cloud_development.app.domain.AzureSqlMetric import AzureSqlMetric
@@ -37,6 +39,7 @@ class RunProcess():
     __redisCacheService:RedisCacheService
     __cosmosDbService:CosmosDbService
     __metricModelAppService:MetricModelAppService
+    __maturityLevelService:MaturityLevelService
     __metricModelSquadService:MetricModelSquadService
 
     def __init__(self,period:str):
@@ -63,7 +66,10 @@ class RunProcess():
         self.__cosmosDbService = CosmosDbService(metricAzureMonitorCosmos)
 
         self.__metricModelAppService = MetricModelAppService()
-        self.__metricModelSquadService = MetricModelSquadService(None)
+
+        metricMaturityLevel:any = Utils.getConfigurationFileJson("metricMaturityLevel")
+        self.__maturityLevelService = MaturityLevelService(metricMaturityLevel)
+        self.__metricModelSquadService = MetricModelSquadService(self.__maturityLevelService)
 
     def run(self):
         Utils.logInfo(f"Leo la base de datos de activos con el periodo {self.__period}")

@@ -1,0 +1,342 @@
+[
+    {
+        "serviceCloud": "azureSql",
+        "percentage":40.00,
+        "categories":[
+            {
+                "category": "categoryDesign",
+                "percentage":40.00,
+                "metrics":
+                [
+                    {
+                        "metric": "metricNormalizedSizing",
+                        "percentage":50.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "normalizacion",
+                                "type": "assesment",
+                                "percentage": 50.00
+                            },
+                            {
+                                "variable": "tablesDenormalized",
+                                "type": "azure",
+                                "percentage": 50.00
+                            }                            
+                        ]
+                    },
+                    {
+                        "metric": "metricPerformance",
+                        "percentage":50.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "performance",
+                                "type": "assesment",
+                                "percentage": 20.00
+                            },
+                            {
+                                "variable": "topConsumptionQueries",
+                                "type": "azure",
+                                "percentage": 50.00
+                            },
+                            {
+                                "variable": "advisorsRecommended",
+                                "type": "azure",
+                                "percentage": 30.00
+                            }                            
+                        ]
+                    }
+                ]
+            }, 
+            {
+                "category": "categoryImplementation",
+                "percentage":40.00,
+                "metrics":
+                [
+                    {
+                        "metric": "metricQuerys",
+                        "percentage":50.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "querys",
+                                "type": "assesment",
+                                "percentage": 40.00
+                            },
+                            {
+                                "variable": "deadlock",
+                                "type": "azure",
+                                "percentage": 60.00
+                            }                            
+                        ]
+                    },
+                    {
+                        "metric": "metricTransactional",
+                        "percentage":50.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "transactional",
+                                "type": "assesment",
+                                "percentage": 100.00
+                            }               
+                        ]
+                    }
+                ]
+            },          
+            {
+                "category": "categoryConnectivity",
+                "percentage":40.00,
+                "metrics":
+                [
+                    {
+                        "metric": "metricStandardConnection",
+                        "percentage":50.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "estandarConexion",
+                                "type": "assesment",
+                                "percentage": 100.00
+                            }                    
+                        ]
+                    },
+                    {
+                        "metric": "metricConnectionPool",
+                        "percentage":50.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "poolConexion",
+                                "type": "assesment",
+                                "percentage": 20.00
+                            },
+                            {
+                                "variable": "connectionPool",
+                                "type": "sonar",
+                                "percentage": 40.00
+                            },
+                            {
+                                "variable": "connectionFailed",
+                                "type": "azure",
+                                "percentage": 40.00
+                            }                                      
+                        ]
+                    }
+                ]
+            }               
+        ]
+    },
+    {
+        "serviceCloud": "cacheRedis",
+        "percentage":30.00,
+        "categories":[
+            {
+                "category": "categoryDesign",
+                "percentage":20.00,
+                "metrics":
+                [
+                    {
+                        "metric": "metricStructure",
+                        "percentage":30.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "estructura",
+                                "type": "assesment",
+                                "percentage": 100.00
+                            }        
+                        ]
+                    },
+                    {
+                        "metric": "metricPerformance",
+                        "percentage":70.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "performance",
+                                "type": "assesment",
+                                "percentage": 20.00
+                            },
+                            {
+                                "variable": "maximumProcessorConsumption",
+                                "type": "azure",
+                                "percentage": 40.00
+                            },
+                            {
+                                "variable": "maximumMemoryConsumption",
+                                "type": "azure",
+                                "percentage": 40.00
+                            }                            
+                        ]
+                    }
+                ]
+            }, 
+            {
+                "category": "categoryImplementation",
+                "percentage":40.00,
+                "metrics":
+                [
+                    {
+                        "metric": "metricUseCase",
+                        "percentage":60.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "casosUso",
+                                "type": "assesment",
+                                "percentage": 40.00
+                            },
+                            {
+                                "variable": "cacheMissRate",
+                                "type": "azure",
+                                "percentage": 60.00
+                            }                            
+                        ]
+                    },
+                    {
+                        "metric": "metricReactivity",
+                        "percentage":40.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "reactividad",
+                                "type": "assesment",
+                                "percentage": 100.00
+                            }               
+                        ]
+                    }
+                ]
+            },          
+            {
+                "category": "categoryConnectivity",
+                "percentage":40.00,
+                "metrics":
+                [
+                    {
+                        "metric": "metricStandardConnection",
+                        "percentage":40.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "estandarConexion",
+                                "type": "assesment",
+                                "percentage": 100.00
+                            }                    
+                        ]
+                    },
+                    {
+                        "metric": "metricConnectionPool",
+                        "percentage":60.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "poolConexion",
+                                "type": "assesment",
+                                "percentage": 40.00
+                            },
+                            {
+                                "variable": "connectionPool",
+                                "type": "sonar",
+                                "percentage": 60.00
+                            }                             
+                        ]
+                    }
+                ]
+            }               
+        ]
+    },
+    {
+        "serviceCloud": "cosmosDb",
+        "percentage":30.00,
+        "categories":[
+            {
+                "category": "categoryDesign",
+                "percentage":60.00,
+                "metrics":
+                [
+                    {
+                        "metric": "metricDenormalization",
+                        "percentage":20.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "desnormalizacion",
+                                "type": "assesment",
+                                "percentage": 100.00
+                            }
+                        ]
+                    },
+                    {
+                        "metric": "metricPerformance",
+                        "percentage":70.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "performance",
+                                "type": "assesment",
+                                "percentage": 30.00
+                            },
+                            {
+                                "variable": "maximumRusConsumption",
+                                "type": "azure",
+                                "percentage": 70.00
+                            }                     
+                        ]
+                    }
+                ]
+            }, 
+            {
+                "category": "categoryImplementation",
+                "percentage":20.00,
+                "metrics":
+                [
+                    {
+                        "metric": "metricQuerys",
+                        "percentage":50.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "querys",
+                                "type": "assesment",
+                                "percentage": 100.00
+                            }         
+                        ]
+                    },
+                    {
+                        "metric": "metricInsertions",
+                        "percentage":50.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "insertions",
+                                "type": "assesment",
+                                "percentage": 100.00
+                            }               
+                        ]
+                    }
+                ]
+            },          
+            {
+                "category": "categoryConnectivity",
+                "percentage":20.00,
+                "metrics":
+                [
+                    {
+                        "metric": "metricStandardConnection",
+                        "percentage":100.00,
+                        "variables":
+                        [
+                            {
+                                "variable": "estandarConexion",
+                                "type": "assesment",
+                                "percentage": 100.00
+                            }                    
+                        ]
+                    }
+                ]
+            }               
+        ]
+    }            
+]

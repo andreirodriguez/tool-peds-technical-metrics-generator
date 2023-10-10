@@ -244,3 +244,11 @@ class Utils:
         if(len(str(value).strip())==0): return True
 
         return False            
+    
+    @staticmethod
+    def findObjectJson(listJson:any,property:str,value:str)->pd.DataFrame:
+        listJson = [record for record in listJson if record[property]==value]
+
+        if(len(listJson)==0): return None
+
+        return listJson[0]

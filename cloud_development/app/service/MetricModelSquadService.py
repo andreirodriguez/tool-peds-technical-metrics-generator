@@ -9,17 +9,19 @@ from cloud_development.app.repository.SquadPrioritizedRepository import SquadPri
 import cloud_development.app.common.Constants as Constants
 from cloud_development.app.common.Utils import Utils
 
+from cloud_development.app.service.MaturityLevelService import MaturityLevelService
+
 from cloud_development.app.domain.AzureSqlMetric import AzureSqlMetric
 from cloud_development.app.domain.RedisCacheMetric import RedisCacheMetric
 from cloud_development.app.domain.CosmosDbMetric import CosmosDbMetric
 
 class MetricModelSquadService():
 
-    __metricsModel:any  
+    __maturityLevelService:MaturityLevelService  
     __squadPrioritizedRepository:SquadPrioritizedRepository
 
-    def __init__(self,metricsModel:any):
-        self.__metricsModel = metricsModel
+    def __init__(self,maturityLevelService:MaturityLevelService):
+        self.__maturityLevelService = maturityLevelService
         self.__squadPrioritizedRepository = SquadPrioritizedRepository()
 
     def calculateMetricAzureSqlBySquad(self,metricsApp:pd.DataFrame,metricsAssesment:pd.DataFrame,baseActivos:pd.DataFrame)->pd.DataFrame:
@@ -30,6 +32,8 @@ class MetricModelSquadService():
                                       [Constants.METRIC_SONAR_CONNECTION_POOL],metricsApp,
                                       Constants.ASSESMENT_METRICS_AZURE_SQL,metricsAssesment
                                       )
+        
+        self.__maturityLevelService.calculateMaturityLevelBySquad(Constants.SERVICE_CLOUD_AZURE_SQL,squads)
 
         return squads
     
@@ -41,6 +45,8 @@ class MetricModelSquadService():
                                       [Constants.METRIC_SONAR_CONNECTION_POOL],metricsApp,
                                       Constants.ASSESMENT_METRICS_CACHE_REDIS,metricsAssesment
                                       )
+        
+        self.__maturityLevelService.calculateMaturityLevelBySquad(Constants.SERVICE_CLOUD_CACHE_REDIS,squads)
 
         return squads    
     
@@ -52,6 +58,8 @@ class MetricModelSquadService():
                                       [],metricsApp,
                                       Constants.ASSESMENT_METRICS_COSMOS_DB,metricsAssesment
                                       )
+
+        self.__maturityLevelService.calculateMaturityLevelBySquad(Constants.SERVICE_CLOUD_COSMOS_DB,squads)
 
         return squads        
     
