@@ -51,7 +51,7 @@
             }, 
             {
                 "category": "categoryImplementation",
-                "percentage":40.00,
+                "percentage":30.00,
                 "metrics":
                 [
                     {
@@ -87,7 +87,7 @@
             },          
             {
                 "category": "categoryConnectivity",
-                "percentage":40.00,
+                "percentage":30.00,
                 "metrics":
                 [
                     {

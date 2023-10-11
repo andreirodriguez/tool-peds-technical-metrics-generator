@@ -26,6 +26,31 @@ class MaturityLevelService():
         self.__calculateMetricsSquads(model,squads)
 
         return squads
+
+    def calculateMaturityLevelAssesmentBySquad(self,serviceCloud:str,squads:pd.DataFrame)->pd.DataFrame:
+
+        model:any = Utils.findObjectJson(self.__metricsModel,"serviceCloud",serviceCloud)
+
+        squads["applyPractice"] = squads.apply(lambda record: self.__getApplyAssesmentPractice(record,model),axis=1)
+
+        self.__calculateMetricsAssesmentSquads(model,squads)
+
+        return squads    
+    
+    def __getApplyAssesmentPractice(self,squad:any,model:any)->Decimal:
+        metricPoints:Decimal = 0.00
+        points:Decimal = 0.00
+
+        for category in model["categories"]:
+            for metric in category["metrics"]:        
+                for variable in metric["variables"]: 
+                    if(not variable["type"]=="assesment"): continue
+
+                    points = squad[variable["variable"]]
+
+                    if(math.isnan(points)): return False
+
+        return True
     
     def calculateMaturityLevel(self,squads:pd.DataFrame,squadsAzureSql:pd.DataFrame,squadsCacheRedis:pd.DataFrame,squadsCosmosDb:pd.DataFrame)->pd.DataFrame:
         squads["maturityLevelAzureSql"] = squads.apply(lambda record: self.__getMaturityLevelBySquadAndServiceCloud(record["squadCode"],squadsAzureSql),axis=1)
@@ -98,44 +123,70 @@ class MaturityLevelService():
 
         squads["maturityLevel"] = squads.apply(lambda record: self.__getMaturityLevelServiceCloud(record,model["categories"]),axis=1)
 
+    def __calculateMetricsAssesmentSquads(self,model:any,squads:pd.DataFrame):
+        for category in model["categories"]:
+            for metric in category["metrics"]:
+                squads[metric["metric"]] = squads.apply(lambda record: self.__getMetricAssesmentPoints(record,metric["variables"]),axis=1)
+
+        for category in model["categories"]:
+            squads[category["category"]] = squads.apply(lambda record: self.__getCategoryPoints(record,category["metrics"]),axis=1)
+
+        squads["maturityLevel"] = squads.apply(lambda record: self.__getMaturityLevelServiceCloud(record,model["categories"]),axis=1)        
 
     def __getMetricPoints(self,squad:any,variables:any)->Decimal:
-        if(not squad["hasAzure"]): return None
+        if(not squad["applyPractice"]): return None
 
         metricPoints:Decimal = 0.00
         points:Decimal = 0.00
         for variable in variables: 
             points = squad[variable["variable"]]
 
-            if(points==None): points = Constants.METRIC_SONAR_POINTS_MINIMUM
+            if(math.isnan(points)): points = Constants.METRIC_SONAR_POINTS_MINIMUM
 
             metricPoints += points * (variable["percentage"] / 100)
 
         return round(metricPoints,2)
     
+    def __getMetricAssesmentPoints(self,squad:any,variables:any)->Decimal:
+        if(not squad["applyPractice"]): return None
+
+        metricPoints:Decimal = 0.00
+        points:Decimal = 0.00
+
+        for variable in variables: 
+            if(not variable["type"]=="assesment"): continue
+
+            points = squad[variable["variable"]]
+
+            if(math.isnan(points)): points = Constants.METRIC_SONAR_POINTS_MINIMUM
+
+            metricPoints = points
+
+        return round(metricPoints,2)    
+    
     def __getCategoryPoints(self,squad:any,metrics:any)->Decimal:
-        if(not squad["hasAzure"]): return None
+        if(not squad["applyPractice"]): return None
 
         categoryPoints:Decimal = 0.00
         points:Decimal = 0.00
         for metric in metrics: 
             points = squad[metric["metric"]]
 
-            if(points==None): points = Constants.METRIC_SONAR_POINTS_MINIMUM
+            if(math.isnan(points)): points = Constants.METRIC_SONAR_POINTS_MINIMUM
 
             categoryPoints += points * (metric["percentage"] / 100)
 
         return round(categoryPoints,2)
 
     def __getMaturityLevelServiceCloud(self,squad:any,categories:any)->Decimal:
-        if(not squad["hasAzure"]): return None
+        if(not squad["applyPractice"]): return None
 
         maturityLevel:Decimal = 0.00
         points:Decimal = 0.00
         for category in categories: 
             points = squad[category["category"]]
 
-            if(points==None): points = Constants.METRIC_SONAR_POINTS_MINIMUM
+            if(math.isnan(points)): points = Constants.METRIC_SONAR_POINTS_MINIMUM
 
             maturityLevel += points * (category["percentage"] / 100)
 
@@ -168,6 +219,21 @@ class MaturityLevelService():
             assesmentCosmosDb.to_excel(writer,sheet_name="ASSESMENT " + Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_COSMOS,columns=self.__getColumnsMetricsAssesmentByServiceCloud(Constants.SERVICE_CLOUD_COSMOS_DB), index=False)
             baseActivos.to_excel(writer,sheet_name="BASE ACTIVOS", index=False)
 
+    def exportExcelSummaryAssesment(self,period,baseActivos:pd.DataFrame,
+                              squadsMaturityLevel:pd.DataFrame,squadsAzureSql:pd.DataFrame,squadsRedisCache:pd.DataFrame,squadsCosmosDb:pd.DataFrame,
+                              assesmentAzureSql:pd.DataFrame,assesmentRedisCache:pd.DataFrame,assesmentCosmosDb:pd.DataFrame
+                              ):
+        file = Utils.getPathDirectory(Constants.PATH_OUTPUT_FILE_ASSESMENT_SUMMARY.format(period=period))
+
+        with pd.ExcelWriter(file) as writer:
+            squadsMaturityLevel.to_excel(writer,sheet_name=Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_GENERAL,columns=self.__getColumnsSquadsGeneral(), index=False)
+            squadsAzureSql.to_excel(writer,sheet_name=Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_SQL,columns=self.__getColumnsAssesmentSquadsServiceCloud(Constants.SERVICE_CLOUD_AZURE_SQL), index=False)
+            squadsRedisCache.to_excel(writer,sheet_name=Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_REDIS,columns=self.__getColumnsAssesmentSquadsServiceCloud(Constants.SERVICE_CLOUD_CACHE_REDIS), index=False)
+            squadsCosmosDb.to_excel(writer,sheet_name=Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_COSMOS,columns=self.__getColumnsAssesmentSquadsServiceCloud(Constants.SERVICE_CLOUD_COSMOS_DB), index=False)
+            assesmentAzureSql.to_excel(writer,sheet_name="ASSESMENT " + Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_SQL,columns=self.__getColumnsMetricsAssesmentByServiceCloud(Constants.SERVICE_CLOUD_AZURE_SQL), index=False)
+            assesmentRedisCache.to_excel(writer,sheet_name="ASSESMENT " + Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_REDIS,columns=self.__getColumnsMetricsAssesmentByServiceCloud(Constants.SERVICE_CLOUD_CACHE_REDIS), index=False)
+            assesmentCosmosDb.to_excel(writer,sheet_name="ASSESMENT " + Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_COSMOS,columns=self.__getColumnsMetricsAssesmentByServiceCloud(Constants.SERVICE_CLOUD_COSMOS_DB), index=False)
+            baseActivos.to_excel(writer,sheet_name="BASE ACTIVOS", index=False)
 
     def __getColumnsSquadsGeneral(self)->list[str]:
         columns:list[str] = ["tribeCode","tribe","squadCode","squad","group","cmt","maturityLevel",
@@ -178,7 +244,7 @@ class MaturityLevelService():
     def __getColumnsSquadsServiceCloud(self,serviceCloud:str)->list[str]:
         model:any = Utils.findObjectJson(self.__metricsModel,"serviceCloud",serviceCloud)        
 
-        columns:list[str] = ["tribeCode","tribe","squadCode","squad","group","cmt","hasAzure","maturityLevel"]
+        columns:list[str] = ["tribeCode","tribe","squadCode","squad","group","cmt","applyPractice","maturityLevel"]
         
         for category in model["categories"]:
             columns.append(category["category"])
@@ -188,6 +254,26 @@ class MaturityLevelService():
                     columns.append(variable["variable"])
 
         columns.append("app")
+
+        return columns
+
+    def __getColumnsAssesmentSquadsServiceCloud(self,serviceCloud:str)->list[str]:
+        model:any = Utils.findObjectJson(self.__metricsModel,"serviceCloud",serviceCloud)        
+
+        columns:list[str] = ["tribeCode","tribe","squadCode","squad","group","cmt","applyPractice","maturityLevel"]
+        
+        for category in model["categories"]:
+            columns.append(category["category"])
+            for metric in category["metrics"]:
+                columns.append(metric["metric"])
+                for variable in metric["variables"]:
+                    if(not variable["type"]=="assesment"): continue
+
+                    columns.append(variable["variable"])
+
+        columns.append("app")
+
+        return columns
 
     def __getColumnsMetricsAppByServiceCloud(self,serviceCloud:str)->list[str]:
         columns:list[str] = ["app"]
