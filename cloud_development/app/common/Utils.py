@@ -14,7 +14,8 @@ from os import listdir,getcwd,mkdir
 log.basicConfig(filename=getLog(), 
                 level=log.INFO,
                 format=getLogFormat(),
-                datefmt=getLogDateFormat())
+                datefmt=getLogDateFormat(),
+                filemode="w")
 
 class Utils:
     @staticmethod
@@ -36,6 +37,12 @@ class Utils:
         if(os.path.exists(directory)): return
 
         mkdir(directory)
+
+    @staticmethod
+    def existsDirectory(directory:str)->bool:
+        if(os.path.exists(directory)): return True
+
+        return False
 
     @staticmethod
     def setCreateMkdir(directory:str):

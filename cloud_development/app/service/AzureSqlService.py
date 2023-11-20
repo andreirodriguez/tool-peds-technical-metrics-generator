@@ -58,6 +58,8 @@ class AzureSqlService():
     def __getTablesDenormalized(self,tenantId:str,database:AzureSql,limitColumns:int)->Decimal:
         columns:pd.DataFrame = self.__azureSqlRepository.getColumnsTableByDatabase(tenantId,database)
 
+        if(len(columns.index)==0): return 0
+
         tables = columns.groupby(['table']).size().reset_index(name='count')
 
         tables = tables[(tables['count'] > limitColumns)]
@@ -69,6 +71,8 @@ class AzureSqlService():
     def __getTopConsumptionQueries(self,tenantId:str,database:AzureSql,maxCpuPercentage:Decimal)->Decimal:
         topQueries:pd.DataFrame = self.__azureSqlRepository.getTopQuerysByDatabase(tenantId,database)
 
+        if(len(topQueries.index)==0): return 0
+
         topQueries = topQueries[(topQueries['valueCpu'] > maxCpuPercentage)]
 
         value = len(topQueries.index)
@@ -77,6 +81,8 @@ class AzureSqlService():
     
     def __getAdvisorsRecommended(self,tenantId:str,database:AzureSql)->Decimal:
         advisors:pd.DataFrame = self.__azureSqlRepository.getAdvisorsRecommended(tenantId,database)
+
+        if(len(advisors.index)==0): return 0
 
         advisors = advisors[(advisors['state'].isin(Constants.AZURE_MONITOR_AZURE_SQL_ADVISORS_RECOMMENDED_STATES))]
 

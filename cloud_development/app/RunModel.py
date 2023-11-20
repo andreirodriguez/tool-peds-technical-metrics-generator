@@ -147,6 +147,8 @@ class RunModel():
         with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
             metrics += executor.map(self.__extractMetricsAzureSqlByDatabase, databases)
 
+        metrics = list(filter(lambda record: not record == None, metrics))
+
         Utils.logInfo(f"Fin a calcular información de las métricas de {str(len(databases))} base de datos Azure Sql")
 
         return metrics
@@ -173,6 +175,8 @@ class RunModel():
         with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
             metrics += executor.map(self.__extractMetricsRedisCacheByDatabase, databases)
 
+        metrics = list(filter(lambda record: not record == None, metrics))
+
         Utils.logInfo(f"Fin a calcular información de las métricas de {str(len(databases))} base de datos Redis Cache")
 
         return metrics
@@ -198,6 +202,8 @@ class RunModel():
         
         with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
             metrics += executor.map(self.__extractMetricsCosmosDbByDatabase, databases)
+
+        metrics = list(filter(lambda record: not record == None, metrics))
 
         Utils.logInfo(f"Fin a calcular información de las métricas de {str(len(databases))} base de datos Cosmos Db")
 

@@ -35,6 +35,8 @@ class AzureSqlRepository():
         file:str = Constants.PATH_INPUT_METRIC_AZURE_SQL_TABLE_COLUMNS.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,sqlServer=database.sqlServer,sqlDatabase=database.name)
         file = Utils.getPathDirectory(file)
 
+        if(not Utils.existsDirectory(file)): return pd.DataFrame({})
+
         usecols:list[str]=["id","subscriptionId","resourceGroup","sqlServer","sqlDatabase",
                            "table","name","type"]
 
@@ -46,6 +48,8 @@ class AzureSqlRepository():
     def getTopQuerysByDatabase(self,tenantId:str,database:AzureSql)->pd.DataFrame:
         file:str = Constants.PATH_INPUT_METRIC_AZURE_SQL_TOP_QUERIES.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,sqlServer=database.sqlServer,sqlDatabase=database.name)
         file = Utils.getPathDirectory(file)
+
+        if(not Utils.existsDirectory(file)): return pd.DataFrame({})
 
         usecols:list[str]=["id","subscriptionId","resourceGroup","sqlServer","sqlDatabase",
                            "executionCount","intervalStartTime",
@@ -59,6 +63,8 @@ class AzureSqlRepository():
     def getAdvisorsRecommended(self,tenantId:str,database:AzureSql)->pd.DataFrame:
         file:str = Constants.PATH_INPUT_METRIC_AZURE_SQL_ADVISOR_RECOMMENDEDS.format(tenantId=tenantId,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,sqlServer=database.sqlServer,sqlDatabase=database.name)
         file = Utils.getPathDirectory(file)
+
+        if(not Utils.existsDirectory(file)): return pd.DataFrame({})
 
         usecols:list[str]=["id","subscriptionId","resourceGroup","sqlServer","sqlDatabase",
                            "advisor","name","reason",

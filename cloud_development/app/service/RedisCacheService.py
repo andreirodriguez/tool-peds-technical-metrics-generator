@@ -54,11 +54,13 @@ class RedisCacheService():
 
         successful:Decimal = azureMonitorSuccess["value"].sum()
 
+        value:Decimal = 0.00
+
+        if(successful==value): return value
+
         azureMonitorFailed = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_MISSES]))]
 
         failed:Decimal = azureMonitorFailed["value"].sum()  
-
-        value:Decimal = 0.00
 
         if(failed==value): return value
 
