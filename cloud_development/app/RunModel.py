@@ -29,7 +29,7 @@ from cloud_development.app.domain.CosmosDb import CosmosDb
 from cloud_development.app.domain.CosmosDbMetric import CosmosDbMetric
 
 
-class RunProcess():
+class RunModel():
     __period:str
     __environment:any
     __baseActivosService:BaseActivosService

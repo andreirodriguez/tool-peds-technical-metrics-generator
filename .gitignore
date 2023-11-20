@@ -138,6 +138,7 @@ util/files/*
 # Python language
 **/__pycache__/
 **/__init__.py
+venvmetrics
 venv
 ven
 *.idea

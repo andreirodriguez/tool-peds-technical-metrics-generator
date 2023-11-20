@@ -5,13 +5,13 @@
 ### Create a virtual environment
 
 ```shell
-python -m venv ven
+python -m venv venvmetrics
 ```
 
 ### Activate venv
 
 ```shell
-venv\Scripts\activate
+venvmetrics\Scripts\activate
 ```
 
 ### Get libs
