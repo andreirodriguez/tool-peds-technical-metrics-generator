@@ -16,3 +16,6 @@ class BaseActivosQuizRepo(RepoInterface):
         self.df['estandares_lineamientos_int_points'] = self.df.apply(lambda row: MetricCalculate.quizPoints(row['estandares_lineamientos_points']), axis=1)
         self.df['patrones_principios_int_points'] = self.df.apply(lambda row: MetricCalculate.quizPoints(row['patrones_principios_points']), axis=1)
         return self.df
+    
+    def set_table(self, data: PD.DataFrame)->None:
+        self.df = data

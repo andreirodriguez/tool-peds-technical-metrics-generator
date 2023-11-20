@@ -75,3 +75,5 @@ class AllowedVariablesByPr(Enum):
     TECHNICAL_MATURITY_LEVEL = 'technical_maturity_level'
     ANALYSIS_DATE = 'analysis_date'
     EXECUTION_DATE = 'execution_date'
+    MODIFIED_EXTENSIONS = "modified_extensions"
+    MODIFIED_FUNTIONALITY = "modified_functionality"

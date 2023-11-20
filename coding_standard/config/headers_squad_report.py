@@ -1,7 +1,9 @@
+from typing import List
+from config.PropertyInterface import PropertyInterface
 from config.PropertyModel import PropertyModel
 from config.allowed_variables_by_squad_report import AllowedVariablesBySquadReport as AB
 
-SQUAD_HEADERS = (
+SQUAD_HEADERS: List[PropertyInterface] = [
     PropertyModel(AB.SQUAD_CODE, 'squad_code', ''),
     PropertyModel(AB.TRIBE_CODE, 'tribe_code', ''),
     PropertyModel(AB.SQUAD, 'squad', ''),
@@ -74,4 +76,4 @@ SQUAD_HEADERS = (
     PropertyModel(AB.MATURITY_LEVEL, 'maturity_level', ''),
     PropertyModel(AB.ANALYSIS_DATE, 'analysis_date', ''),
     PropertyModel(AB.EXECUTION_DATE, 'execution_date', '')
-)
+]

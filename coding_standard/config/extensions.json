@@ -1,0 +1,6 @@
+{
+    "JAVA": ["java"],
+    "ANDROID": ["kt"],
+    "IOS": ["swift"],
+    "WEB": ["css", "ts", "js", "scss", "html", "tsx"]
+}

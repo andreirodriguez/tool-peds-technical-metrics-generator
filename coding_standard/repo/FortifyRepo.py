@@ -24,7 +24,9 @@ class FortifyRepo(RepoInterface):
         self.df['short_last_analysis_date']  = self.df['format_date'].dt.strftime('%Y-%m-%d %H:%M')
         self.df['custom_analysis_date']  = self.df.apply(lambda row: TimestampsCalc.set_dataframe_date(row['Ultimo análisis'], '-'), axis=1)
     
-    def table(self)->PD.DataFrame:      
-        self.df = self.df.sort_values(by='custom_analysis_date', ascending=True)  
+    def table(self)->PD.DataFrame:
+        self.df = self.df.sort_values(by='custom_analysis_date', ascending=True)
         return self.df
     
+    def set_table(self, data: PD.DataFrame)->None:
+        self.df = data

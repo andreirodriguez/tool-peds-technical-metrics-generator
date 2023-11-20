@@ -4,9 +4,9 @@ class MaturityCalc:
     ADOCTION_KNOWLEDGE_WEIGHT           = 0.15
 
     #SUB METRICS
-    CLEAN_CODE_WEIGHT                   = 0.10
-    MAINTAINABILITY_RESILIENCE_WEIGHT   = 0.40
-    SECURITY_WEIGHT                     = 0.35
+    CLEAN_CODE_WEIGHT                   = 0.45
+    MAINTAINABILITY_RESILIENCE_WEIGHT   = 0.10
+    SECURITY_WEIGHT                     = 0.30
 
     def cleanCodeCal(self, c_smell_diff_points, c_smell_overall_points, c_smell_severity_points, bug_diff_points, bug_overall_points, bug_severity_points):
         # PRINCIPAL WEIGHTS
@@ -16,11 +16,11 @@ class MaturityCalc:
         BUGS_SEVERITY_WEIGHT        = 0.10
 
         # SUB WEIGHTS
-        CODE_SMELL_DIFF_WEIGHT      = 0.20
-        CODE_SMELL_OVERALL_WEIGHT   = 0.80
+        CODE_SMELL_DIFF_WEIGHT      = 1
+        CODE_SMELL_OVERALL_WEIGHT   = 0
 
-        BUG_DIFF_WEIGHT             = 0.20
-        BUG_OVERALL_WEIGHT          = 0.80
+        BUG_DIFF_WEIGHT             = 1
+        BUG_OVERALL_WEIGHT          = 0
 
         c_smell_diff_maturity       = CODE_SMELL_DIFF_WEIGHT * c_smell_diff_points
         c_smell_overall_maturity    = CODE_SMELL_OVERALL_WEIGHT * c_smell_overall_points
@@ -80,11 +80,11 @@ class MaturityCalc:
     def tecnicalMaturityCal(self, tecnical_maturity_avg:float)->float:
         return tecnical_maturity_avg * self.TECNICAL_MATURITY_WEIGTH
 
-    def adoctionKnoledgeCal(self, standards_points:float, principles_and_patters_points:float)->float:
+    def adoptionKnowledgeCalculate(self, standards_points:float, principles_and_patters_points:float)->float:
         STANDARS                    = 0.50
         PRINCIPLES                  = 0.50
 
         standards_maturity          = standards_points * STANDARS
         principles_and_patters      = principles_and_patters_points * PRINCIPLES
 
-        return (standards_maturity + principles_and_patters) * self.ADOCTION_KNOWLEDGE_WEIGHT
+        return (standards_maturity + principles_and_patters)

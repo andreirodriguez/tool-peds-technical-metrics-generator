@@ -15,5 +15,8 @@ class QuizRepo(RepoInterface):
 
         self.df = PD.concat(dfs)        
     
-    def table(self)->PD.DataFrame:                
+    def table(self)->PD.DataFrame:
         return self.df
+    
+    def set_table(self, data: PD.DataFrame)->None:
+        self.df = data

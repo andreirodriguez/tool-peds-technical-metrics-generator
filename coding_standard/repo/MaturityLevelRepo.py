@@ -10,6 +10,8 @@ class MaturityLevelRepo(RepoInterface):
                             usecols=['squad_code', 'squad', 'tribe_code', 'tribe','group', 'cmt'], on_bad_lines='skip'
                         )
     
-    def table(self)->PD.DataFrame:        
-        return self.df          
-        
+    def table(self)->PD.DataFrame:
+        return self.df
+
+    def set_table(self, data: PD.DataFrame)->None:
+        self.df = data

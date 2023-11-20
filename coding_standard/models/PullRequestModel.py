@@ -1,4 +1,5 @@
 import pandas as pd
+from typing import List
 from config.PropertyInterface import PropertyInterface
 from models.ModelInterface import ModelInterface
 from queries.PRQuery import PRQuery
@@ -10,7 +11,7 @@ from utils.TimestampsCalc import TimestampsCalc
 class PullRequestModel(ModelInterface, PRQuery):        
     __default_points = 0
 
-    def __init__(self, maturity: MaturityCalc, timestapms: TimestampsCalc, df_prs_by_squad:pd.DataFrame, report_fields: tuple[PropertyInterface], *args, **kwargs) -> None:
+    def __init__(self, maturity: MaturityCalc, timestapms: TimestampsCalc, df_prs_by_squad:pd.DataFrame, report_fields: List[PropertyInterface], *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.maturity = maturity
         self.timestapms = timestapms
@@ -400,18 +401,26 @@ class PullRequestModel(ModelInterface, PRQuery):
     
     @property 
     def technical_maturity_level(self)->float:            
+        if not self.__has_sonar:
+            return None          
         tecnical_metric = self.maturity_clean_code + self.maturity_maintenaibily + self.maturity_security
-        tecnical_metric += self.code_smells_overall_penalty + self.bugs_overall_penalty + self.security_hostpots_total_penalty  + self.fortify_total_bugs_penalty
         return round((tecnical_metric) * (100 / 85), 2)
     
     @property
     def analysis_date(self):
         return self.timestapms.first_day_custom_date
 
-
     @property
     def execution_date(self):
         return self.timestapms.current_date_formated
+    
+    @property
+    def modified_extensions(self)->str:
+        return self.pr.modified_extensions
+    
+    @property
+    def modified_functionality(self)->str:
+        return self.pr.modified_functionality_for_CS
 
 
     def __global_setter(self)->None:

@@ -124,7 +124,7 @@ class RunProcess():
 
         metricsSquadCosmos = self.__metricModelSquadService.calculateMetricCosmosDbBySquad(metricsAppCosmos,assesmentCosmosDb,baseActivos)
 
-        Utils.logInfo(f"Cálculo el nivel de madurez de los squads priorizados del periodo {self.__period}")
+        Utils.logInfo(f"Cálculo el nivel de los squads priorizados del periodo {self.__period}")
 
         squads = self.__metricModelSquadService.calculateMaturityLevel(metricsSquadSql,metricsSquadRedis,metricsSquadCosmos)
 

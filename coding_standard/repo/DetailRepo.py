@@ -13,8 +13,11 @@ class DetailRepo(RepoInterface):
                 match_file = file                
                 break        
         
-        df = PD.read_csv(OUTPUT_FOLDER + match_file, encoding = 'utf8')        
+        df = PD.read_csv(OUTPUT_FOLDER + match_file, encoding = 'utf8')
         self.df = df
 
     def table(self)->PD.DataFrame:
         return self.df
+    
+    def set_table(self, data: PD.DataFrame)->None:
+        self.df = data

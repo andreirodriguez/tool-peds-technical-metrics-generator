@@ -1,6 +1,7 @@
 import pandas as pd
+from typing import List
+from config.PropertyInterface import PropertyInterface
 from reports.ReportInterface import ReportInterface
-
 from models.PullRequestModel import PullRequestModel
 from repo.Storage import Storage
 from utils.MaturityCalc import MaturityCalc
@@ -8,7 +9,7 @@ from utils.TimestampsCalc import TimestampsCalc
 
 class PullRequestReport(ReportInterface):
 
-    def __init__(self, output_path, storage: Storage, timestamps: TimestampsCalc, report_fields)->None:
+    def __init__(self, output_path, storage: Storage, timestamps: TimestampsCalc, report_fields: List[PropertyInterface])->None:
         self.__output_path      = output_path
         self.__timestamps       = timestamps
         self.__maturity_calc    = MaturityCalc()
@@ -32,7 +33,7 @@ class PullRequestReport(ReportInterface):
             print(f'REPORTE POR PR:  Squad:: {str(squad["squad"])} - REG {counter} DE {len(self.__maturity_level)} ###################')
             
             df_prs_by_squad = self.__pull_request.bySquadCode(squad['squad_code'])
-
+            if len(df_prs_by_squad) == 0: continue
             prs = self.__get_pull_requests(df_prs_by_squad)
             if len(prs): dataFrameCollect.append(prs)
 

@@ -308,17 +308,17 @@ column_status = [
         "status"
     ]
 
-columns_summary = ['Especialidad', 'grupo 1 y 2', 'grupo 3', 'all']
+columns_summary = ['Especialidad', 'grupo 1 y 2', 'grupo 3', 'grupo 4', 'all']
 columns_summary_propened = ['Especialidad', 'cantidad de pr abierto']
 xls_report_columns = [
     'specialty',
-    'grupo_1_2_approved',
-    'grupo_1_2_disapprove',
-    'grupo_1_2_without_maturity_level',
-    'grupo_1_2_total',
-    'grupo_3_approved',
-    'grupo_3_disapprove',
-    'grupo_3_without_maturity_level',
-    'grupo_3_total',
+    'grupo_1/2/3_approved',
+    'grupo_1/2/3_disapprove',
+    'grupo_1/2/3_without_maturity_level',
+    'grupo_1/2/3_total',
+    'grupo_4_approved',
+    'grupo_4_disapprove',
+    'grupo_4_without_maturity_level',
+    'grupo_4_total',
     'without_maturity',
     'all_squads']

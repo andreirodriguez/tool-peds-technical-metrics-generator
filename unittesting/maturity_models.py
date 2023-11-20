@@ -308,12 +308,15 @@ def getReportSquadsMaturityLevelByGroup(squadsGeneral,squadsPrioritized)->pd.Dat
         squadsByGroup = squads[(squads['grupo']==3)] 
         mean_group_3 = round(squadsByGroup["maturity_level"].mean(),2)
 
+        squadsByGroup = squads[(squads['grupo']==4)] 
+        mean_group_4 = round(squadsByGroup["maturity_level"].mean(),2)
+
         squadsByGroup = squads[(squads['grupo'].isnull())]
         mean_others = round(squadsByGroup["maturity_level"].mean(),2)
 
         mean_all = round(squads["maturity_level"].mean(),2)
 
-        newRow = pd.Series({'specialty': specialty,'grupo_1_2': mean_group_1_2,'grupo_3': mean_group_3,'otros': mean_others, 'todos': mean_all})
+        newRow = pd.Series({'specialty': specialty,'grupo_1_2': mean_group_1_2,'grupo_3': mean_group_3,'grupo_4': mean_group_4 ,'otros': mean_others, 'todos': mean_all})
         xlsReport = pd.concat([xlsReport, newRow.to_frame().T], ignore_index=True)
 
         count += 1
@@ -342,23 +345,25 @@ def getReportSquadsApprovedByGroup(squadsGeneral,squadsPrioritized)->pd.DataFram
 
         if(specialty in "IOS" or specialty in "ANDROID"): nmApproved = 3
 
-        squadsByGroup = squads[(squads['grupo'].isin([1,2]))]
+        squadsByGroup = squads[(squads['grupo'].isin([1,2,3]))]
 
-        grupo_1_2_approved = len(squadsByGroup[(squadsByGroup['maturity_level'] >= nmApproved)].index)
-        grupo_1_2_disapprove = len(squadsByGroup[(squadsByGroup['maturity_level'] < nmApproved)].index)
-        grupo_1_2_without_maturity_level = len(squadsByGroup[(squadsByGroup['maturity_level'].isnull())].index)
-        grupo_1_2_total = len(squadsByGroup.index)
+        grupo_1_2_3_approved = len(squadsByGroup[(squadsByGroup['maturity_level'] >= nmApproved)].index)
+        grupo_1_2_3_disapprove = len(squadsByGroup[(squadsByGroup['maturity_level'] < nmApproved)].index)
+        grupo_1_2_3_without_maturity_level = len(squadsByGroup[(squadsByGroup['maturity_level'].isnull())].index)
+        grupo_1_2_3_total = len(squadsByGroup.index)
 
         nmApproved = 3.5
 
-        squadsByGroup = squads[(squads['grupo'].isin([3]))]
+        squadsByGroup = squads[(squads['grupo'].isin([4]))]
 
-        grupo_3_approved = len(squadsByGroup[(squadsByGroup['maturity_level'] >= nmApproved)].index)
-        grupo_3_disapprove = len(squadsByGroup[(squadsByGroup['maturity_level'] < nmApproved)].index)
-        grupo_3_without_maturity_level = len(squadsByGroup[(squadsByGroup['maturity_level'].isnull())].index)
-        grupo_3_total = len(squadsByGroup.index)        
+        grupo_4_approved = len(squadsByGroup[(squadsByGroup['maturity_level'] >= nmApproved)].index)
+        grupo_4_disapprove = len(squadsByGroup[(squadsByGroup['maturity_level'] < nmApproved)].index)
+        grupo_4_without_maturity_level = len(squadsByGroup[(squadsByGroup['maturity_level'].isnull())].index)
+        grupo_4_total = len(squadsByGroup.index)        
 
-        newRow = pd.Series({'specialty': specialty,'grupo_1_2_approved': grupo_1_2_approved,'grupo_1_2_disapprove': grupo_1_2_disapprove,'grupo_1_2_without_maturity_level': grupo_1_2_without_maturity_level,'grupo_1_2_total': grupo_1_2_total,'grupo_3_approved': grupo_3_approved,'grupo_3_disapprove': grupo_3_disapprove,'grupo_3_without_maturity_level': grupo_3_without_maturity_level,'grupo_3_total': grupo_3_total})
+        newRow = pd.Series({'specialty': specialty,'grupo_1_2_approved': grupo_1_2_3_approved,'grupo_1_2_disapprove': grupo_1_2_3_disapprove,'grupo_1_2_without_maturity_level': grupo_1_2_3_without_maturity_level,
+                            'grupo_1_2_total': grupo_1_2_3_total,'grupo_3_approved': grupo_4_approved,'grupo_3_disapprove': grupo_4_disapprove,'grupo_3_without_maturity_level': grupo_4_without_maturity_level,
+                            'grupo_3_total': grupo_4_total})
         xlsReport = pd.concat([xlsReport, newRow.to_frame().T], ignore_index=True)
 
         count += 1

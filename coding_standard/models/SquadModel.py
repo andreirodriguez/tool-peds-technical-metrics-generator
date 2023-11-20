@@ -1,12 +1,13 @@
 from config.PropertyInterface import PropertyInterface
 from models.ModelInterface import ModelInterface
 from queries.SquadQuery import SquadQuery
+from typing import List
 import pandas as pd
 
 from utils.MaturityCalc import MaturityCalc
 
 class SquadModel(ModelInterface, SquadQuery):
-    def __init__(self, squad_df: pd.DataFrame, report_fields: tuple[PropertyInterface], *args, **kwargs):
+    def __init__(self, squad_df: pd.DataFrame, report_fields: List[PropertyInterface], *args, **kwargs):
         super().__init__(squad_df, *args, **kwargs)        
         self.squad_df = squad_df
         self.maturity = MaturityCalc()
@@ -281,7 +282,7 @@ class SquadModel(ModelInterface, SquadQuery):
 
     @property        
     def technical_maturity_level(self)->float:
-        return round(self.maturity.tecnicalMaturityCal(self.avgMetric('technical_maturity_level')), 2)
+        return round(self.avgMetric('technical_maturity_level'), 2)
     
     @property
     def estandares_lineamientos_points(self)->float:
@@ -293,13 +294,16 @@ class SquadModel(ModelInterface, SquadQuery):
     
     @property
     def knoledge_maturity_level(self)->float:
-        return round(self.maturity.adoctionKnoledgeCal(self.estandares_lineamientos_points, self.patrones_principios_points), 2)
+        return round(self.maturity.adoptionKnowledgeCalculate(self.estandares_lineamientos_points, self.patrones_principios_points), 2)
     
     @property
     def sonar_execution_ratio(self)->float:
         all_registers           = self.countAllRegisters()
         pr_with_sonar_execution = self.registersWithSonarExecution()
-        return round((pr_with_sonar_execution / all_registers) * 100, 1)
+        if pr_with_sonar_execution > 0:
+            return round((pr_with_sonar_execution / all_registers) * 100, 1)
+        
+        return 0.0
 
     @property
     def sonar_execution_penalty(self)->float:
@@ -307,8 +311,8 @@ class SquadModel(ModelInterface, SquadQuery):
 
     @property
     def maturity_level(self)->float:        
-        maturity = sum([self.knoledge_maturity_level,
-                    self.technical_maturity_level,
+        maturity = sum([self.knoledge_maturity_level * self.maturity.ADOCTION_KNOWLEDGE_WEIGHT,
+                    self.technical_maturity_level * self.maturity.TECNICAL_MATURITY_WEIGTH,
                     self.code_smells_severity_penalty,
                     self.bugs_severity_penalty,
                     self.hostpots_severity_penalty,

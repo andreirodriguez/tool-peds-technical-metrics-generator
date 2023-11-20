@@ -13,5 +13,8 @@ class BaseActivosRepo(RepoInterface):
         self.df = self.df.astype({'squad_code': int})
     
     def table(self)->PD.DataFrame:
-        df = self.df        
+        df = self.df
         return df
+    
+    def set_table(self, data: PD.DataFrame)->None:
+        self.df = data

@@ -26,7 +26,6 @@ AZURE_MONITOR_FILE_REDIS_CACHE:str = "redis-caches.csv"
 AZURE_MONITOR_FILE_COSMOS_DB:str = "cosmos-dbs.csv"
 
 PATH_OUTPUT_FILE_SUMMARY:str = "cloud_development\\resources\\output\\{period}-cloud-development-maturity-level-by-squad-summary.xlsx"
-PATH_OUTPUT_FILE_ASSESMENT_SUMMARY:str = "cloud_development\\resources\\output\\{period}-cloud-development-maturity-level-assesment-by-squad-summary.xlsx"
 
 AZURE_MONITOR_AZURE_SQL_METRICS:list[str] = ["tablesDenormalized","topConsumptionQueries","advisorsRecommended","deadlock","connectionFailed"]
 AZURE_MONITOR_AZURE_SQL_ADVISORS_RECOMMENDED_STATES:list[str] = ["Active","Pending"]

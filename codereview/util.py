@@ -152,9 +152,10 @@ def set_export_excel_summary(period, team_member_data_base, pr_with_variable_not
 def get_summary(squad_maturity_level, specialty):
     group_1_2 = round(squad_maturity_level[(squad_maturity_level['group']==1) | (squad_maturity_level['group']==2)]["maturity_level"].mean(),2)
     group_3 = round(squad_maturity_level[(squad_maturity_level['group']==3)]["maturity_level"].mean(),2)
+    group_4 = round(squad_maturity_level[(squad_maturity_level['group']==4)]["maturity_level"].mean(),2)
     all = round(squad_maturity_level["maturity_level"].mean(),2)
 
-    return [specialty, group_1_2, group_3, all]
+    return [specialty, group_1_2, group_3, group_4, all]
 
 def get_summary_pr(pr_opened):
     summary_open_pr = []
@@ -176,21 +177,22 @@ def get_data_per_group(squads_with_maturity_level)->pd.DataFrame:
         squads = squads_with_maturity_level[count]
         nmApproved = 4
         if(specialty == "FRONTEND IOS" or specialty == "FRONTEND ANDROID"): nmApproved = 3
-        squadsByGroup = squads[(squads['group'].isin([1,2]))]
+        squadsByGroup = squads[(squads['group'].isin([1,2,3]))]
         group_1_2_approved = squadsByGroup[squadsByGroup['maturity_level'] >= nmApproved].shape[0]
         group_1_2_disapprove = squadsByGroup[squadsByGroup['maturity_level'] < nmApproved].shape[0]
         group_1_2_without_maturity_level = squadsByGroup[squadsByGroup['maturity_level'].isnull()].shape[0]
         group_1_2_total = squadsByGroup.shape[0]
         nmApproved = 3.5
-        squadsByGroup = squads[(squads['group'].isin([3]))]
-        group_3_approved = squadsByGroup[squadsByGroup['maturity_level'] >= nmApproved].shape[0]
-        group_3_disapprove = squadsByGroup[squadsByGroup['maturity_level'] < nmApproved].shape[0]
-        group_3_without_maturity_level = squadsByGroup[squadsByGroup['maturity_level'].isnull()].shape[0]
-        group_3_total = squadsByGroup.shape[0]
-        without_maturity = group_1_2_without_maturity_level + group_3_without_maturity_level
+        squadsByGroup = squads[(squads['group'].isin([4]))]
+        group_4_approved = squadsByGroup[squadsByGroup['maturity_level'] >= nmApproved].shape[0]
+        group_4_disapprove = squadsByGroup[squadsByGroup['maturity_level'] < nmApproved].shape[0]
+        group_4_without_maturity_level = squadsByGroup[squadsByGroup['maturity_level'].isnull()].shape[0]
+        group_4_total = squadsByGroup.shape[0]
+
+        without_maturity = group_1_2_without_maturity_level + group_4_without_maturity_level + group_4_without_maturity_level
         all_squads = len(squads)
-        xls_report.append([specialty, group_1_2_approved, group_1_2_disapprove, group_1_2_without_maturity_level, group_1_2_total, group_3_approved, 
-                         group_3_disapprove, group_3_without_maturity_level, group_3_total, without_maturity, all_squads])
+        xls_report.append([specialty, group_1_2_approved, group_1_2_disapprove, group_1_2_without_maturity_level, group_1_2_total, group_4_approved, 
+                         group_4_disapprove, group_4_without_maturity_level, group_4_total, without_maturity, all_squads])
         xls_report_df = pd.DataFrame(xls_report, columns = xls_report_columns)
         count += 1
 

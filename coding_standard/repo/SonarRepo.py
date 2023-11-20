@@ -27,6 +27,9 @@ class SonarRepo(RepoInterface):
         df = self.df        
         return df
     
+    def set_table(self, data: PD.DataFrame)->None:
+        self.df = data
+    
     def setBranchName(self, row)->str:
         branch = re.sub(r"""^.+SNAPSHOT-""", "", row['Version'])
         branch = re.sub(r"""^(\d+(\.|-))+""", "", branch)

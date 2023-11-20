@@ -20,3 +20,7 @@ OUTPUT_BY_SQUAD_FILE_ANDROID= "output" + os.sep + "{}-cs-maturity-level-by-squad
 OUTPUT_BY_SQUAD_FILE_IOS= "output" + os.sep + "{}-cs-maturity-level-by-squad-FRONTEND IOS.csv"
 OUTPUT_BY_SQUAD_FILE_WEB= "output" + os.sep + "{}-cs-maturity-level-by-squad-FRONTEND WEB.csv"
 OUTPUT_FOLDER            = "output" + os.sep
+
+############### OTHER FILES ##################################
+
+EXTENSIONS_ADD_FUNTIONALITY = "config" + os.sep + "extensions.json"

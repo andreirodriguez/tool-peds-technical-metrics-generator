@@ -1,7 +1,9 @@
+from typing import List
+from config.PropertyInterface import PropertyInterface
 from config.PropertyModel import PropertyModel
 from config.allowed_variables_by_pr_report import AllowedVariablesByPr as AV
 
-DETAIL_HEADERS = (
+DETAIL_HEADERS: List[PropertyInterface] = [
     PropertyModel(AV.APP, 'app', ''),
     PropertyModel(AV.REPO, 'repo', ''),
     PropertyModel(AV.SONAR_PROJECT_NAME, 'sonar_project_name', 'SONAR'),
@@ -76,4 +78,6 @@ DETAIL_HEADERS = (
     PropertyModel(AV.TECHNICAL_MATURITY_LEVEL, 'technical_maturity_level', ''),
     PropertyModel(AV.ANALYSIS_DATE, 'analysis_date', ''),
     PropertyModel(AV.EXECUTION_DATE, 'execution_date', ''),
-)
+    PropertyModel(AV.MODIFIED_EXTENSIONS, 'modified_extensions', ''),
+    PropertyModel(AV.MODIFIED_FUNTIONALITY, 'modified_functionality', '')
+]
