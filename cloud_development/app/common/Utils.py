@@ -8,6 +8,8 @@ import traceback
 import os
 from decimal import Decimal
 
+import cloud_development.app.common.Constants as Constants
+
 from cloud_development.app.common.Log import getLog,getLogDateFormat,getLogFormat
 from os import listdir,getcwd,mkdir
 
@@ -170,10 +172,22 @@ class Utils:
                 return character.upper()
 
     @staticmethod
-    def getFilesDirectory(directory:str) -> str:
+    def getFilesDirectory(directory:str) -> list:
         files = [x for x in listdir(Utils.getPathDirectory(directory))]
 
-        return files          
+        return files   
+
+    @staticmethod
+    def getFoldersDirectory(directory:str) -> list:
+        directory = Utils.getPathDirectory(directory)
+        folders:list[str] = []
+
+        for folder in os.listdir(directory):
+            if os.path.isdir(os.path.join(directory, folder)):
+                folders.append(folder)
+
+        return folders
+
     
     @staticmethod
     def getAllFilesSubDirectory(directory:str,pattern:str) -> list[str]:
@@ -259,3 +273,44 @@ class Utils:
         if(len(listJson)==0): return None
 
         return listJson[0]
+    
+    @staticmethod
+    def getAllResourcesAzureType(basePathAzure:str,fileResource:str,resourceColumns:list[str])->pd.DataFrame:
+        data = pd.DataFrame({})
+        files = Utils.getAllFilesSubDirectory(basePathAzure,fileResource)
+
+        for file in files:
+            data = pd.concat([data, Utils.getFileResourcesAzureType(file,resourceColumns)], ignore_index=True)        
+
+        return data
+
+    @staticmethod
+    def getFileResourcesAzureType(directory:str,resourceColumns:list[str])->pd.DataFrame:
+        file:str = Utils.getPathDirectory(directory)
+
+        usecols:list[str]=resourceColumns.copy()
+        usecols.append("processDate")
+
+        data:pd.DataFrame = pd.read_csv(file,usecols=usecols,encoding="utf-8")
+        data = data.astype(object).where(pd.notnull(data),None)
+
+        data['processDate'] = data['processDate'].apply(lambda value: pd.to_datetime(value,format=Constants.FORMAT_DATETIME_PROCESS_AZURE_MONITOR).to_datetime64())
+
+        return data            
+    
+    @staticmethod
+    def getDataAzureMonitor(pathAzureData:str,columnsAzureData:list[str])->pd.DataFrame:
+        data = pd.DataFrame(columns=columnsAzureData)
+        folders = Utils.getFoldersDirectory(Constants.PATH_INPUT_AZURE_MONITOR)
+
+        for folder in folders:
+            file = pathAzureData.replace(Constants.PARAMETER_INPUT_AZURE_TENANTID,folder)
+
+            if(not Utils.existsDirectory(file)): continue
+
+            dataAzure = pd.read_csv(Utils.getPathDirectory(file),usecols=columnsAzureData,encoding="utf-8")
+            dataAzure = dataAzure.astype(object).where(pd.notnull(dataAzure),None)
+
+            data = pd.concat([data, dataAzure], ignore_index=True)        
+
+        return data    

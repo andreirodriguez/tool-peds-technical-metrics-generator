@@ -28,12 +28,12 @@ class RedisCacheService():
     def listAllRedisDatabases(self)->pd.DataFrame:
         return self.__redisCacheRepository.getAllRedisDatabases()
     
-    def calculateMetrics(self,tenantId:str,database:RedisCache)->RedisCacheMetric:
+    def calculateMetrics(self,database:RedisCache)->RedisCacheMetric:
         metric:RedisCacheMetric = RedisCacheMetric(database)
 
         metricAzureMonitor:any
 
-        azureMonitor:pd.DataFrame = self.__redisCacheRepository.getAzureMonitor(tenantId,database)
+        azureMonitor:pd.DataFrame = self.__redisCacheRepository.getAzureMonitor(database)
 
         metricAzureMonitor = self.__getMetric("cachemissrate")
         metric.cacheMissRate = self.__getCacheMissRate(azureMonitor)

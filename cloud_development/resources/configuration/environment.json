@@ -1,5 +1,4 @@
 {
-    "tenantId": "5d93ebcc-f769-4380-8b7e-289fc972da1b",
     "threads" : {
         "azureSql" : 10,
         "cacheRedis": 10,

@@ -98,13 +98,13 @@ class RunModel():
 
         sqlDatabases = self.__azureSqlService.listAllSqlDatabases()
 
-        metricsAzureSql = self.__extractMetricsAzureSql(sqlDatabases)
-
         redisDatabases = self.__redisCacheService.listAllRedisDatabases()
 
-        metricsAzureRedis = self.__extractMetricsRedisCache(redisDatabases)
-
         cosmosDatabases = self.__cosmosDbService.listAllCosmosDatabases()
+
+        metricsAzureSql = self.__extractMetricsAzureSql(sqlDatabases)
+
+        metricsAzureRedis = self.__extractMetricsRedisCache(redisDatabases)
 
         metricsAzureCosmos = self.__extractMetricsCosmosDb(cosmosDatabases)
 
@@ -158,7 +158,7 @@ class RunModel():
         Utils.logInfo(f"Cálculo métricas del recurso Azure Sql: {database.id}")
 
         try:
-            metric:AzureSqlMetric = self.__azureSqlService.calculateMetrics(self.__environment["tenantId"],database)
+            metric:AzureSqlMetric = self.__azureSqlService.calculateMetrics(database)
 
             return metric
         except Exception as ex:
@@ -186,7 +186,7 @@ class RunModel():
         Utils.logInfo(f"Cálculo métricas del recurso Redis Cache: {database.id}")
 
         try:
-            metric:RedisCacheMetric = self.__redisCacheService.calculateMetrics(self.__environment["tenantId"],database)
+            metric:RedisCacheMetric = self.__redisCacheService.calculateMetrics(database)
 
             return metric
         except Exception as ex:
@@ -214,7 +214,7 @@ class RunModel():
         Utils.logInfo(f"Cálculo métricas del recurso Cosmos Db: {database.id}")
 
         try:
-            metric:CosmosDbMetric = self.__cosmosDbService.calculateMetrics(self.__environment["tenantId"],database)
+            metric:CosmosDbMetric = self.__cosmosDbService.calculateMetrics(database)
 
             return metric
         except Exception as ex:

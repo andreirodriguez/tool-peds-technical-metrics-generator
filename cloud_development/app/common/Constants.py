@@ -2,6 +2,8 @@ PATH_INPUT_BASE_ACTIVOS:str = "cloud_development\\resources\\input\\base_activos
 PATH_INPUT_SONAR:str = "cloud_development\\resources\\input\\sonar\\"
 PATH_INPUT_AZURE_MONITOR:str = "cloud_development\\resources\\input\\azure_monitor\\"
 
+PARAMETER_INPUT_AZURE_TENANTID:str = "@tenantId"
+
 PATH_INPUT_ASSESMENT_AZURE_SQL:str = "cloud_development\\resources\\input\\assesments\\azure_sql\\"
 PATH_INPUT_ASSESMENT_CACHE_REDIS:str = "cloud_development\\resources\\input\\assesments\\cache_redis\\"
 PATH_INPUT_ASSESMENT_COSMOS_DB:str = "cloud_development\\resources\\input\\assesments\\cosmos_db\\"
@@ -27,12 +29,14 @@ AZURE_MONITOR_FILE_COSMOS_DB:str = "cosmos-dbs.csv"
 
 PATH_OUTPUT_FILE_SUMMARY:str = "cloud_development\\resources\\output\\{period}-cloud-development-maturity-level-by-squad-summary.xlsx"
 
+AZURE_MONITOR_AZURE_SQL_COLUMNS:list[str] = ["id","subscriptionId","resourceGroup","sqlServer","kind","name"]
 AZURE_MONITOR_AZURE_SQL_METRICS:list[str] = ["tablesDenormalized","topConsumptionQueries","advisorsRecommended","deadlock","connectionFailed"]
 AZURE_MONITOR_AZURE_SQL_ADVISORS_RECOMMENDED_STATES:list[str] = ["Active","Pending"]
 AZURE_MONITOR_AZURE_SQL_METRIC_DEADLOCK:str = "deadlock"
 AZURE_MONITOR_AZURE_SQL_METRIC_CONNECTION_SUCCESSFUL:str = "connection_successful"
 AZURE_MONITOR_AZURE_SQL_METRIC_CONNECTION_FAILED:str = "connection_failed"
 
+AZURE_MONITOR_AZURE_REDIS_COLUMNS:list[str] = ["id","subscriptionId","resourceGroup","location","name","type","state","version","hostName"]
 AZURE_MONITOR_AZURE_REDIS_METRICS:list[str] = ["cacheMissRate","maximumProcessorConsumption","maximumMemoryConsumption"]
 AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_MISS_RATE:str = "cachemissrate"
 AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_HITS:str = "cachehits"
@@ -40,6 +44,7 @@ AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_MISSES:str = "cachemisses"
 AZURE_MONITOR_AZURE_REDIS_METRIC_PERCENT_PROCESSOR:str = "percentProcessorTime"
 AZURE_MONITOR_AZURE_REDIS_METRIC_MEMORY_PERCENTAGE:str = "usedmemorypercentage"
 
+AZURE_MONITOR_AZURE_COSMOS_COLUMNS:list[str] = ["id","subscriptionId","resourceGroup","location","name","type","kind","state","documentEndpoint","enabledApiTypes","databaseAccountOfferType","minimalTlsVersion"]
 AZURE_MONITOR_AZURE_COSMOS_METRICS:list[str] = ["maximumRusConsumption"]
 AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION:str = "NormalizedRUConsumption"
 
@@ -50,6 +55,7 @@ ASSESMENT_METRICS_CACHE_REDIS:list[str] = ["structureAssesment","performanceAsse
 ASSESMENT_METRICS_COSMOS_DB:list[str] = ["denormalizationAssesment","performanceAssesment","querysAssesment","insertionsAssesment","standardConnectionAssesment"]
 
 FORMAT_DATETIME_SONAR:str = "%Y-%m-%dT%H:%M:%S-%f"
+FORMAT_DATETIME_PROCESS_AZURE_MONITOR:str = "%Y-%m-%d %H:%M:%S.%f+00:00"
 
 URL_BASE_BITBUCKET_REPO:str = "https://bitbucket.lima.bcp.com.pe/scm/"
 
