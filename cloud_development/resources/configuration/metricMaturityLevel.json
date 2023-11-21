@@ -110,17 +110,17 @@
                             {
                                 "variable": "connectionPoolAssesment",
                                 "type": "assesment",
-                                "percentage": 20.00
+                                "percentage": 30.00
                             },
                             {
                                 "variable": "connectionPool",
                                 "type": "sonar",
-                                "percentage": 40.00
+                                "percentage": 0.00
                             },
                             {
                                 "variable": "connectionFailed",
                                 "type": "azure",
-                                "percentage": 40.00
+                                "percentage": 70.00
                             }                                      
                         ]
                     }
@@ -234,12 +234,12 @@
                             {
                                 "variable": "connectionPoolAssesment",
                                 "type": "assesment",
-                                "percentage": 40.00
+                                "percentage": 100.00
                             },
                             {
                                 "variable": "connectionPool",
                                 "type": "sonar",
-                                "percentage": 60.00
+                                "percentage": 0.00
                             }                             
                         ]
                     }
