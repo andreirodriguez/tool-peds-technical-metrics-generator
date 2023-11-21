@@ -10,7 +10,7 @@
                 [
                     {
                         "metric": "metricNormalizedSizing",
-                        "percentage":50.00,
+                        "percentage":40.00,
                         "variables":
                         [
                             {
@@ -27,7 +27,7 @@
                     },
                     {
                         "metric": "metricPerformance",
-                        "percentage":50.00,
+                        "percentage":60.00,
                         "variables":
                         [
                             {
@@ -51,7 +51,7 @@
             }, 
             {
                 "category": "categoryImplementation",
-                "percentage":40.00,
+                "percentage":30.00,
                 "metrics":
                 [
                     {
@@ -87,12 +87,12 @@
             },          
             {
                 "category": "categoryConnectivity",
-                "percentage":40.00,
+                "percentage":30.00,
                 "metrics":
                 [
                     {
                         "metric": "metricStandardConnection",
-                        "percentage":50.00,
+                        "percentage":30.00,
                         "variables":
                         [
                             {
@@ -104,7 +104,7 @@
                     },
                     {
                         "metric": "metricConnectionPool",
-                        "percentage":50.00,
+                        "percentage":70.00,
                         "variables":
                         [
                             {
@@ -134,7 +134,7 @@
         "categories":[
             {
                 "category": "categoryDesign",
-                "percentage":20.00,
+                "percentage":30.00,
                 "metrics":
                 [
                     {
@@ -211,7 +211,7 @@
             },          
             {
                 "category": "categoryConnectivity",
-                "percentage":40.00,
+                "percentage":30.00,
                 "metrics":
                 [
                     {
@@ -270,7 +270,7 @@
                     },
                     {
                         "metric": "metricPerformance",
-                        "percentage":70.00,
+                        "percentage":80.00,
                         "variables":
                         [
                             {
