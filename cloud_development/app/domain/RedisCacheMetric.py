@@ -11,13 +11,16 @@ class RedisCacheMetric:
     app:str
     name: str
 
-    cacheMissRate:int
+    cacheSearchHits:Decimal
+    cacheSearchFailed:Decimal
+    cacheSearchTotal:Decimal
+    cacheMissRate:Decimal
     cacheMissRatePoints:Decimal
 
-    maximumMemoryConsumption:int
+    maximumMemoryConsumption:Decimal
     maximumMemoryConsumptionPoints:Decimal
 
-    maximumProcessorConsumption:int
+    maximumProcessorConsumption:Decimal
     maximumProcessorConsumptionPoints:Decimal
 
     def __init__(self,redisCache:RedisCache):

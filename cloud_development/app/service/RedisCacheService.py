@@ -1,6 +1,7 @@
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 from decimal import Decimal
+import concurrent.futures
 
 from cloud_development.app.repository.RedisCacheRepository import RedisCacheRepository
 
@@ -25,10 +26,39 @@ class RedisCacheService():
 
         return metricAzure
 
-    def listAllRedisDatabases(self)->pd.DataFrame:
+    def __listAllRedisDatabases(self)->pd.DataFrame:
         return self.__redisCacheRepository.getAllRedisDatabases()
-    
-    def calculateMetrics(self,database:RedisCache)->RedisCacheMetric:
+
+    def extractMetricsAzure(self,maximumThreads:int):
+        databases = self.__listAllRedisDatabases()
+
+        Utils.logInfo(f"Inicio a calcular información de las métricas de {str(len(databases))} base de datos Redis Cache")
+
+        metrics:list[RedisCacheMetric] = []
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=maximumThreads) as executor:
+            metrics += executor.map(self.__extractMetricsAzureByDatabase, databases)
+
+        metrics = list(filter(lambda record: not record == None, metrics))
+
+        Utils.logInfo(f"Fin a calcular información de las métricas de {str(len(databases))} base de datos Redis Cache")
+
+        return metrics
+
+
+    def __extractMetricsAzureByDatabase(self,database:RedisCache)->RedisCacheMetric:
+        Utils.logInfo(f"Cálculo métricas del recurso Redis Cache: {database.id}")
+
+        try:
+            metric:RedisCacheMetric = self.__calculateMetrics(database)
+
+            return metric
+        except Exception as ex:
+            Utils.logError(f"Error en el cálculo de metricas del recurso Redis Cache {database.id}",ex)
+
+            return None
+
+    def __calculateMetrics(self,database:RedisCache)->RedisCacheMetric:
         metric:RedisCacheMetric = RedisCacheMetric(database)
 
         metricAzureMonitor:any
@@ -36,7 +66,7 @@ class RedisCacheService():
         azureMonitor:pd.DataFrame = self.__redisCacheRepository.getAzureMonitor(database)
 
         metricAzureMonitor = self.__getMetric("cachemissrate")
-        metric.cacheMissRate = self.__getCacheMissRate(azureMonitor)
+        self.__getCacheMissRate(azureMonitor,metric)
         metric.cacheMissRatePoints = Utils.getMetricPointsAzureMonitor(metric.cacheMissRate,metricAzureMonitor["ranges"])     
 
         metricAzureMonitor = self.__getMetric("percentProcessorTime")
@@ -49,24 +79,22 @@ class RedisCacheService():
 
         return metric    
     
-    def __getCacheMissRate(self,azureMonitor:pd.DataFrame)->Decimal:
+    def __getCacheMissRate(self,azureMonitor:pd.DataFrame,metric:RedisCacheMetric):
         azureMonitorSuccess = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_HITS]))]
 
-        successful:Decimal = azureMonitorSuccess["value"].sum()
-
-        value:Decimal = 0.00
-
-        if(successful==value): return value
+        metric.cacheSearchHits = azureMonitorSuccess["value"].sum()
 
         azureMonitorFailed = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_MISSES]))]
 
-        failed:Decimal = azureMonitorFailed["value"].sum()  
+        metric.cacheSearchFailed = azureMonitorFailed["value"].sum()  
 
-        if(failed==value): return value
+        metric.cacheSearchTotal = metric.cacheSearchHits + metric.cacheSearchFailed
 
-        value = (failed * 100) / successful
+        value:Decimal = 0.00        
 
-        return round(value,2)
+        metric.cacheMissRate = value
+        if(metric.cacheSearchTotal>value): 
+            metric.cacheMissRate = (metric.cacheSearchFailed * 100) / metric.cacheSearchTotal
     
     def __getMaximumProcessorConsumption(self,azureMonitor:pd.DataFrame,maxProcessorPercentage:Decimal)->Decimal:
         azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_REDIS_METRIC_PERCENT_PROCESSOR]))]

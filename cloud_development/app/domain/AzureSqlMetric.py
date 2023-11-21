@@ -12,6 +12,7 @@ class AzureSqlMetric:
     sqlServer: str
     name: str
 
+    tablesQuantity:int
     tablesDenormalized:int
     tablesDenormalizedPoints:Decimal
 

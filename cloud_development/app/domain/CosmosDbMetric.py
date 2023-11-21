@@ -11,6 +11,7 @@ class CosmosDbMetric:
     app:str
     name: str
 
+    totalRequestUnits:Decimal
     maximumRusConsumption:int
     maximumRusConsumptionPoints:Decimal
 

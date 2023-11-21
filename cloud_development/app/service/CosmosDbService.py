@@ -1,6 +1,9 @@
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 from decimal import Decimal
+import concurrent.futures
+
+import math
 
 from cloud_development.app.repository.CosmosDbRepository import CosmosDbRepository
 
@@ -24,10 +27,39 @@ class CosmosDbService():
 
         return metricAzure
 
-    def listAllCosmosDatabases(self)->pd.DataFrame:
+    def __listAllCosmosDatabases(self)->pd.DataFrame:
         return self.__cosmosDbRepository.getAllCosmosDatabases()
     
-    def calculateMetrics(self,database:CosmosDb)->CosmosDbMetric:
+    def extractMetricsAzure(self,maximumThreads:int):
+        databases = self.__listAllCosmosDatabases()
+
+        Utils.logInfo(f"Inicio a calcular información de las métricas de {str(len(databases))} base de datos Cosmos Db")
+
+        metrics:list[CosmosDbMetric] = []
+        
+        with concurrent.futures.ThreadPoolExecutor(max_workers=maximumThreads) as executor:
+            metrics += executor.map(self.__extractMetricsAzureByDatabase, databases)
+
+        metrics = list(filter(lambda record: not record == None, metrics))
+
+        Utils.logInfo(f"Fin a calcular información de las métricas de {str(len(databases))} base de datos Cosmos Db")
+
+        return metrics
+
+
+    def __extractMetricsAzureByDatabase(self,database:CosmosDb)->CosmosDbMetric:
+        Utils.logInfo(f"Cálculo métricas del recurso Cosmos Db: {database.id}")
+
+        try:
+            metric:CosmosDbMetric = self.__calculateMetrics(database)
+
+            return metric
+        except Exception as ex:
+            Utils.logError(f"Error en el cálculo de metricas del recurso Cosmos Db {database.id}",ex)
+
+            return None    
+    
+    def __calculateMetrics(self,database:CosmosDb)->CosmosDbMetric:
         metric:CosmosDbMetric = CosmosDbMetric(database)
 
         metricAzureMonitor:any
@@ -35,17 +67,28 @@ class CosmosDbService():
         azureMonitor:pd.DataFrame = self.__cosmosDbRepository.getAzureMonitor(database)
 
         metricAzureMonitor = self.__getMetric("NormalizedRUConsumption")
-        metric.maximumRusConsumption = self.__getTopConsumptionQueries(azureMonitor,metricAzureMonitor["limitValue"])
+        metric.totalRequestUnits = self.__getTotalRequestUnits(azureMonitor)
+        metric.maximumRusConsumption = self.__getRusConsumption(azureMonitor,metricAzureMonitor["limitValue"])
         metric.maximumRusConsumptionPoints = Utils.getMetricPointsAzureMonitor(metric.maximumRusConsumption,metricAzureMonitor["ranges"])     
 
         return metric
+    
+    def __getTotalRequestUnits(self,azureMonitor:pd.DataFrame)->Decimal:
+        azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
+
+        value = azureMonitor["value"].sum()  
+
+        if(math.isnan(value)): return 0.0
+
+        return round(value,2)
 
 
-    def __getTopConsumptionQueries(self,azureMonitor:pd.DataFrame,maxRusPercentage:Decimal)->Decimal:
+    def __getRusConsumption(self,azureMonitor:pd.DataFrame,maxRusPercentage:Decimal)->Decimal:
         azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION]))]
 
         azureMonitor = azureMonitor[(azureMonitor['value'] > maxRusPercentage)]
 
         value = len(azureMonitor.index)
 
-        return value                
+        return value       
+

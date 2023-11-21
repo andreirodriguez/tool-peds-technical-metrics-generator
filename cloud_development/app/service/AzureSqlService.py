@@ -1,6 +1,7 @@
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 from decimal import Decimal
+import concurrent.futures
 
 from cloud_development.app.repository.AzureSqlRepository import AzureSqlRepository
 from cloud_development.app.domain.AzureSql import AzureSql
@@ -23,18 +24,47 @@ class AzureSqlService():
 
         return metricAzure
 
-    def listAllSqlDatabases(self)->pd.DataFrame:
+    def __listAllSqlDatabases(self)->pd.DataFrame:
         return self.__azureSqlRepository.getAllSqlDatabases()
     
-    def calculateMetrics(self,database:AzureSql)->AzureSqlMetric:
+    def extractMetricsAzure(self,maximumThreads:int):
+        databases = self.__listAllSqlDatabases()
+
+        Utils.logInfo(f"Inicio a calcular información de las métricas de {str(len(databases))} base de datos Azure SQL")
+
+        metrics:list[AzureSqlMetric] = []
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=maximumThreads) as executor:
+            metrics += executor.map(self.__extractMetricsAzureByDatabase, databases)
+
+        metrics = list(filter(lambda record: not record == None, metrics))
+
+        Utils.logInfo(f"Fin a calcular información de las métricas de {str(len(databases))} base de datos Azure Sql")
+
+        return metrics
+
+
+    def __extractMetricsAzureByDatabase(self,database:AzureSql)->AzureSqlMetric:
+        Utils.logInfo(f"Cálculo métricas del recurso Azure Sql: {database.id}")
+
+        try:
+            metric:AzureSqlMetric = self.__calculateMetrics(database)
+
+            return metric
+        except Exception as ex:
+            Utils.logError(f"Error en el cálculo de metricas del recurso Azure Sql {database.id}",ex)
+
+            return None
+    
+    def __calculateMetrics(self,database:AzureSql)->AzureSqlMetric:
         metric:AzureSqlMetric = AzureSqlMetric(database)
 
         metricAzureMonitor:any
 
         metricAzureMonitor = self.__getMetric("tablesDenormalized")
-        metric.tablesDenormalized = self.__getTablesDenormalized(database,metricAzureMonitor["limitValue"])
+        self.__getTables(database,metric,metricAzureMonitor["limitValue"])
         metric.tablesDenormalizedPoints = Utils.getMetricPointsAzureMonitor(metric.tablesDenormalized,metricAzureMonitor["ranges"]) 
-        
+
         metricAzureMonitor = self.__getMetric("topConsumptionQueries")
         metric.topConsumptionQueries = self.__getTopConsumptionQueries(database,metricAzureMonitor["limitValue"])
         metric.topConsumptionQueriesPoints = Utils.getMetricPointsAzureMonitor(metric.topConsumptionQueries,metricAzureMonitor["ranges"]) 
@@ -54,19 +84,17 @@ class AzureSqlService():
         metric.connectionFailedPoints = Utils.getMetricPointsAzureMonitor(metric.deadlock,metricAzureMonitor["ranges"]) 
 
         return metric
-    
-    def __getTablesDenormalized(self,database:AzureSql,limitColumns:int)->Decimal:
-        columns:pd.DataFrame = self.__azureSqlRepository.getColumnsTableByDatabase(database)
 
-        if(len(columns.index)==0): return 0
+    def __getTables(self,database:AzureSql,metric:AzureSqlMetric,limitColumns:int):
+        columns:pd.DataFrame = self.__azureSqlRepository.getColumnsTableByDatabase(database)
 
         tables = columns.groupby(['table']).size().reset_index(name='count')
 
-        tables = tables[(tables['count'] > limitColumns)]
+        metric.tablesQuantity = len(tables.index)
 
-        value = len(tables.index)
+        tablesDenormalized = tables[(tables['count'] > limitColumns)]
 
-        return value
+        metric.tablesDenormalized = len(tablesDenormalized.index)
     
     def __getTopConsumptionQueries(self,database:AzureSql,maxCpuPercentage:Decimal)->Decimal:
         topQueries:pd.DataFrame = self.__azureSqlRepository.getTopQuerysByDatabase(database)

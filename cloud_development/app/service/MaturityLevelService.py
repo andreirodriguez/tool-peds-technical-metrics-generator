@@ -207,10 +207,13 @@ class MaturityLevelService():
         columns:list[str] = ["id","subscriptionId","resourceGroup","app","name"]
 
         if(serviceCloud==Constants.SERVICE_CLOUD_AZURE_SQL):
+            columns += ["tablesQuantity"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_SQL_METRICS)          
         elif(serviceCloud==Constants.SERVICE_CLOUD_CACHE_REDIS):
+            columns += ["cacheSearchHits","cacheSearchFailed","cacheSearchTotal"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_REDIS_METRICS)
         elif(serviceCloud==Constants.SERVICE_CLOUD_COSMOS_DB):
+            columns += ["totalRequestUnits"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_COSMOS_METRICS)
         
         return columns

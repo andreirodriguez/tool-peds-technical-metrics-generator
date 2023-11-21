@@ -47,6 +47,7 @@ AZURE_MONITOR_AZURE_REDIS_METRIC_MEMORY_PERCENTAGE:str = "usedmemorypercentage"
 AZURE_MONITOR_AZURE_COSMOS_COLUMNS:list[str] = ["id","subscriptionId","resourceGroup","location","name","type","kind","state","documentEndpoint","enabledApiTypes","databaseAccountOfferType","minimalTlsVersion"]
 AZURE_MONITOR_AZURE_COSMOS_METRICS:list[str] = ["maximumRusConsumption"]
 AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION:str = "NormalizedRUConsumption"
+AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS:str = "TotalRequestUnits"
 
 BASE_ACTIVOS_FLAGS_ACTIVE_COE:list[str] = ["ACTIVO COE"]
 
