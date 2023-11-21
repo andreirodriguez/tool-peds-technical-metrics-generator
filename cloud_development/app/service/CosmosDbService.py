@@ -67,6 +67,8 @@ class CosmosDbService():
         azureMonitor:pd.DataFrame = self.__cosmosDbRepository.getAzureMonitor(database)
 
         metricAzureMonitor = self.__getMetric("NormalizedRUConsumption")
+        metric.provisionedThroughput = self.__getTotalProvisionedThroughput(azureMonitor)
+        metric.autoscaleMaxThroughput = self.__getTotalAutoscaleMaxThroughput(azureMonitor)
         metric.totalRequestUnits = self.__getTotalRequestUnits(azureMonitor)
         metric.maximumRusConsumption = self.__getRusConsumption(azureMonitor,metricAzureMonitor["limitValue"])
         metric.maximumRusConsumptionPoints = Utils.getMetricPointsAzureMonitor(metric.maximumRusConsumption,metricAzureMonitor["ranges"])     
@@ -76,9 +78,27 @@ class CosmosDbService():
     def __getTotalRequestUnits(self,azureMonitor:pd.DataFrame)->Decimal:
         azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
 
-        value = azureMonitor["value"].sum()  
+        value = azureMonitor["value"].mean()
 
         if(math.isnan(value)): return 0.0
+
+        return round(value,2)
+
+    def __getTotalProvisionedThroughput(self,azureMonitor:pd.DataFrame)->Decimal:
+        azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_PROVISIONEDTHROUGHPUT]))]
+
+        value = azureMonitor["value"].min()
+
+        if(math.isnan(value)): return None
+
+        return round(value,2)
+
+    def __getTotalAutoscaleMaxThroughput(self,azureMonitor:pd.DataFrame)->Decimal:
+        azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_AUTOSCALEMAXTHROUGHPUT]))]
+
+        value = azureMonitor["value"].max()
+
+        if(math.isnan(value)): return None
 
         return round(value,2)
 

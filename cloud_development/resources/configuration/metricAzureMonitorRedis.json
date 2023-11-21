@@ -1,7 +1,7 @@
 [
     {
         "metric":"percentProcessorTime",
-        "limitValue":3.0,
+        "limitValue":80.00,
         "ranges":[
             {
                 "id": 1,
@@ -37,7 +37,7 @@
     },
     {
         "metric":"usedmemorypercentage",
-        "limitValue":10.0,
+        "limitValue":80.00,
         "ranges":[
             {
                 "id": 1,
@@ -78,30 +78,30 @@
             {
                 "id": 1,
                 "minimum": 100,
-                "maximum": 10,
+                "maximum": 15,
                 "points": 1.00
             },           
             {
                 "id": 2,
-                "minimum": 10,
-                "maximum": 8,
+                "minimum": 15,
+                "maximum": 12,
                 "points": 2.00
             },             
             {
                 "id": 3,
-                "minimum": 8,
-                "maximum": 5,
+                "minimum": 12,
+                "maximum": 10,
                 "points": 3.00
             },             
             {
                 "id": 4,
-                "minimum": 5,
-                "maximum": 3,
+                "minimum": 10,
+                "maximum": 5,
                 "points": 4.00
             },
             {
                 "id": 5,
-                "minimum": 3,
+                "minimum": 5,
                 "maximum": 0,
                 "points": 5.00
             }                                                                                                 

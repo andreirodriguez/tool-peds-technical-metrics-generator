@@ -49,6 +49,11 @@ AZURE_MONITOR_AZURE_COSMOS_METRICS:list[str] = ["maximumRusConsumption"]
 AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION:str = "NormalizedRUConsumption"
 AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS:str = "TotalRequestUnits"
 
+AZURE_MONITOR_AZURE_COSMOS_METRIC_AUTOSCALEMAXTHROUGHPUT:str = "AutoscaleMaxThroughput"
+AZURE_MONITOR_AZURE_COSMOS_METRIC_PROVISIONEDTHROUGHPUT:str = "ProvisionedThroughput"
+
+
+
 BASE_ACTIVOS_FLAGS_ACTIVE_COE:list[str] = ["ACTIVO COE"]
 
 ASSESMENT_METRICS_AZURE_SQL:list[str] = ["normalizedAssesment","performanceAssesment","querysAssesment","transactionalAssesment","connectionPoolAssesment","standardConnectionAssesment"]
