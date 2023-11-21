@@ -75,7 +75,7 @@ class MetricModelSquadService():
                                  metricsListSonar:list[str],metricsDataSonar:pd.DataFrame,
                                  metricsListAssesment:list[str],metricsDataAssesment:pd.DataFrame)->pd.DataFrame:        
         squads["app"] = squads.apply(lambda record: self.__getAppsBySquad(record["squadCode"],baseActivos),axis=1)
-        squads["hasAzure"] = squads.apply(lambda record: self.__hazAzure(record["app"],metricsDataAzure),axis=1)
+        squads["applyPractice"] = squads.apply(lambda record: self.__applyPractice(record["app"],metricsDataAzure),axis=1)
 
         for metric in metricsListAzure:
             squads[metric] = squads.apply(lambda record: self.__getPointsMetricsAzureBySquad(record["app"],metricsDataAzure,metric),axis=1)
@@ -104,7 +104,7 @@ class MetricModelSquadService():
 
         return apps    
 
-    def __hazAzure(self,apps:str,metricsAzure:pd.DataFrame)->Decimal:        
+    def __applyPractice(self,apps:str,metricsAzure:pd.DataFrame)->Decimal:        
         metricsAzure:pd.DataFrame = metricsAzure[(metricsAzure['app'].isin(apps.split(",")))]
 
         if(len(metricsAzure.index)==0): return False
@@ -120,7 +120,7 @@ class MetricModelSquadService():
 
         if(math.isnan(points)): return None
 
-        return points    
+        return round(points,2)
     
     def __getPointsMetricsSonarBySquad(self,apps:str,metricsData:pd.DataFrame,metric:str)->Decimal:        
         metricsBySquad:pd.DataFrame = metricsData[(metricsData['app'].isin(apps.split(",")))]
@@ -131,7 +131,7 @@ class MetricModelSquadService():
 
         if(math.isnan(points)): return None
 
-        return points
+        return round(points,2)
     
     def __getPointsMetricsAssesmentBySquad(self,squadCode:str,metricsData:pd.DataFrame,metric:str)->Decimal:        
         metricsBySquad:pd.DataFrame = metricsData[(metricsData['squadCode']==squadCode)]

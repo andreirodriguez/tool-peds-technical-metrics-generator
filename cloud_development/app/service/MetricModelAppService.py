@@ -54,7 +54,9 @@ class MetricModelAppService():
 
         metrics = metrics[(metrics['app']==app)]
 
-        return metrics[metric].mean()
+        value = metrics[metric].mean()
+
+        return round(value,2)
 
     def __getMetricSonarMeanByApp(self,app:str,metric:str,metrics:pd.DataFrame)->float:
         metric = metric + "Points"
@@ -65,7 +67,7 @@ class MetricModelAppService():
 
         if(math.isnan(value)): return Constants.METRIC_SONAR_POINTS_MAXIMUM
 
-        return value
+        return round(value,2)
 
 
         

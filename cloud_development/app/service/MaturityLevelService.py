@@ -100,7 +100,7 @@ class MaturityLevelService():
 
 
     def __getMetricPoints(self,squad:any,variables:any)->Decimal:
-        if(not squad["hasAzure"]): return None
+        if(not squad["applyPractice"]): return None
 
         metricPoints:Decimal = 0.00
         points:Decimal = 0.00
@@ -114,7 +114,7 @@ class MaturityLevelService():
         return round(metricPoints,2)
     
     def __getCategoryPoints(self,squad:any,metrics:any)->Decimal:
-        if(not squad["hasAzure"]): return None
+        if(not squad["applyPractice"]): return None
 
         categoryPoints:Decimal = 0.00
         points:Decimal = 0.00
@@ -128,7 +128,7 @@ class MaturityLevelService():
         return round(categoryPoints,2)
 
     def __getMaturityLevelServiceCloud(self,squad:any,categories:any)->Decimal:
-        if(not squad["hasAzure"]): return None
+        if(not squad["applyPractice"]): return None
 
         maturityLevel:Decimal = 0.00
         points:Decimal = 0.00
@@ -178,7 +178,7 @@ class MaturityLevelService():
     def __getColumnsSquadsServiceCloud(self,serviceCloud:str)->list[str]:
         model:any = Utils.findObjectJson(self.__metricsModel,"serviceCloud",serviceCloud)        
 
-        columns:list[str] = ["tribeCode","tribe","squadCode","squad","group","cmt","hasAzure","maturityLevel"]
+        columns:list[str] = ["tribeCode","tribe","squadCode","squad","group","cmt","applyPractice","maturityLevel"]
         
         for category in model["categories"]:
             columns.append(category["category"])
