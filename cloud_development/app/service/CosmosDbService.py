@@ -78,7 +78,7 @@ class CosmosDbService():
     def __getTotalRequestUnits(self,azureMonitor:pd.DataFrame)->Decimal:
         azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
 
-        value = azureMonitor["value"].mean()
+        value = azureMonitor["value"].sum()
 
         if(math.isnan(value)): return 0.0
 
