@@ -70,19 +70,32 @@ class CosmosDbService():
         metric.provisionedThroughput = self.__getTotalProvisionedThroughput(azureMonitor)
         metric.autoscaleMaxThroughput = self.__getTotalAutoscaleMaxThroughput(azureMonitor)
         metric.totalRequestUnits = self.__getTotalRequestUnits(azureMonitor)
-        metric.maximumRusConsumption = self.__getRusConsumption(azureMonitor,metricAzureMonitor["limitValue"])
+        metric.maximumRequestUnits = self.__getMaximumRequestUnits(azureMonitor)
+        metric.maximumRusConsumption = self.__getRusConsumption(azureMonitor,metric,metricAzureMonitor["limitValue"])
         metric.maximumRusConsumptionPoints = Utils.getMetricPointsAzureMonitor(metric.maximumRusConsumption,metricAzureMonitor["ranges"])     
 
         return metric
     
     def __getTotalRequestUnits(self,azureMonitor:pd.DataFrame)->Decimal:
         azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
+        azureMonitor = azureMonitor[(azureMonitor['aggregation']=="total")]
 
         value = azureMonitor["value"].sum()
 
         if(math.isnan(value)): return 0.0
 
         return round(value,2)
+
+    def __getMaximumRequestUnits(self,azureMonitor:pd.DataFrame)->Decimal:
+        azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
+        azureMonitor = azureMonitor[(azureMonitor['aggregation']=="maximum")]
+
+        value = azureMonitor["value"].max()
+
+        if(math.isnan(value)): return 0.0
+
+        return round(value,2)
+
 
     def __getTotalProvisionedThroughput(self,azureMonitor:pd.DataFrame)->Decimal:
         azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_PROVISIONEDTHROUGHPUT]))]
@@ -103,10 +116,19 @@ class CosmosDbService():
         return round(value,2)
 
 
-    def __getRusConsumption(self,azureMonitor:pd.DataFrame,maxRusPercentage:Decimal)->Decimal:
-        azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION]))]
+    def __getRusConsumption(self,azureMonitor:pd.DataFrame,metric:CosmosDbMetric,maxRusPercentage:Decimal)->Decimal:
+        provisionedThroughput:Decimal = metric.provisionedThroughput
 
-        azureMonitor = azureMonitor[(azureMonitor['value'] > maxRusPercentage)]
+        if(not metric.autoscaleMaxThroughput==None): 
+            if(metric.autoscaleMaxThroughput>metric.provisionedThroughput): 
+                provisionedThroughput = metric.autoscaleMaxThroughput
+
+        maxLimitRus = round((provisionedThroughput * maxRusPercentage) / 100,2)
+
+        azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
+        azureMonitor = azureMonitor[(azureMonitor['aggregation']=="maximum")]
+
+        azureMonitor = azureMonitor[(azureMonitor['value'] > maxLimitRus)]
 
         value = len(azureMonitor.index)
 

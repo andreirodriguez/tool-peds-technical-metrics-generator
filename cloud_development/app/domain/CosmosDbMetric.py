@@ -13,6 +13,7 @@ class CosmosDbMetric:
 
     provisionedThroughput:Decimal
     autoscaleMaxThroughput:Decimal
+    maximumRequestUnits:Decimal
     totalRequestUnits:Decimal
     maximumRusConsumption:int
     maximumRusConsumptionPoints:Decimal
