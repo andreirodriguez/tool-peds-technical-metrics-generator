@@ -81,7 +81,7 @@ class AzureSqlService():
 
         metricAzureMonitor = self.__getMetric("connection_failed")
         metric.connectionFailed = self.__getConnectionFailed(azureMonitor)
-        metric.connectionFailedPoints = Utils.getMetricPointsAzureMonitor(metric.deadlock,metricAzureMonitor["ranges"]) 
+        metric.connectionFailedPoints = Utils.getMetricPointsAzureMonitor(metric.connectionFailed,metricAzureMonitor["ranges"]) 
 
         return metric
 
@@ -92,9 +92,11 @@ class AzureSqlService():
 
         metric.tablesQuantity = len(tables.index)
 
-        tablesDenormalized = tables[(tables['count'] > limitColumns)]
+        tablesDenormalized = len(tables[(tables['count'] > limitColumns)].index)
 
-        metric.tablesDenormalized = len(tablesDenormalized.index)
+        metric.tablesDenormalized = 0.00
+        if(metric.tablesQuantity>0): 
+            metric.tablesDenormalized = round((tablesDenormalized * 100) / metric.tablesQuantity,2)
     
     def __getTopConsumptionQueries(self,database:AzureSql,maxCpuPercentage:Decimal)->Decimal:
         topQueries:pd.DataFrame = self.__azureSqlRepository.getTopQuerysByDatabase(database)
@@ -134,11 +136,13 @@ class AzureSqlService():
 
         failed:Decimal = azureMonitorFailed["value"].sum()  
 
+        total:Decimal = successful + failed
+
         value:Decimal = 0.00
 
-        if(failed==value): return value
+        if(total==value): return value
 
-        value = (failed * 100) / successful
+        value = (failed * 100) / total
 
         return round(value,2)
 

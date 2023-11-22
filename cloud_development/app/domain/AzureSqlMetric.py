@@ -13,7 +13,7 @@ class AzureSqlMetric:
     name: str
 
     tablesQuantity:int
-    tablesDenormalized:int
+    tablesDenormalized:Decimal
     tablesDenormalizedPoints:Decimal
 
     topConsumptionQueries:int
