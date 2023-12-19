@@ -27,6 +27,7 @@ AZURE_MONITOR_FILE_AZURE_SQL:str = "sql-databases.csv"
 AZURE_MONITOR_FILE_REDIS_CACHE:str = "redis-caches.csv"
 AZURE_MONITOR_FILE_COSMOS_DB:str = "cosmos-dbs.csv"
 
+PATH_OUTPUT_FILE_DATA:str = "cloud_development\\resources\\output\\data.xlsx"
 PATH_OUTPUT_FILE_SUMMARY:str = "cloud_development\\resources\\output\\{period}-cloud-development-maturity-level-by-squad-summary.xlsx"
 
 AZURE_MONITOR_AZURE_SQL_COLUMNS:list[str] = ["id","subscriptionId","resourceGroup","sqlServer","kind","name"]
@@ -73,3 +74,6 @@ METRIC_SONAR_CONNECTION_POOL:str = "connectionPool"
 
 METRIC_SONAR_POINTS_MAXIMUM:float = 5.00
 METRIC_SONAR_POINTS_MINIMUM:float = 1.00
+
+
+AZURE_MONITOR_AZURE_COSMOS_RU_PERCENTILE:float = 0.95

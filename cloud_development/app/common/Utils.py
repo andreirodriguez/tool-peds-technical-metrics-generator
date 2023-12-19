@@ -313,4 +313,13 @@ class Utils:
 
             data = pd.concat([data, dataAzure], ignore_index=True)        
 
-        return data    
+        return data
+    
+    @staticmethod
+    def getIntervalHour(intervalMinute:str)->pd.DataFrame:
+        intervalHour:str = intervalMinute[0:13]
+
+        intervalHour += ":00:00+00:00"
+
+
+        return intervalHour

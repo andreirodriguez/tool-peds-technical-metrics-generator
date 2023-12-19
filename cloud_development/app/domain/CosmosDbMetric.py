@@ -11,10 +11,16 @@ class CosmosDbMetric:
     app:str
     name: str
 
-    provisionedThroughput:Decimal
+    provisionedMinThroughput:Decimal
     autoscaleMaxThroughput:Decimal
+    provisionedMaxThroughput:Decimal
+
+    averageHalfRequestUnits:Decimal
     maximumRequestUnits:Decimal
+    averageSpikesRequestUnits:Decimal
     totalRequestUnits:Decimal
+
+    percentageRusConsumption:Decimal
     maximumRusConsumption:int
     maximumRusConsumptionPoints:Decimal
 
