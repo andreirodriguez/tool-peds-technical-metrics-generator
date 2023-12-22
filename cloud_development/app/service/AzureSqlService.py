@@ -26,7 +26,10 @@ class AzureSqlService():
 
     def __listAllSqlDatabases(self)->pd.DataFrame:
         return self.__azureSqlRepository.getAllSqlDatabases()
-    
+
+    def listSummarySqlDatabases(self)->pd.DataFrame:
+        return self.__azureSqlRepository.getSummarySqlDatabases()
+
     def extractMetricsAzure(self,maximumThreads:int):
         databases = self.__listAllSqlDatabases()
 

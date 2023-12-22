@@ -29,6 +29,9 @@ class RedisCacheService():
     def __listAllRedisDatabases(self)->pd.DataFrame:
         return self.__redisCacheRepository.getAllRedisDatabases()
 
+    def listSummaryRedisDatabases(self)->pd.DataFrame:
+        return self.__redisCacheRepository.getSummaryRedisDatabases()
+
     def extractMetricsAzure(self,maximumThreads:int):
         databases = self.__listAllRedisDatabases()
 

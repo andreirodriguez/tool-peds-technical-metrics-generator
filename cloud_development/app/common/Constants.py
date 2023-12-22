@@ -1,3 +1,11 @@
+ENVIRONMENT_RESOURCE_DESARROLLO:str = "D"
+ENVIRONMENT_RESOURCE_INTEGRACION:str = "I"
+ENVIRONMENT_RESOURCE_INFRAESTRUCTURA:str = "F"
+ENVIRONMENT_RESOURCE_CERTIFICACION:str = "C"
+ENVIRONMENT_RESOURCE_PRODUCCION:str = "P"
+
+ENVIRONMENTS_RESOURCE:list = [ENVIRONMENT_RESOURCE_DESARROLLO,ENVIRONMENT_RESOURCE_INTEGRACION,ENVIRONMENT_RESOURCE_INFRAESTRUCTURA,ENVIRONMENT_RESOURCE_CERTIFICACION,ENVIRONMENT_RESOURCE_PRODUCCION]
+
 PATH_INPUT_BASE_ACTIVOS:str = "cloud_development\\resources\\input\\base_activos\\base_activos_{period}.xlsx"
 PATH_INPUT_SONAR:str = "cloud_development\\resources\\input\\sonar\\"
 PATH_INPUT_AZURE_MONITOR:str = "cloud_development\\resources\\input\\azure_monitor\\"
@@ -17,11 +25,18 @@ PATH_INPUT_METRIC_REDIS_CACHE_MONITOR_METRICS:str = "cloud_development\\resource
 
 PATH_INPUT_METRIC_COSMOS_DB_MONITOR_METRICS:str = "cloud_development\\resources\\input\\azure_monitor\\{tenantId}\\{subscriptionId}\\{resourceGroup}\\cosmos-db\\{cosmosDb}\\monitor-metrics-cosmos-db.csv"
 
+PATH_OUTPUT_SQUADS_PRIORIZADOS:str = "cloud_development\\resources\\output\\squads_priorizados.xlsx"
 PATH_INPUT_SQUADS_PRIORIZADOS:str = "cloud_development\\resources\\input\\squads_priorizados\\squads_priorizados.xlsx"
 PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_SQL:str = "CLOUD SQL"
 PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_REDIS:str = "CLOUD REDIS"
 PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_COSMOS:str = "CLOUD COSMOS"
 PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_GENERAL:str = "GENERAL"
+SQUADS_PRIORIZADOS_COLUMNS:list[str] = ["tribe","squad","group","cmt"]
+
+AZURE_MONITOR_FILE_SUMMARY_RESOURCE_GROUPS:str = "resource-groups-summary.csv"
+AZURE_MONITOR_FILE_SUMMARY_AZURE_SQL:str = "sql-databases-summary.csv"
+AZURE_MONITOR_FILE_SUMMARY_REDIS_CACHE:str = "redis-caches-summary.csv"
+AZURE_MONITOR_FILE_SUMMARY_COSMOS_DB:str = "cosmos-dbs-summary.csv"
 
 AZURE_MONITOR_FILE_AZURE_SQL:str = "sql-databases.csv"
 AZURE_MONITOR_FILE_REDIS_CACHE:str = "redis-caches.csv"
@@ -29,6 +44,8 @@ AZURE_MONITOR_FILE_COSMOS_DB:str = "cosmos-dbs.csv"
 
 PATH_OUTPUT_FILE_DATA:str = "cloud_development\\resources\\output\\data.xlsx"
 PATH_OUTPUT_FILE_SUMMARY:str = "cloud_development\\resources\\output\\{period}-cloud-development-maturity-level-by-squad-summary.xlsx"
+
+AZURE_MONITOR_AZURE_RESOURCE_GROUPS_COLUMNS:list[str] = ["id","subscriptionId","name","location","app","environment","provisioningState"]
 
 AZURE_MONITOR_AZURE_SQL_COLUMNS:list[str] = ["id","subscriptionId","resourceGroup","sqlServer","kind","name"]
 AZURE_MONITOR_AZURE_SQL_METRICS:list[str] = ["tablesDenormalized","topConsumptionQueries","advisorsRecommended","deadlock","connectionFailed"]

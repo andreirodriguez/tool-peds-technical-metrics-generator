@@ -29,7 +29,10 @@ class CosmosDbService():
 
     def __listAllCosmosDatabases(self)->pd.DataFrame:
         return self.__cosmosDbRepository.getAllCosmosDatabases()
-    
+
+    def listSummaryCosmosDatabases(self)->pd.DataFrame:
+        return self.__cosmosDbRepository.getSummaryCosmosDatabases()
+
     def extractMetricsAzure(self,maximumThreads:int):
         databases = self.__listAllCosmosDatabases()
 
@@ -150,10 +153,16 @@ class CosmosDbService():
 
         azureRus = pd.merge(azureRus, azureProvisioned, on="intervalTimeStampProvisioned", how="left")
 
-        azureRus["percentageConsumptionProvisioned"] = azureRus.apply(lambda record: round((record["value"] * 100) / record["provisionedThroughput"],2),axis=1)
+        azureRus["percentageConsumptionProvisioned"] = azureRus.apply(lambda record: self.__calculatePercentageConsumptionProvisioned(record["value"],record["provisionedThroughput"]),axis=1)
 
         metric.percentageRusConsumption = round(azureRus["percentageConsumptionProvisioned"].mean(),2)
         metric.maximumRusConsumption = len(azureRus[(azureRus['percentageConsumptionProvisioned'] > maxRusPercentage)].index)
 
+    def __calculatePercentageConsumptionProvisioned(self,consumptionRus:Decimal,provisionedThroughput:Decimal)->Decimal:
+        percentageRusConsumption:Decimal = 0.0
 
+        if(provisionedThroughput==0.0): return percentageRusConsumption
 
+        provisionedThroughput = round((consumptionRus * 100) / provisionedThroughput,2)
+
+        return provisionedThroughput

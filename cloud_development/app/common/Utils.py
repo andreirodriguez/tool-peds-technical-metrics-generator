@@ -7,6 +7,7 @@ import logging as log
 import traceback
 import os
 from decimal import Decimal
+import math
 
 import cloud_development.app.common.Constants as Constants
 
@@ -157,11 +158,29 @@ class Utils:
         print(time + ": " + error)
 
     @staticmethod
-    def getEnvironmentByResourceGroupName(resourceGroupName:str) -> str:
+    def getResourceGroupFormat(resourceGroupName:str) -> str:
+        resourceGroupName = resourceGroupName.strip().upper()
+        arrResourceGroup:list
+
+        if("_" in resourceGroupName): 
+            arrResourceGroup = resourceGroupName.split("_")
+
+            if(len(arrResourceGroup) > 1): resourceGroupName = arrResourceGroup[1]
+        elif("-" in resourceGroupName): 
+            arrResourceGroup = resourceGroupName.split("-")
+
+            if(len(arrResourceGroup) > 2): resourceGroupName = arrResourceGroup[2]
+
+        return resourceGroupName
+    
+    @staticmethod
+    def getAppCodeByResourceGroupName(resourceGroupName:str) -> str:
+        resourceGroupName = Utils.getResourceGroupFormat(resourceGroupName)
+
         lenght:int = len(resourceGroupName) - 1
         character:str = resourceGroupName[lenght]
 
-        if(not character.isnumeric()): return "F"
+        if(not character.isnumeric()): return None
 
         while lenght >= 0:
             character = resourceGroupName[lenght]
@@ -169,7 +188,12 @@ class Utils:
             if(character.isnumeric()): 
                 lenght-=1
             else:
-                return character.upper()
+                if(character.upper() in Constants.ENVIRONMENTS_RESOURCE):
+                    return resourceGroupName[(lenght-4):lenght].upper()
+                else:
+                    return None                
+
+        return None    
 
     @staticmethod
     def getFilesDirectory(directory:str) -> list:
@@ -200,23 +224,6 @@ class Utils:
 
         return paths
     
-
-    @staticmethod
-    def getAppCodeByResourceGroupName(resourceGroupName:str) -> str:
-        lenght:int = len(resourceGroupName) - 1
-        character:str = resourceGroupName[lenght]
-
-        if(not character.isnumeric()): return None
-
-        while lenght >= 0:
-            character = resourceGroupName[lenght]
-
-            if(character.isnumeric()): 
-                lenght-=1
-            else:
-                return resourceGroupName[(lenght-4):lenght].upper()    
-            
-        return None
     
     @staticmethod
     def getMetricPointsAzureMonitor(value:Decimal,ranges:any) -> Decimal:
@@ -323,3 +330,11 @@ class Utils:
 
 
         return intervalHour
+    
+    @staticmethod
+    def isNumber(value)->bool:
+        if(value==None): return False
+
+        if(math.isnan(value)): return False
+
+        return True

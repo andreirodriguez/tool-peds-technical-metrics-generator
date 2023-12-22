@@ -43,7 +43,7 @@ class MaturityLevelService():
 
         maturityLevel = squad.iloc[0]["maturityLevel"]
 
-        if(math.isnan(maturityLevel)): return None
+        if(not Utils.isNumber(maturityLevel)): return None
 
         return maturityLevel
 
@@ -53,13 +53,13 @@ class MaturityLevelService():
         percentageCosmosDb:Decimal = Utils.findObjectJson(self.__metricsModel,"serviceCloud",Constants.SERVICE_CLOUD_COSMOS_DB)["percentage"]/100
 
         maturityLevelAzureSql:Decimal = squad["maturityLevelAzureSql"]
-        if(math.isnan(maturityLevelAzureSql)): maturityLevelAzureSql = None
+        if(not Utils.isNumber(maturityLevelAzureSql)): maturityLevelAzureSql = None
 
         maturityLevelRedisCache:Decimal = squad["maturityLevelRedisCache"]
-        if(math.isnan(maturityLevelRedisCache)): maturityLevelRedisCache = None
+        if(not Utils.isNumber(maturityLevelRedisCache)): maturityLevelRedisCache = None
 
         maturityLevelCosmosDb:Decimal = squad["maturityLevelCosmosDb"]
-        if(math.isnan(maturityLevelCosmosDb)): maturityLevelCosmosDb = None
+        if(not Utils.isNumber(maturityLevelCosmosDb)): maturityLevelCosmosDb = None
 
         if(maturityLevelAzureSql==None and maturityLevelRedisCache==None and maturityLevelCosmosDb==None): return None
 
@@ -213,7 +213,7 @@ class MaturityLevelService():
             columns += ["cacheSearchHits","cacheSearchFailed","cacheSearchTotal"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_REDIS_METRICS)
         elif(serviceCloud==Constants.SERVICE_CLOUD_COSMOS_DB):
-            columns += ["provisionedMinThroughput","autoscaleMaxThroughput","provisionedMaxThroughput","totalRequestUnits","averageHalfRequestUnits","averageSpikesRequestUnits","percentageRusConsumption","maximumRequestUnits"]
+            columns += ["provisionedMinThroughput","autoscaleMaxThroughput","provisionedMaxThroughput","totalRequestUnits","averageHalfRequestUnits","maximumRequestUnits"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_COSMOS_METRICS)
         
         return columns

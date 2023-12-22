@@ -145,5 +145,27 @@ class MetricModelSquadService():
         return round(points,2)    
     
 
+    def exportExcelSquadsPriorizados(self,baseActivos:pd.DataFrame,
+                              azureSql:pd.DataFrame,redisCache:pd.DataFrame,cosmosDb:pd.DataFrame
+                              ):
+        file = Utils.getPathDirectory(Constants.PATH_OUTPUT_SQUADS_PRIORIZADOS)
+
+        general:pd.DataFrame = self.__squadPrioritizedRepository.getSquadsByServiceCloud(Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_GENERAL)
+
+        with pd.ExcelWriter(file) as writer:
+            general.to_excel(writer,sheet_name=Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_GENERAL,columns=Constants.SQUADS_PRIORIZADOS_COLUMNS, index=False)
+            self.__getSquadsPriorizadosByResourceCloud(general,azureSql,baseActivos).to_excel(writer,sheet_name=Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_SQL,columns=Constants.SQUADS_PRIORIZADOS_COLUMNS, index=False)
+            self.__getSquadsPriorizadosByResourceCloud(general,redisCache,baseActivos).to_excel(writer,sheet_name=Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_REDIS,columns=Constants.SQUADS_PRIORIZADOS_COLUMNS, index=False)
+            self.__getSquadsPriorizadosByResourceCloud(general,cosmosDb,baseActivos).to_excel(writer,sheet_name=Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_COSMOS,columns=Constants.SQUADS_PRIORIZADOS_COLUMNS, index=False)
+
+
+    def __getSquadsPriorizadosByResourceCloud(self,squads:pd.DataFrame,resources:pd.DataFrame,baseActivos:pd.DataFrame)->pd.DataFrame:
+        apps = resources["app"].unique()
+
+        squadsCode = baseActivos[baseActivos['app'].isin(apps)]["squadCode"].unique()
+        
+        squads = squads[squads['squadCode'].isin(squadsCode)]
+
+        return squads
     
     

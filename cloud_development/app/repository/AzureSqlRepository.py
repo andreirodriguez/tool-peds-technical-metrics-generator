@@ -17,6 +17,15 @@ class AzureSqlRepository():
 
         return dataBases
     
+    def getSummarySqlDatabases(self)->pd.DataFrame:
+        data = Utils.getAllResourcesAzureType(Constants.PATH_INPUT_AZURE_MONITOR,Constants.AZURE_MONITOR_FILE_SUMMARY_AZURE_SQL,Constants.AZURE_MONITOR_AZURE_SQL_COLUMNS)
+
+        data = data[Constants.AZURE_MONITOR_AZURE_SQL_COLUMNS].copy()
+
+        data["app"] = data.apply(lambda record: Utils.getAppCodeByResourceGroupName(record["resourceGroup"]),axis=1)
+
+        return data
+    
     def getColumnsTableByDatabase(self,database:AzureSql)->pd.DataFrame:
         file:str = Constants.PATH_INPUT_METRIC_AZURE_SQL_TABLE_COLUMNS.format(tenantId=Constants.PARAMETER_INPUT_AZURE_TENANTID,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,sqlServer=database.sqlServer,sqlDatabase=database.name)
 
