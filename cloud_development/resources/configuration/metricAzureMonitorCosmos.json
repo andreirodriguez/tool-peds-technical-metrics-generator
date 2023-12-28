@@ -1,7 +1,7 @@
 [
     {
         "metric":"NormalizedRUConsumption",
-        "limitValue":70.00,
+        "limitValue":80.00,
         "ranges":[
             {
                 "id": 1,

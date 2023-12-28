@@ -188,3 +188,6 @@ cloud_development/resources/input/assesments/cache_redis/*
 
 cloud_development/resources/input/assesments/cosmos_db/*
 !cloud_development/resources/input/assesments/cosmos_db/.gitkeep
+
+cloud_development/resources/input/azure_costs/cosmos_db/*
+!cloud_development/resources/input/azure_costs/cosmos_db/.gitkeep

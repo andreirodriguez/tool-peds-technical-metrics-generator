@@ -338,3 +338,15 @@ class Utils:
         if(math.isnan(value)): return False
 
         return True
+    
+    @staticmethod
+    def getAzureSubscriptionId(subscription:str)->str:
+        if(Utils.isNullOrEmpty(subscription)): return None
+
+        arrSubscription=subscription.split("(")   
+
+        if(len(arrSubscription)<2): return None
+
+        arrSubscription=arrSubscription[1].split(")") 
+
+        return arrSubscription[0].strip()

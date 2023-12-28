@@ -5,6 +5,6 @@ from cloud_development.app.RunModel import RunModel
 
 period:str = sys.argv[1]
 
-process = RunScopePractice(period)
+process = RunModel(period)
 
 process.run()

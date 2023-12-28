@@ -164,8 +164,8 @@ class MetricModelSquadService():
 
         squadsCode = baseActivos[baseActivos['app'].isin(apps)]["squadCode"].unique()
         
-        squads = squads[squads['squadCode'].isin(squadsCode)]
+        squadsByResource = squads[squads['squadCode'].isin(squadsCode)]
 
-        return squads
+        return squadsByResource
     
     

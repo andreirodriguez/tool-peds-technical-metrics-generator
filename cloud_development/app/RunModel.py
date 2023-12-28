@@ -99,7 +99,7 @@ class RunModel():
 
         metricsAzureRedis = self.__redisCacheService.extractMetricsAzure(self.__environment["threads"][Constants.SERVICE_CLOUD_CACHE_REDIS])
 
-        metricsAzureCosmos = self.__cosmosDbService.extractMetricsAzure(self.__environment["threads"][Constants.SERVICE_CLOUD_COSMOS_DB])
+        metricsAzureCosmos = self.__cosmosDbService.extractMetricsAzure(self.__period,self.__environment["threads"][Constants.SERVICE_CLOUD_COSMOS_DB])
 
         Utils.logInfo(f"Cálculo el modelo de la métricas por aplicación del periodo {self.__period}")
 

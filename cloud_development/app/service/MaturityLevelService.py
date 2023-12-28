@@ -213,7 +213,7 @@ class MaturityLevelService():
             columns += ["cacheSearchHits","cacheSearchFailed","cacheSearchTotal"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_REDIS_METRICS)
         elif(serviceCloud==Constants.SERVICE_CLOUD_COSMOS_DB):
-            columns += ["provisionedMinThroughput","autoscaleMaxThroughput","provisionedMaxThroughput","totalRequestUnits","averageHalfRequestUnits","maximumRequestUnits"]
+            columns += ["provisionedMinThroughput","autoscaleMaxThroughput","provisionedMaxThroughput","azureCosts","averageHalfRequestUnits","maximumRequestUnits","averageSpikesRequestUnits"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_COSMOS_METRICS)
         
         return columns

@@ -17,6 +17,7 @@ class CosmosDbService():
 
     __metricsAzureMonitor:any  
     __cosmosDbRepository:CosmosDbRepository
+    __azureCosts:pd.DataFrame
 
     def __init__(self,metricsAzureMonitor:any):
         self.__metricsAzureMonitor = metricsAzureMonitor
@@ -33,8 +34,9 @@ class CosmosDbService():
     def listSummaryCosmosDatabases(self)->pd.DataFrame:
         return self.__cosmosDbRepository.getSummaryCosmosDatabases()
 
-    def extractMetricsAzure(self,maximumThreads:int):
+    def extractMetricsAzure(self,period:str,maximumThreads:int):
         databases = self.__listAllCosmosDatabases()
+        self.__azureCosts = self.__cosmosDbRepository.getAzureCosts(period)
 
         Utils.logInfo(f"Inicio a calcular información de las métricas de {str(len(databases))} base de datos Cosmos Db")
 
@@ -73,9 +75,9 @@ class CosmosDbService():
 
         self.__setProvisionedThroughput(azureMonitor,metric)
         metric.autoscaleMaxThroughput = self.__getTotalAutoscaleMaxThroughput(azureMonitor)
+        metric.azureCosts = self.__getAzureCost(metric)
 
         metric.averageHalfRequestUnits = self.__getAverageHalfRequestUnits(azureMonitor)
-        metric.averageSpikesRequestUnits = self.__getAverageSpikesRequestUnits(azureMonitor,metric.averageHalfRequestUnits)
         metric.maximumRequestUnits = self.__getMaximumRequestUnits(azureMonitor)
         metric.totalRequestUnits = self.__getTotalRequestUnits(azureMonitor)
 
@@ -93,23 +95,25 @@ class CosmosDbService():
         if(math.isnan(value)): return None
 
         return round(value,2)
-    
-    def __getAverageSpikesRequestUnits(self,azureMonitor:pd.DataFrame,averageHalf:float)->Decimal:
-        azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
-        azureMonitor = azureMonitor[(azureMonitor['aggregation']=="maximum")]
-        azureMonitor = azureMonitor[(azureMonitor['value']>averageHalf)]
-
-        value = azureMonitor["value"].mean()
-
-        if(math.isnan(value)): return None
-
-        return round(value,2)    
+     
 
     def __getTotalRequestUnits(self,azureMonitor:pd.DataFrame)->Decimal:
         azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
         azureMonitor = azureMonitor[(azureMonitor['aggregation']=="total")]
 
         value = azureMonitor["value"].sum()
+
+        if(math.isnan(value)): return 0.0
+
+        return round(value,2)
+
+
+    def __getAzureCost(self,metric:CosmosDbMetric)->Decimal:
+        costs = self.__azureCosts[(self.__azureCosts['subscriptionId']==metric.subscriptionId)]
+        costs = costs[(costs['resourceGroup']==metric.resourceGroup.lower())]
+        costs = costs[(costs['name']==metric.name.lower())]
+
+        value = costs["azureCost"].sum()
 
         if(math.isnan(value)): return 0.0
 
@@ -153,10 +157,14 @@ class CosmosDbService():
 
         azureRus = pd.merge(azureRus, azureProvisioned, on="intervalTimeStampProvisioned", how="left")
 
-        azureRus["percentageConsumptionProvisioned"] = azureRus.apply(lambda record: self.__calculatePercentageConsumptionProvisioned(record["value"],record["provisionedThroughput"]),axis=1)
+        azureRus["percentageConsumptionProvisioned"] = azureRus.apply(lambda record: self.__calculatePercentageConsumptionProvisioned(record["value"],metric.provisionedMinThroughput),axis=1)
 
         metric.percentageRusConsumption = round(azureRus["percentageConsumptionProvisioned"].mean(),2)
-        metric.maximumRusConsumption = len(azureRus[(azureRus['percentageConsumptionProvisioned'] > maxRusPercentage)].index)
+
+        azureRus = azureRus[(azureRus['percentageConsumptionProvisioned'] > maxRusPercentage)]
+
+        metric.averageSpikesRequestUnits = round(azureRus["value"].mean(),2)
+        metric.maximumRusConsumption = len(azureRus.index)
 
     def __calculatePercentageConsumptionProvisioned(self,consumptionRus:Decimal,provisionedThroughput:Decimal)->Decimal:
         percentageRusConsumption:Decimal = 0.0

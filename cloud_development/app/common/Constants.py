@@ -12,6 +12,8 @@ PATH_INPUT_AZURE_MONITOR:str = "cloud_development\\resources\\input\\azure_monit
 
 PARAMETER_INPUT_AZURE_TENANTID:str = "@tenantId"
 
+PATH_INPUT_AZURE_COSTS_COSMOS_DB:str = "cloud_development\\resources\\input\\azure_costs\\cosmos_db\\"
+
 PATH_INPUT_ASSESMENT_AZURE_SQL:str = "cloud_development\\resources\\input\\assesments\\azure_sql\\"
 PATH_INPUT_ASSESMENT_CACHE_REDIS:str = "cloud_development\\resources\\input\\assesments\\cache_redis\\"
 PATH_INPUT_ASSESMENT_COSMOS_DB:str = "cloud_development\\resources\\input\\assesments\\cosmos_db\\"
@@ -78,6 +80,7 @@ ASSESMENT_METRICS_AZURE_SQL:list[str] = ["normalizedAssesment","performanceAsses
 ASSESMENT_METRICS_CACHE_REDIS:list[str] = ["structureAssesment","performanceAssesment","useCaseAssesment","reactivityAssesment","standardConnectionAssesment","connectionPoolAssesment"]
 ASSESMENT_METRICS_COSMOS_DB:list[str] = ["denormalizationAssesment","performanceAssesment","querysAssesment","insertionsAssesment","standardConnectionAssesment"]
 
+FORMAT_DATETIME_AZURE_COST:str = "%Y-%m-%d"
 FORMAT_DATETIME_SONAR:str = "%Y-%m-%dT%H:%M:%S-%f"
 FORMAT_DATETIME_PROCESS_AZURE_MONITOR:str = "%Y-%m-%d %H:%M:%S.%f+00:00"
 
