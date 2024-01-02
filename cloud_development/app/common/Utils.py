@@ -8,6 +8,7 @@ import traceback
 import os
 from decimal import Decimal
 import math
+import pytz
 
 import cloud_development.app.common.Constants as Constants
 
@@ -350,3 +351,33 @@ class Utils:
         arrSubscription=arrSubscription[1].split(")") 
 
         return arrSubscription[0].strip()
+    
+    @staticmethod
+    def getDatetimeNowUTC() -> datetime.datetime:
+        dateNow = datetime.datetime.now(tz=datetime.timezone.utc)
+
+        dateNow = dateNow - datetime.timedelta(hours=5)
+
+        return dateNow    
+    
+    @staticmethod
+    def convertStringToDatetime(dateText:str,format:str) -> datetime.datetime:
+        date:datetime.datetime = datetime.datetime.strptime(dateText, format)
+
+        return date
+
+    @staticmethod
+    def convertDatetimeToString(date:datetime.datetime,format:str) -> str:
+        text:str = date.strftime(format)
+
+        return text          
+
+    @staticmethod
+    def setDataFrameProcessDate(data:pd.DataFrame,processDate:str):
+        processDateTime:datetime = Utils.convertStringToDatetime(processDate,Constants.FORMAT_DATETIME_PROCESS_DATE)
+        executionDateTime:datetime = datetime.datetime.now()
+
+        data["processDate"] = processDateTime.date()
+        data["executionDate"] = executionDateTime.date()
+
+

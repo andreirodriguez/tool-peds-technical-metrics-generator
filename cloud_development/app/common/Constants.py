@@ -80,6 +80,9 @@ ASSESMENT_METRICS_AZURE_SQL:list[str] = ["normalizedAssesment","performanceAsses
 ASSESMENT_METRICS_CACHE_REDIS:list[str] = ["structureAssesment","performanceAssesment","useCaseAssesment","reactivityAssesment","standardConnectionAssesment","connectionPoolAssesment"]
 ASSESMENT_METRICS_COSMOS_DB:list[str] = ["denormalizationAssesment","performanceAssesment","querysAssesment","insertionsAssesment","standardConnectionAssesment"]
 
+FORMAT_DATETIME_PROCESS_DATE:str = "%Y%m%d"
+FORMAT_DATETIME_EXPORT_PROCESS_DATE:str = "%Y-%m-%d"
+
 FORMAT_DATETIME_AZURE_COST:str = "%Y-%m-%d"
 FORMAT_DATETIME_SONAR:str = "%Y-%m-%dT%H:%M:%S-%f"
 FORMAT_DATETIME_PROCESS_AZURE_MONITOR:str = "%Y-%m-%d %H:%M:%S.%f+00:00"

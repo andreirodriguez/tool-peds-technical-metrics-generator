@@ -30,6 +30,7 @@ from cloud_development.app.domain.CosmosDbMetric import CosmosDbMetric
 
 class RunModel():
     __period:str
+    __processDate:str
     __environment:any
     __baseActivosService:BaseActivosService
     __assesmentService:AssesmentService
@@ -41,8 +42,9 @@ class RunModel():
     __maturityLevelService:MaturityLevelService
     __metricModelSquadService:MetricModelSquadService
 
-    def __init__(self,period:str):
-        self.__period = period
+    def __init__(self,processDate:str):
+        self.__period = processDate[0:6]
+        self.__processDate = processDate
 
         Utils.logInfo(f"INICIALIZO la ejecución del proceso modelo de métrica cloud development con el periodo {self.__period}")
 
@@ -121,7 +123,7 @@ class RunModel():
 
         squads = self.__metricModelSquadService.calculateMaturityLevel(metricsSquadSql,metricsSquadRedis,metricsSquadCosmos)
 
-        self.__maturityLevelService.exportExcelSummary(self.__period,baseActivos,
+        self.__maturityLevelService.exportExcelSummary(self.__period,self.__processDate,baseActivos,
                                                        squads,metricsSquadSql,metricsSquadRedis,metricsSquadCosmos,
                                                        metricsAppSql,metricsAppRedis,metricsAppCosmos,
                                                        Utils.getDataFrameToDictionaryList(metricsAzureSql),Utils.getDataFrameToDictionaryList(metricsAzureRedis),Utils.getDataFrameToDictionaryList(metricsAzureCosmos),

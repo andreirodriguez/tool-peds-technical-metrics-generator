@@ -141,7 +141,7 @@ class MaturityLevelService():
 
         return round(maturityLevel,2)
 
-    def exportExcelSummary(self,period,baseActivos:pd.DataFrame,
+    def exportExcelSummary(self,period:str,processDate:str,baseActivos:pd.DataFrame,
                               squadsMaturityLevel:pd.DataFrame,squadsAzureSql:pd.DataFrame,squadsRedisCache:pd.DataFrame,squadsCosmosDb:pd.DataFrame,
                               metricsAppAzureSql:pd.DataFrame,metricsAppRedisCache:pd.DataFrame,metricsAppCosmosDb:pd.DataFrame,
                               metricsAzureSql:pd.DataFrame,metricsAzureRedis:pd.DataFrame,metricsAzureCosmos:pd.DataFrame,
@@ -149,6 +149,23 @@ class MaturityLevelService():
                               assesmentAzureSql:pd.DataFrame,assesmentRedisCache:pd.DataFrame,assesmentCosmosDb:pd.DataFrame
                               ):
         file = Utils.getPathDirectory(Constants.PATH_OUTPUT_FILE_SUMMARY.format(period=period))
+
+        Utils.setDataFrameProcessDate(squadsMaturityLevel,processDate)
+        Utils.setDataFrameProcessDate(squadsAzureSql,processDate)
+        Utils.setDataFrameProcessDate(squadsRedisCache,processDate)
+        Utils.setDataFrameProcessDate(squadsCosmosDb,processDate)
+        Utils.setDataFrameProcessDate(metricsAppAzureSql,processDate)
+        Utils.setDataFrameProcessDate(metricsAppRedisCache,processDate)
+        Utils.setDataFrameProcessDate(metricsAppCosmosDb,processDate)
+        Utils.setDataFrameProcessDate(metricsAzureSql,processDate)
+        Utils.setDataFrameProcessDate(metricsAzureRedis,processDate)
+        Utils.setDataFrameProcessDate(metricsAzureCosmos,processDate)
+        Utils.setDataFrameProcessDate(metricsSonarAzureSql,processDate)
+        Utils.setDataFrameProcessDate(metricsSonarRedisCache,processDate)
+        Utils.setDataFrameProcessDate(assesmentAzureSql,processDate)
+        Utils.setDataFrameProcessDate(assesmentRedisCache,processDate)
+        Utils.setDataFrameProcessDate(assesmentCosmosDb,processDate)
+        Utils.setDataFrameProcessDate(baseActivos,processDate)
 
         with pd.ExcelWriter(file) as writer:
             squadsMaturityLevel.to_excel(writer,sheet_name=Constants.PATH_INPUT_SQUADS_PRIORIZADOS_HOJA_AZURE_GENERAL,columns=self.__getColumnsSquadsGeneral(), index=False)
@@ -171,7 +188,7 @@ class MaturityLevelService():
 
     def __getColumnsSquadsGeneral(self)->list[str]:
         columns:list[str] = ["tribeCode","tribe","squadCode","squad","group","cmt","maturityLevel",
-                             "maturityLevelAzureSql","maturityLevelRedisCache","maturityLevelCosmosDb"]
+                             "maturityLevelAzureSql","maturityLevelRedisCache","maturityLevelCosmosDb","processDate","executionDate"]
         
         return columns
     
@@ -188,6 +205,10 @@ class MaturityLevelService():
                     columns.append(variable["variable"])
 
         columns.append("app")
+        columns.append("processDate")
+        columns.append("executionDate")
+
+        return columns
 
     def __getColumnsMetricsAppByServiceCloud(self,serviceCloud:str)->list[str]:
         columns:list[str] = ["app"]
@@ -201,6 +222,9 @@ class MaturityLevelService():
         elif(serviceCloud==Constants.SERVICE_CLOUD_COSMOS_DB):
             columns += Constants.AZURE_MONITOR_AZURE_COSMOS_METRICS
         
+        columns.append("processDate")
+        columns.append("executionDate")
+
         return columns    
     
     def __getColumnsMetricsAzureByServiceCloud(self,serviceCloud:str)->list[str]:
@@ -216,6 +240,9 @@ class MaturityLevelService():
             columns += ["provisionedMinThroughput","autoscaleMaxThroughput","provisionedMaxThroughput","azureCosts","averageHalfRequestUnits","maximumRequestUnits","averageSpikesRequestUnits"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_COSMOS_METRICS)
         
+        columns.append("processDate")
+        columns.append("executionDate")
+
         return columns
 
     def __getColumnsMetricsSonarByServiceCloud(self,serviceCloud:str)->list[str]:
@@ -225,7 +252,10 @@ class MaturityLevelService():
             columns += self.__getColumnsVariableWithPoints([Constants.METRIC_SONAR_CONNECTION_POOL])          
         elif(serviceCloud==Constants.SERVICE_CLOUD_CACHE_REDIS):
             columns += self.__getColumnsVariableWithPoints([Constants.METRIC_SONAR_CONNECTION_POOL])          
-        
+
+        columns.append("processDate")
+        columns.append("executionDate")
+
         return columns
 
     def __getColumnsMetricsAssesmentByServiceCloud(self,serviceCloud:str)->list[str]:
@@ -237,7 +267,10 @@ class MaturityLevelService():
             columns += self.__getColumnsVariableWithPoints(Constants.ASSESMENT_METRICS_CACHE_REDIS)
         elif(serviceCloud==Constants.SERVICE_CLOUD_COSMOS_DB):
             columns += self.__getColumnsVariableWithPoints(Constants.ASSESMENT_METRICS_COSMOS_DB)
-        
+
+        columns.append("processDate")
+        columns.append("executionDate")
+
         return columns        
 
     def __getColumnsVariableWithPoints(self,columnsMetric:list[str])->list[str]:
