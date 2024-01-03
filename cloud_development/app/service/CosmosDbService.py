@@ -82,7 +82,9 @@ class CosmosDbService():
         metric.totalRequestUnits = self.__getTotalRequestUnits(azureMonitor)
 
         self.__setRusConsumption(azureMonitor,metric,metricAzureMonitor["limitValue"])
-        metric.maximumRusConsumptionPoints = Utils.getMetricPointsAzureMonitor(metric.maximumRusConsumption,metricAzureMonitor["ranges"])     
+        metric.maximumRusConsumptionPoints = Utils.getMetricPointsAzureMonitor(metric.maximumRusConsumption,metricAzureMonitor["ranges"])
+
+        self.__setRusConsumptionProposed(azureMonitor,metric,metricAzureMonitor["limitValue"])
 
         return metric
 
@@ -147,24 +149,49 @@ class CosmosDbService():
 
 
     def __setRusConsumption(self,azureMonitor:pd.DataFrame,metric:CosmosDbMetric,maxRusPercentage:Decimal):
-        azureRus = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
-        azureRus = azureRus[(azureRus['aggregation']=="maximum")]
-        azureRus["intervalTimeStampProvisioned"] = azureRus.apply(lambda record: Utils.getIntervalHour(record["intervalTimeStamp"]),axis=1)
-
-        azureProvisioned = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_PROVISIONEDTHROUGHPUT]))]
-        azureProvisioned = azureProvisioned[['intervalTimeStamp', 'value']].copy()
-        azureProvisioned = azureProvisioned.rename(columns={"intervalTimeStamp": "intervalTimeStampProvisioned", "value": "provisionedThroughput"})
-
-        azureRus = pd.merge(azureRus, azureProvisioned, on="intervalTimeStampProvisioned", how="left")
-
-        azureRus["percentageConsumptionProvisioned"] = azureRus.apply(lambda record: self.__calculatePercentageConsumptionProvisioned(record["value"],metric.provisionedMinThroughput),axis=1)
-
-        metric.percentageRusConsumption = round(azureRus["percentageConsumptionProvisioned"].mean(),2)
-
-        azureRus = azureRus[(azureRus['percentageConsumptionProvisioned'] > maxRusPercentage)]
+        azureRus:pd.DataFrame = self.__getRusMaximumSpikes(azureMonitor,metric.provisionedMinThroughput,maxRusPercentage)
 
         metric.averageSpikesRequestUnits = round(azureRus["value"].mean(),2)
         metric.maximumRusConsumption = len(azureRus.index)
+
+
+    def __setRusConsumptionProposed(self,azureMonitor:pd.DataFrame,metric:CosmosDbMetric,maxRusPercentage:Decimal):
+        metric.provisionedMinThroughputProposed = self.__getThroughputIncrement(metric.averageHalfRequestUnits)
+
+        azureRus:pd.DataFrame
+        spikesAcceptable:int = round((Constants.AZURE_MONITOR_AZURE_COSMOS_QUANTITY_RUNNING * (Constants.AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_SPIKES_ACCEPTABLE / 100)),0)
+        spikesRus:int = spikesAcceptable
+        while(spikesRus>=spikesAcceptable):
+            azureRus = self.__getRusMaximumSpikes(azureMonitor,metric.provisionedMinThroughputProposed,maxRusPercentage)
+
+            spikesRus = len(azureRus.index)
+
+            if(spikesRus>=spikesAcceptable): 
+                metric.provisionedMinThroughputProposed += Constants.AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT
+            else:
+                metric.spikesThroughputProposed = spikesRus
+
+        metric.autoscaleMaxThroughputProposed = round((metric.maximumRequestUnits * (1 + (Constants.AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_AUTOSCALE_PROPOSED / 100))),2)
+        metric.autoscaleMaxThroughputProposed = self.__getThroughputIncrement(metric.autoscaleMaxThroughputProposed) + Constants.AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT
+
+    def __getThroughputIncrement(self,provisionedThroughput)->Decimal:
+        proposedThroughput:Decimal = Constants.AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT
+
+        while(proposedThroughput<provisionedThroughput):
+            proposedThroughput += Constants.AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT
+
+        return proposedThroughput
+
+
+    def __getRusMaximumSpikes(self,azureMonitor:pd.DataFrame,provisionedThroughput:Decimal,maxRusPercentage:Decimal):
+        azureRus = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS]))]
+        azureRus = azureRus[(azureRus['aggregation']=="maximum")]
+
+        azureRus["percentageConsumptionProvisioned"] = azureRus.apply(lambda record: self.__calculatePercentageConsumptionProvisioned(record["value"],provisionedThroughput),axis=1)
+
+        azureRus = azureRus[(azureRus['percentageConsumptionProvisioned'] > maxRusPercentage)]
+
+        return azureRus
 
     def __calculatePercentageConsumptionProvisioned(self,consumptionRus:Decimal,provisionedThroughput:Decimal)->Decimal:
         percentageRusConsumption:Decimal = 0.0

@@ -16,12 +16,16 @@ class CosmosDbMetric:
     provisionedMaxThroughput:Decimal
     azureCosts:Decimal
 
+    provisionedMinThroughputProposed:Decimal
+    autoscaleMaxThroughputProposed:Decimal
+    azureCostsProposed:Decimal
+    spikesThroughputProposed:int
+
     averageHalfRequestUnits:Decimal
     maximumRequestUnits:Decimal
     averageSpikesRequestUnits:Decimal
     totalRequestUnits:Decimal
-
-    percentageRusConsumption:Decimal
+    
     maximumRusConsumption:int
     maximumRusConsumptionPoints:Decimal
 
