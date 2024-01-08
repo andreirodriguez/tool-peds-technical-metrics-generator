@@ -234,7 +234,7 @@ class MaturityLevelService():
             columns += ["tablesQuantity"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_SQL_METRICS)          
         elif(serviceCloud==Constants.SERVICE_CLOUD_CACHE_REDIS):
-            columns += ["cacheSearchHits","cacheSearchFailed","cacheSearchTotal"]
+            columns += ["cacheSearchHits","cacheSearchFailed","cacheSearchTotal","halfAverageProcessorValue","maximumProcessorValue","halfAverageMemoryValue","maximumMemoryValue"]
             columns += self.__getColumnsVariableWithPoints(Constants.AZURE_MONITOR_AZURE_REDIS_METRICS)
         elif(serviceCloud==Constants.SERVICE_CLOUD_COSMOS_DB):
             columns += ["provisionedMinThroughput","autoscaleMaxThroughput","provisionedMaxThroughput","azureCosts","averageHalfRequestUnits","maximumRequestUnits","provisionedMinThroughputProposed","percentageUtilizationProposed","autoscaleMaxThroughputProposed","spikesThroughputProposed"]

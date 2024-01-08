@@ -64,6 +64,9 @@ AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_MISSES:str = "cachemisses"
 AZURE_MONITOR_AZURE_REDIS_METRIC_PERCENT_PROCESSOR:str = "percentProcessorTime"
 AZURE_MONITOR_AZURE_REDIS_METRIC_MEMORY_PERCENTAGE:str = "usedmemorypercentage"
 
+AZURE_MONITOR_AZURE_REDIS_CPU_PERCENTILE:float = 0.90
+AZURE_MONITOR_AZURE_REDIS_MEMORY_PERCENTILE:float = 0.90
+
 AZURE_MONITOR_AZURE_COSMOS_COLUMNS:list[str] = ["id","subscriptionId","resourceGroup","location","name","type","kind","state","documentEndpoint","enabledApiTypes","databaseAccountOfferType","minimalTlsVersion"]
 AZURE_MONITOR_AZURE_COSMOS_METRICS:list[str] = ["maximumRusConsumption"]
 AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION:str = "NormalizedRUConsumption"

@@ -17,9 +17,13 @@ class RedisCacheMetric:
     cacheMissRate:Decimal
     cacheMissRatePoints:Decimal
 
+    halfAverageMemoryValue:Decimal
+    maximumMemoryValue:Decimal
     maximumMemoryConsumption:Decimal
     maximumMemoryConsumptionPoints:Decimal
 
+    halfAverageProcessorValue:Decimal
+    maximumProcessorValue:Decimal
     maximumProcessorConsumption:Decimal
     maximumProcessorConsumptionPoints:Decimal
 

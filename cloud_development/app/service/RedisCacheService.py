@@ -73,11 +73,11 @@ class RedisCacheService():
         metric.cacheMissRatePoints = Utils.getMetricPointsAzureMonitor(metric.cacheMissRate,metricAzureMonitor["ranges"])     
 
         metricAzureMonitor = self.__getMetric("percentProcessorTime")
-        metric.maximumProcessorConsumption = self.__getMaximumProcessorConsumption(azureMonitor,metricAzureMonitor["limitValue"])
+        self.__setMaximumProcessorConsumption(azureMonitor,metricAzureMonitor["limitValue"],metric)
         metric.maximumProcessorConsumptionPoints = Utils.getMetricPointsAzureMonitor(metric.maximumProcessorConsumption,metricAzureMonitor["ranges"])             
 
         metricAzureMonitor = self.__getMetric("percentProcessorTime")
-        metric.maximumMemoryConsumption = self.__getMaximumMemoryConsumption(azureMonitor,metricAzureMonitor["limitValue"])
+        self.__setMaximumMemoryConsumption(azureMonitor,metricAzureMonitor["limitValue"],metric)
         metric.maximumMemoryConsumptionPoints = Utils.getMetricPointsAzureMonitor(metric.maximumMemoryConsumption,metricAzureMonitor["ranges"])                     
 
         return metric    
@@ -89,7 +89,7 @@ class RedisCacheService():
 
         azureMonitorFailed = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_REDIS_METRIC_CACHE_MISSES]))]
 
-        metric.cacheSearchFailed = azureMonitorFailed["value"].sum()  
+        metric.cacheSearchFailed = azureMonitorFailed["value"].sum()
 
         metric.cacheSearchTotal = metric.cacheSearchHits + metric.cacheSearchFailed
 
@@ -97,22 +97,22 @@ class RedisCacheService():
 
         metric.cacheMissRate = value
         if(metric.cacheSearchTotal>value): 
-            metric.cacheMissRate = (metric.cacheSearchFailed * 100) / metric.cacheSearchTotal
+            metric.cacheMissRate = round(((metric.cacheSearchFailed * 100) / metric.cacheSearchTotal),2)
     
-    def __getMaximumProcessorConsumption(self,azureMonitor:pd.DataFrame,maxProcessorPercentage:Decimal)->Decimal:
+    def __setMaximumProcessorConsumption(self,azureMonitor:pd.DataFrame,maxProcessorPercentage:Decimal,metric:RedisCacheMetric):
         azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_REDIS_METRIC_PERCENT_PROCESSOR]))]
 
+        metric.halfAverageProcessorValue = azureMonitor["value"].quantile(Constants.AZURE_MONITOR_AZURE_REDIS_CPU_PERCENTILE)
+        metric.maximumProcessorValue = azureMonitor["value"].max()
+
         azureMonitor = azureMonitor[(azureMonitor['value'] > maxProcessorPercentage)]
-
-        value = len(azureMonitor.index)
-
-        return value           
+        metric.maximumProcessorConsumption = len(azureMonitor.index)
     
-    def __getMaximumMemoryConsumption(self,azureMonitor:pd.DataFrame,maxMemoryPercentage:Decimal)->Decimal:
+    def __setMaximumMemoryConsumption(self,azureMonitor:pd.DataFrame,maxMemoryPercentage:Decimal,metric:RedisCacheMetric):
         azureMonitor = azureMonitor[(azureMonitor['metric'].isin([Constants.AZURE_MONITOR_AZURE_REDIS_METRIC_MEMORY_PERCENTAGE]))]
 
+        metric.halfAverageMemoryValue = azureMonitor["value"].quantile(Constants.AZURE_MONITOR_AZURE_REDIS_MEMORY_PERCENTILE)
+        metric.maximumMemoryValue = azureMonitor["value"].max()
+
         azureMonitor = azureMonitor[(azureMonitor['value'] > maxMemoryPercentage)]
-
-        value = len(azureMonitor.index)
-
-        return value               
+        metric.maximumMemoryConsumption = len(azureMonitor.index)
