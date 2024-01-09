@@ -173,15 +173,18 @@ class CosmosDbService():
 
         metric.autoscaleMaxThroughputProposed = round((metric.maximumRequestUnits * (1 + (Constants.AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_AUTOSCALE_PROPOSED / 100))),2)
         metric.autoscaleMaxThroughputProposed = self.__getThroughputIncrement(metric.autoscaleMaxThroughputProposed) + Constants.AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT
+        autoscaleMinThroughput:Decimal = Constants.AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT * 10
 
-        if(metric.provisionedMinThroughputProposed==Constants.AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT):
-            metric.autoscaleMaxThroughputProposed = metric.provisionedMinThroughputProposed * Constants.AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_PROVISIONEDTHROUGHPUT
+        if(metric.autoscaleMaxThroughputProposed < autoscaleMinThroughput): metric.autoscaleMaxThroughputProposed = autoscaleMinThroughput
+
+        if(metric.provisionedMinThroughputProposed==Constants.AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT and metric.autoscaleMaxThroughputProposed>autoscaleMinThroughput):
+            metric.provisionedMinThroughputProposed = metric.autoscaleMaxThroughputProposed * (Constants.AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_PROVISIONEDTHROUGHPUT / 100)
         else:
             provisionedMinThroughput:Decimal = metric.provisionedMinThroughputProposed * (Constants.AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_PROVISIONEDTHROUGHPUT / 100)
 
             if(metric.provisionedMinThroughputProposed < provisionedMinThroughput): metric.provisionedMinThroughputProposed = provisionedMinThroughput
 
-        metric.percentageUtilizationProposed = round(((metric.provisionedMinThroughputProposed * 100) / metric.autoscaleMaxThroughputProposed),0)
+        metric.percentageUtilizationProposed = round(((metric.provisionedMinThroughputProposed * 100) / metric.autoscaleMaxThroughputProposed),2)
 
     def __getThroughputIncrement(self,provisionedThroughput)->Decimal:
         proposedThroughput:Decimal = Constants.AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT

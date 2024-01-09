@@ -20,7 +20,7 @@ class CosmosDbMetric:
     autoscaleMaxThroughputProposed:Decimal
     azureCostsProposed:Decimal
     spikesThroughputProposed:int
-    percentageUtilizationProposed:int
+    percentageUtilizationProposed:Decimal
 
     averageHalfRequestUnits:Decimal
     maximumRequestUnits:Decimal
