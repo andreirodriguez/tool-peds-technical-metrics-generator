@@ -105,6 +105,8 @@ class MetricModelSquadService():
         return apps    
 
     def __applyPractice(self,apps:str,metricsAzure:pd.DataFrame)->Decimal:        
+        if(apps==None): return False
+
         metricsAzure:pd.DataFrame = metricsAzure[(metricsAzure['app'].isin(apps.split(",")))]
 
         if(len(metricsAzure.index)==0): return False
@@ -112,6 +114,8 @@ class MetricModelSquadService():
         return True
 
     def __getPointsMetricsAzureBySquad(self,apps:str,metricsData:pd.DataFrame,metric:str)->Decimal:        
+        if(apps==None): return None
+
         metricsBySquad:pd.DataFrame = metricsData[(metricsData['app'].isin(apps.split(",")))]
 
         if(len(metricsBySquad.index)==0): return None
@@ -123,6 +127,8 @@ class MetricModelSquadService():
         return round(points,2)
     
     def __getPointsMetricsSonarBySquad(self,apps:str,metricsData:pd.DataFrame,metric:str)->Decimal:        
+        if(apps==None): return None
+        
         metricsBySquad:pd.DataFrame = metricsData[(metricsData['app'].isin(apps.split(",")))]
 
         if(len(metricsBySquad.index)==0): return None
