@@ -213,3 +213,32 @@ class CosmosDbService():
         provisionedThroughput = round((consumptionRus * 100) / provisionedThroughput,2)
 
         return provisionedThroughput
+    
+
+    def getContainersCosmosDatabases(self)->pd.DataFrame:
+        data = self.__cosmosDbRepository.getContainersCosmosDatabases()
+
+        data["provisionedMinThroughput"] = data.apply(lambda record: self.__getProvisionedMinThroughputContainer(record["provisionedTroughputDatabase"],record["provisionedTroughputContainer"],record["troughputMode"]),axis=1)
+        data["azureCostActually"] = data.apply(lambda record: self.__getCostProvisionedThroughputContainer(record["provisionedMinThroughput"],record["troughputMode"]),axis=1)
+
+        return data       
+    
+    def __getProvisionedMinThroughputContainer(self,provisionedTroughputDatabase:Decimal,provisionedThroughput:Decimal,troughputMode:str)->Decimal:
+        if(not Utils.isNumber(provisionedThroughput)): return provisionedTroughputDatabase
+
+        if(troughputMode==Constants.AZURE_MONITOR_COSMOS_DB_TROUGHPUT_MODE_AUTOSCALE):
+            provisionedThroughput = provisionedThroughput * (Constants.AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_PROVISIONEDTHROUGHPUT / 100)
+
+        return provisionedThroughput
+    
+    def __getCostProvisionedThroughputContainer(self,provisionedThroughput:Decimal,troughputMode:str)->Decimal:
+        if(not Utils.isNumber(provisionedThroughput)): return None
+
+        azureCost:Decimal 
+        if(troughputMode==Constants.AZURE_MONITOR_COSMOS_DB_TROUGHPUT_MODE_AUTOSCALE):
+            azureCost = (Constants.AZURE_MONITOR_AZURE_COSMOS_COST_RU_AUTOSCALE * provisionedThroughput) * Constants.HOURS_FOR_DAYS * Constants.DAYS_FOR_MONTH_AZURE
+        else:
+            azureCost = (((Constants.AZURE_MONITOR_AZURE_COSMOS_COST_RU_MANUAL * provisionedThroughput) / 10) * 15) * Constants.HOURS_FOR_DAYS * Constants.DAYS_FOR_MONTH_AZURE
+
+
+        return round(azureCost,2)

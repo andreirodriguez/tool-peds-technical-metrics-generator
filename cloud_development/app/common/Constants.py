@@ -39,10 +39,13 @@ AZURE_MONITOR_FILE_SUMMARY_RESOURCE_GROUPS:str = "resource-groups-summary.csv"
 AZURE_MONITOR_FILE_SUMMARY_AZURE_SQL:str = "sql-databases-summary.csv"
 AZURE_MONITOR_FILE_SUMMARY_REDIS_CACHE:str = "redis-caches-summary.csv"
 AZURE_MONITOR_FILE_SUMMARY_COSMOS_DB:str = "cosmos-dbs-summary.csv"
+AZURE_MONITOR_FILE_SUMMARY_COSMOS_DB_CONTAINERS:str = "cosmos-dbs-containers-summary.csv"
 
 AZURE_MONITOR_FILE_AZURE_SQL:str = "sql-databases.csv"
 AZURE_MONITOR_FILE_REDIS_CACHE:str = "redis-caches.csv"
 AZURE_MONITOR_FILE_COSMOS_DB:str = "cosmos-dbs.csv"
+
+AZURE_MONITOR_COSMOS_DB_TROUGHPUT_MODE_AUTOSCALE:str = "Autoscale"
 
 PATH_OUTPUT_FILE_DATA:str = "cloud_development\\resources\\output\\data.xlsx"
 PATH_OUTPUT_FILE_SUMMARY:str = "cloud_development\\resources\\output\\{period}-cloud-development-maturity-level-by-squad-summary.xlsx"
@@ -68,6 +71,7 @@ AZURE_MONITOR_AZURE_REDIS_CPU_PERCENTILE:float = 0.90
 AZURE_MONITOR_AZURE_REDIS_MEMORY_PERCENTILE:float = 0.90
 
 AZURE_MONITOR_AZURE_COSMOS_COLUMNS:list[str] = ["id","subscriptionId","resourceGroup","location","name","type","kind","state","documentEndpoint","enabledApiTypes","databaseAccountOfferType","minimalTlsVersion"]
+AZURE_MONITOR_AZURE_COSMOS_CONTAINERS_COLUMNS:list[str] = ["Subscription","AccountName","ResourceGroupName","Environment","DatabaseName","ContainerName","TroughputMode","ThroughputAssignedDB","ThroughputAssignedCollect"]
 AZURE_MONITOR_AZURE_COSMOS_METRICS:list[str] = ["maximumRusConsumption"]
 AZURE_MONITOR_AZURE_COSMOS_METRIC_RU_CONSUMPTION:str = "NormalizedRUConsumption"
 AZURE_MONITOR_AZURE_COSMOS_METRIC_TOTAL_REQUEST_UNITS:str = "TotalRequestUnits"
@@ -109,3 +113,9 @@ AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_PROVISIONEDTHROUGHPUT :float = 10
 AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_SPIKES_ACCEPTABLE :float = 3
 AZURE_MONITOR_AZURE_COSMOS_PERCENTAGE_AUTOSCALE_PROPOSED :float = 25
 AZURE_MONITOR_AZURE_COSMOS_RU_INCREMENT :float = 400
+
+AZURE_MONITOR_AZURE_COSMOS_COST_RU_MANUAL :float = 0.00008
+AZURE_MONITOR_AZURE_COSMOS_COST_RU_AUTOSCALE :float = 0.00012
+
+HOURS_FOR_DAYS :int = 24
+DAYS_FOR_MONTH_AZURE :float = 30.416

@@ -18,13 +18,31 @@ class CosmosDbRepository():
         return dataBases
     
     def getSummaryCosmosDatabases(self)->pd.DataFrame:
-        data = Utils.getAllResourcesAzureType(Constants.PATH_INPUT_AZURE_MONITOR,Constants.AZURE_MONITOR_FILE_SUMMARY_COSMOS_DB,Constants.AZURE_MONITOR_AZURE_COSMOS_COLUMNS)
+        data = Utils.getAllResourcesAzureType(Constants.PATH_INPUT_AZURE_MONITOR,Constants.AZURE_MONITOR_FILE_SUMMARY_COSMOS_DB_CONTAINERS,Constants.AZURE_MONITOR_AZURE_COSMOS_COLUMNS)
 
         data = data[Constants.AZURE_MONITOR_AZURE_COSMOS_COLUMNS].copy()
 
         data["app"] = data.apply(lambda record: Utils.getAppCodeByResourceGroupName(record["resourceGroup"]),axis=1)
 
         return data    
+    
+    def getContainersCosmosDatabases(self)->pd.DataFrame:
+        data = Utils.getDataByAllFiles(Constants.PATH_INPUT_AZURE_MONITOR,Constants.AZURE_MONITOR_FILE_SUMMARY_COSMOS_DB_CONTAINERS,Constants.AZURE_MONITOR_AZURE_COSMOS_CONTAINERS_COLUMNS)
+
+        data = data.rename(columns= {"Subscription": "subscription", 
+                    "AccountName": "name",
+                    "ResourceGroupName": "resourceGroup",
+                    "Environment": "environment",
+                    "DatabaseName": "databaseName",
+                    "ContainerName": "containerName",
+                    "TroughputMode": "troughputMode",
+                    "ThroughputAssignedDB": "provisionedTroughputDatabase",
+                    "ThroughputAssignedCollect": "provisionedTroughputContainer"
+                    })
+
+        data["app"] = data.apply(lambda record: Utils.getAppCodeByResourceGroupName(record["resourceGroup"]),axis=1)
+
+        return data        
     
     def getAzureMonitor(self,database:CosmosDb)->pd.DataFrame:
         file:str = Constants.PATH_INPUT_METRIC_COSMOS_DB_MONITOR_METRICS.format(tenantId=Constants.PARAMETER_INPUT_AZURE_TENANTID,subscriptionId=database.subscriptionId,resourceGroup=database.resourceGroup,cosmosDb=database.name)

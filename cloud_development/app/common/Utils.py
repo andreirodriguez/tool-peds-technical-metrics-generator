@@ -304,7 +304,26 @@ class Utils:
 
         data['processDate'] = data['processDate'].apply(lambda value: pd.to_datetime(value,format=Constants.FORMAT_DATETIME_PROCESS_AZURE_MONITOR).to_datetime64())
 
-        return data            
+        return data  
+
+    @staticmethod
+    def getDataByAllFiles(basePathAzure:str,fileResource:str,resourceColumns:list[str])->pd.DataFrame:
+        data = pd.DataFrame({})
+        files = Utils.getAllFilesSubDirectory(basePathAzure,fileResource)
+
+        for file in files:
+            data = pd.concat([data, Utils.getDataByFile(file,resourceColumns)], ignore_index=True)        
+
+        return data
+
+    @staticmethod
+    def getDataByFile(directory:str,resourceColumns:list[str])->pd.DataFrame:
+        file:str = Utils.getPathDirectory(directory)
+
+        data:pd.DataFrame = pd.read_csv(file,usecols=resourceColumns,encoding="utf-8")
+        data = data.astype(object).where(pd.notnull(data),None)
+
+        return data                
     
     @staticmethod
     def getDataAzureMonitor(pathAzureData:str,columnsAzureData:list[str])->pd.DataFrame:
