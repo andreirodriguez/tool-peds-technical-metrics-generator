@@ -221,6 +221,9 @@ class CosmosDbService():
         data["provisionedMinThroughput"] = data.apply(lambda record: self.__getProvisionedMinThroughputContainer(record["provisionedTroughputDatabase"],record["provisionedTroughputContainer"],record["troughputMode"]),axis=1)
         data["azureCostActually"] = data.apply(lambda record: self.__getCostProvisionedThroughputContainer(record["provisionedMinThroughput"],record["troughputMode"]),axis=1)
 
+        data["provisionedProposedThroughput"] = data.apply(lambda record: self.__getProvisionedThroughputProposed(record["provisionedMinThroughput"],record["troughputMode"]),axis=1)
+        data["azureCostProposed"] = data.apply(lambda record: self.__getCostProvisionedThroughputContainer(record["provisionedProposedThroughput"],record["troughputMode"]),axis=1)        
+
         return data       
     
     def __getProvisionedMinThroughputContainer(self,provisionedTroughputDatabase:Decimal,provisionedThroughput:Decimal,troughputMode:str)->Decimal:
@@ -242,3 +245,10 @@ class CosmosDbService():
 
 
         return round(azureCost,2)
+    
+    def __getProvisionedThroughputProposed(self,provisionedThroughput:Decimal,troughputMode:str)->Decimal:
+        if(not Utils.isNumber(provisionedThroughput)): return None
+
+        if(provisionedThroughput>Constants.AZURE_MONITOR_AZURE_COSMOS_PROVISIONEDTHROUGHPUT_PROPOSED): provisionedThroughput = Constants.AZURE_MONITOR_AZURE_COSMOS_PROVISIONEDTHROUGHPUT_PROPOSED
+
+        return round(provisionedThroughput,2)    

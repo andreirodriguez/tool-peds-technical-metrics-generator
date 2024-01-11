@@ -6,6 +6,6 @@ from cloud_development.app.RunAccountability import RunAccountability
 
 processDate:str = sys.argv[1]
 
-process = RunAccountability(processDate)
+process = RunModel(processDate)
 
 process.run()
