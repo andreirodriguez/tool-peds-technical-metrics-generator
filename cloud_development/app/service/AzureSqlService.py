@@ -61,7 +61,7 @@ class AzureSqlService():
     
     def __calculateMetrics(self,database:AzureSql)->AzureSqlMetric:
         metric:AzureSqlMetric = AzureSqlMetric(database)
-
+        
         metricAzureMonitor:any
 
         metricAzureMonitor = self.__getMetric("tablesDenormalized")

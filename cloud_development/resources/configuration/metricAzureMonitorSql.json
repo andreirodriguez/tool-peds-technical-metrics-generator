@@ -11,13 +11,13 @@
             },           
             {
                 "id": 2,
-                "minimum": 20,
-                "maximum": 15,
+                "minimum": 25,
+                "maximum": 20,
                 "points": 2.00
             },             
             {
                 "id": 3,
-                "minimum": 15,
+                "minimum": 20,
                 "maximum": 10,
                 "points": 3.00
             },             

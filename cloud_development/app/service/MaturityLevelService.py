@@ -13,6 +13,8 @@ from cloud_development.app.domain.AzureSqlMetric import AzureSqlMetric
 from cloud_development.app.domain.RedisCacheMetric import RedisCacheMetric
 from cloud_development.app.domain.CosmosDbMetric import CosmosDbMetric
 
+import copy
+
 class MaturityLevelService():
 
     __metricsModel:any  
@@ -91,55 +93,60 @@ class MaturityLevelService():
     def __calculateMetricsSquads(self,model:any,squads:pd.DataFrame):
         for category in model["categories"]:
             for metric in category["metrics"]:
-                squads[metric["metric"]] = squads.apply(lambda record: self.__getMetricPoints(record,metric["variables"]),axis=1)
+                squads[metric["metric"]] = squads.apply(lambda record: self.__getModelMetricPoints(record,metric["variables"],Constants.METRIC_MODEL_VARIABLE),axis=1)
 
         for category in model["categories"]:
-            squads[category["category"]] = squads.apply(lambda record: self.__getCategoryPoints(record,category["metrics"]),axis=1)
+            squads[category["category"]] = squads.apply(lambda record: self.__getModelMetricPoints(record,category["metrics"],Constants.METRIC_MODEL_METRIC),axis=1)
 
-        squads["maturityLevel"] = squads.apply(lambda record: self.__getMaturityLevelServiceCloud(record,model["categories"]),axis=1)
+        squads["maturityLevel"] = squads.apply(lambda record: self.__getModelMetricPoints(record,model["categories"],Constants.METRIC_MODEL_CATEGORY),axis=1)
 
 
-    def __getMetricPoints(self,squad:any,variables:any)->Decimal:
+    def __getApportionPercentageMetrics(sef,squad:any,variables:any,type:str)->any:
+        variableApportion:any = None
+
+        for variable in variables: 
+            points = squad[variable[type]]
+
+            if(not Utils.isNumber(points)):
+                variableApportion = copy.deepcopy(variable)
+
+                break
+        
+        if(variableApportion==None): return variables
+
+        percentage:Decimal = 0.00
+        lenApportion:int = (len(variables) - 1)
+
+        if(lenApportion>0):
+            percentage = variableApportion["percentage"] / lenApportion
+
+        newVariables = []
+        for variable in variables: 
+            if(variable[type]==variableApportion[type]): continue
+               
+            variable["percentage"] = variable["percentage"] + percentage
+
+            newVariables.append(variable)
+
+        return newVariables
+
+    def __getModelMetricPoints(self,squad:any,metricsModel:any,typeMetric:str)->Decimal:
         if(not squad["applyPractice"]): return None
+
+        variables = copy.deepcopy(metricsModel)
+
+        variables = self.__getApportionPercentageMetrics(squad,variables,typeMetric)
+
+        if(len(variables)==0): return None
 
         metricPoints:Decimal = 0.00
         points:Decimal = 0.00
         for variable in variables: 
-            points = squad[variable["variable"]]
-
-            if(points==None): points = Constants.METRIC_SONAR_POINTS_MINIMUM
+            points = squad[variable[typeMetric]]
 
             metricPoints += points * (variable["percentage"] / 100)
 
-        return round(metricPoints,2)
-    
-    def __getCategoryPoints(self,squad:any,metrics:any)->Decimal:
-        if(not squad["applyPractice"]): return None
-
-        categoryPoints:Decimal = 0.00
-        points:Decimal = 0.00
-        for metric in metrics: 
-            points = squad[metric["metric"]]
-
-            if(points==None): points = Constants.METRIC_SONAR_POINTS_MINIMUM
-
-            categoryPoints += points * (metric["percentage"] / 100)
-
-        return round(categoryPoints,2)
-
-    def __getMaturityLevelServiceCloud(self,squad:any,categories:any)->Decimal:
-        if(not squad["applyPractice"]): return None
-
-        maturityLevel:Decimal = 0.00
-        points:Decimal = 0.00
-        for category in categories: 
-            points = squad[category["category"]]
-
-            if(points==None): points = Constants.METRIC_SONAR_POINTS_MINIMUM
-
-            maturityLevel += points * (category["percentage"] / 100)
-
-        return round(maturityLevel,2)
+        return round(metricPoints,2)       
 
     def exportExcelSummary(self,period:str,processDate:str,baseActivos:pd.DataFrame,
                               squadsMaturityLevel:pd.DataFrame,squadsAzureSql:pd.DataFrame,squadsRedisCache:pd.DataFrame,squadsCosmosDb:pd.DataFrame,
