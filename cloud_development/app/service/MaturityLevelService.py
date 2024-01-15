@@ -102,27 +102,27 @@ class MaturityLevelService():
 
 
     def __getApportionPercentageMetrics(sef,squad:any,variables:any,type:str)->any:
-        variableApportion:any = None
+        countApportion:int = 0
+        percentage:Decimal = 0.00
 
         for variable in variables: 
             points = squad[variable[type]]
 
-            if(not Utils.isNumber(points)):
-                variableApportion = copy.deepcopy(variable)
-
-                break
+            if(not Utils.isNumber(points) or variable["percentage"]==0.00):
+                percentage += variable["percentage"]
+                countApportion += 1
         
-        if(variableApportion==None): return variables
+        if(countApportion==0): return variables
 
-        percentage:Decimal = 0.00
-        lenApportion:int = (len(variables) - 1)
+        lenApportion:int = (len(variables) - countApportion)
 
-        if(lenApportion>0):
-            percentage = variableApportion["percentage"] / lenApportion
+        if(lenApportion>0): percentage = percentage / lenApportion
 
         newVariables = []
         for variable in variables: 
-            if(variable[type]==variableApportion[type]): continue
+            points = squad[variable[type]]
+
+            if(not Utils.isNumber(points) or variable["percentage"]==0.00): continue
                
             variable["percentage"] = variable["percentage"] + percentage
 
