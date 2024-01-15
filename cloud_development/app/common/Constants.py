@@ -7,7 +7,8 @@ ENVIRONMENT_RESOURCE_PRODUCCION:str = "P"
 ENVIRONMENTS_RESOURCE:list = [ENVIRONMENT_RESOURCE_DESARROLLO,ENVIRONMENT_RESOURCE_INTEGRACION,ENVIRONMENT_RESOURCE_INFRAESTRUCTURA,ENVIRONMENT_RESOURCE_CERTIFICACION,ENVIRONMENT_RESOURCE_PRODUCCION]
 
 PATH_INPUT_BASE_ACTIVOS:str = "cloud_development\\resources\\input\\base_activos\\base_activos_{period}.xlsx"
-PATH_INPUT_SONAR:str = "cloud_development\\resources\\input\\sonar\\"
+PATH_INPUT_SONAR:str = "cloud_development\\resources\\input\\sonar\\data\\"
+PATH_INPUT_SONAR_EXCLUSIONS:str = "cloud_development\\resources\\input\\sonar\\exclusions\\REPORTE_ACCESO_REPOSITORIO.xlsx"
 PATH_INPUT_AZURE_MONITOR:str = "cloud_development\\resources\\input\\azure_monitor\\"
 
 PARAMETER_INPUT_AZURE_TENANTID:str = "@tenantId"

@@ -35,6 +35,19 @@ class SonarRepository():
         data = data.sort_values(["app","repository"], ascending = [True, True])
 
         return data
+    
+    def getSonarExclusions(self)->pd.DataFrame:
+        file:str = Utils.getPathDirectory(Constants.PATH_INPUT_SONAR_EXCLUSIONS)
+
+        usecols:list[int]=[0,1]
+        namescols:list[str]=["app","access"]
+
+        data:pd.DataFrame = pd.read_excel(file,usecols=usecols,names=namescols)
+        data = data.astype(object).where(pd.notnull(data),None)
+        data = data[(data['access']=="SI")]
+
+        return data
+
 
     def __getRepository(self,url: str) -> str:
         repository:str = url.strip().lower().removeprefix(Constants.URL_BASE_BITBUCKET_REPO)

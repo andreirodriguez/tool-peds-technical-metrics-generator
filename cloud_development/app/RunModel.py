@@ -66,7 +66,7 @@ class RunModel():
         metricAzureMonitorCosmos:any = Utils.getConfigurationFileJson("metricAzureMonitorCosmos")
         self.__cosmosDbService = CosmosDbService(metricAzureMonitorCosmos)
 
-        self.__metricModelAppService = MetricModelAppService()
+        self.__metricModelAppService = MetricModelAppService(self.__sonarService)
 
         metricMaturityLevel:any = Utils.getConfigurationFileJson("metricMaturityLevel")
         self.__maturityLevelService = MaturityLevelService(metricMaturityLevel)

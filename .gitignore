@@ -174,8 +174,11 @@ cloud_development/resources/input/base_activos/*
 cloud_development/resources/input/squads_priorizados/*
 !cloud_development/resources/input/squads_priorizados/.gitkeep
 
-cloud_development/resources/input/sonar/*
-!cloud_development/resources/input/sonar/.gitkeep
+cloud_development/resources/input/sonar/data/*
+!cloud_development/resources/input/sonar/data/.gitkeep
+
+cloud_development/resources/input/sonar/exclusions/*
+!cloud_development/resources/input/sonar/exclusions/.gitkeep
 
 cloud_development/resources/input/azure_monitor/*
 !cloud_development/resources/input/azure_monitor/.gitkeep

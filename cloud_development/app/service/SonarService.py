@@ -34,6 +34,9 @@ class SonarService():
             metrics[metricSonar["metric"] + "Points"] = metrics.apply(lambda record: self.__getPropertyMetricSonar(record["app"],record["repository"],metricsSonar,"points"),axis=1)
 
         return metrics
+    
+    def getSonarExclusions(self)->pd.DataFrame:
+        return self.__sonarRepository.getSonarExclusions()
 
     def __getPropertyMetricSonar(self,app:str,repo:str,metricsSonar:pd.DataFrame,property:str)->any:
         metricsSonar = metricsSonar[(metricsSonar['app']==app) & (metricsSonar['repository']==repo)]

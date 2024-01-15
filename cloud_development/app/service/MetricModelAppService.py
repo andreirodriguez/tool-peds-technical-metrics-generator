@@ -6,11 +6,17 @@ import math
 import cloud_development.app.common.Constants as Constants
 from cloud_development.app.common.Utils import Utils
 
+from cloud_development.app.service.SonarService import SonarService
+
 from cloud_development.app.domain.AzureSqlMetric import AzureSqlMetric
 from cloud_development.app.domain.RedisCacheMetric import RedisCacheMetric
 from cloud_development.app.domain.CosmosDbMetric import CosmosDbMetric
 
 class MetricModelAppService():
+    __sonarService:SonarService  
+
+    def __init__(self,sonarService:any):
+        self.__sonarService = sonarService
 
     def calculateMetricAzureSqlByApp(self,metricsAzure:list[AzureSqlMetric],metricsSonar:pd.DataFrame)->pd.DataFrame:
         metrics:pd.DataFrame = self.__getMetricsAzureByApp(metricsAzure,Constants.AZURE_MONITOR_AZURE_SQL_METRICS)
@@ -44,8 +50,10 @@ class MetricModelAppService():
         return metrics
 
     def __getMetricsSonarByApp(self,metrics:pd.DataFrame,metricsSonarObjects:any,listMetrics:list[str])->pd.DataFrame:
+        exclusions:pd.DataFrame = self.__sonarService.getSonarExclusions()
+
         for metric in listMetrics:
-            metrics[metric] = metrics.apply(lambda record: self.__getMetricSonarMeanByApp(record["app"],metric,metricsSonarObjects),axis=1)
+            metrics[metric] = metrics.apply(lambda record: self.__getMetricSonarMeanByApp(record["app"],metric,metricsSonarObjects,exclusions),axis=1)
 
         return metrics
 
@@ -58,7 +66,11 @@ class MetricModelAppService():
 
         return round(value,2)
 
-    def __getMetricSonarMeanByApp(self,app:str,metric:str,metrics:pd.DataFrame)->float:
+    def __getMetricSonarMeanByApp(self,app:str,metric:str,metrics:pd.DataFrame,exclusions:pd.DataFrame)->float:
+        inclusionApp = len(exclusions[(exclusions['app']==app)].index)
+
+        if(inclusionApp==0): return None
+
         metric = metric + "Points"
 
         metrics = metrics[(metrics['app']==app)]
